@@ -1,0 +1,20 @@
+# Comparisions
+ 
+ 
+ 
+```{r}
+library(GGally)
+data.frame(raw = as.numeric(phyloseq::distance(gp_raw, "bray")), 
+           tss = as.numeric(phyloseq::distance(gp_tss, "bray")), 
+           css = as.numeric(phyloseq::distance(gp_css, "bray")),
+           deseq_rle = as.numeric(phyloseq::distance(gp_deseq_rle, "bray")),
+           deseq_vs = as.numeric(phyloseq::distance(gp_deseq_vs, "bray")),
+           rare = as.numeric(phyloseq::distance(gp_rare, "bray")),
+           tmm = as.numeric(phyloseq::distance(gp_tmm, "bray")),
+           diff = as.numeric(dist(get_variable(gp_raw, "depth")))) %>% 
+    ggpairs(columns = 1:7, upper = "blank",
+            diag = "blank",ggplot2::aes(colour=diff))
+
+```
+ 
+ 

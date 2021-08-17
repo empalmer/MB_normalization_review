@@ -1,0 +1,36 @@
+# Cumulative sum scaling (CSS)
+
+Cumulative sum scaling is, another scaling method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner [@paulson2013]. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found, so this is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. It initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods [@costea2014].
+
+```{r}
+norm_CSS <- function(ps){
+  require(metagenomeSeq, quietly = T)
+  ps.metaG<-phyloseq_to_metagenomeSeq(ps)
+  p_stat = cumNormStatFast(ps.metaG)
+  ps.metaG = cumNorm(ps.metaG, p = p_stat)
+  ps.metaG.norm <- MRcounts(ps.metaG, norm = T)
+
+  otu <- otu_table(ps.metaG.norm, taxa_are_rows = T)
+  sam <- access(ps, "sam_data")
+  sam$scaling_factor <- normFactors(ps.metaG)/1e6
+  tax <- access(ps, "tax_table")
+  phy <- access(ps, "phy_tree")
+  ps_CSS <- phyloseq(otu,sam,tax,phy)
+  return(ps_CSS)
+}
+```
+
+## CSS on Global Patterns 
+
+```{r}
+gp_css <- norm_CSS(gp_raw)
+```
+
+```{r}
+plot_norm_changes(gp_css, gp_tss, 
+                  x_lab = "TSS", y_lab = "CSS")
+
+```
+
+CSS normalization appears to consider pairs as more different than TSS normalization, and pairs with high sequencing depth differences even more so. 
+

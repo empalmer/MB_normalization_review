@@ -1,0 +1,121 @@
+# Total Sum scaling (TSS)
+
+## About TSS
+
+The first method described is Total Sum Scaling (TSS). This method is also referred to as Total Count (TC), converting into proportions, or relative abundance. This is a scaling method to normalize the different library sizes across samples. For every entry in the count matrix, we scale by the total read depth of that sample. This converts the counts into the proportion of abundance present in each given sample. 
+
+Though a more straightforward method, TSS normalization is not without its drawbacks. In microbiome data, it is common to have numerous low or zero-count observations, and that only a few most common OTUs contribute to the majority of the total sum of the library size. These high-count, frequent, taxa could be an artifact of the sequencing step, where high abundance  observations are preferentially sampled. Using these large counts can dominate the scaling factor for each sample. As seen below, we see that the scaling factor for each sample is completely dominated by `ASV1`. 
+
+```{r, tss_ex, echo = F}
+sample <- c("Sample A", "Sample B")
+ASV1 <- c(10314, 824)
+ASV2 <- c(34, 23)
+ASV3 <- c(8,13)
+ASV4 <- c(12, 20)
+opts <- options(knitr.kable.NA = "")
+scaling_factor <- ASV1 +  ASV2 + ASV3 + ASV4
+sf_wo_asv1 <- ASV2 + ASV3 + ASV4
+
+tibble(sample, ASV1, ASV2, ASV3, ASV4, scaling_factor, sf_wo_asv1) %>% 
+    knitr::kable(col.names = c("Sample", "ASV1", "ASV2", "ASV3", "ASV4", "TSS Scaling Factor", "Scaling factor w/o ASV1"))
+```
+
+Because this method does not account for the preferential sequencing over-abundance of `ASV1` it is possible to see an increase in false positives. However, this is a widely used method, and one of the few normalization methods that completely accounts for differing library sizes, which can be an important consideration depending on the analysis goal. Community level-analysis for example can be library-size dependent (ordination, some dissimiliarity measures).   
+
+
+## TSS Implementation 
+Here, we provide a function that will normalize a `phyloseq` object by Total Sum Scaling. We have the option of keeping the result as proportions (having values 0-1), or transforming to an equal sequencing depth so the results are counts per million.
+
+```{r, norm_tss_func}
+norm_TSS <- function(ps, keep_prop = F){
+    # keep as proportions or convert to counts per million?
+    scale <- ifelse(keep_prop, 1, 1e6)
+    # TSS function
+    ps_normed <- phyloseq::transform_sample_counts(ps, function(x) x * scale / sum(x))
+    return(ps_normed)
+}
+```
+
+
+## TSS on Global Patterns
+
+Now lets use this method on the Global Patterns data. 
+
+```{r, gp_tss}
+gp_tss <- norm_TSS(gp_raw)
+# rename the depth as the scaling factor 
+sample_data(gp_tss)$scaling_factor <- sample_data(gp_tss)$depth
+```
+
+Now lets see the differences between the un-normalized, raw data, and the TSS transformed normalized data. 
+
+One possible way to do this is by looking at ordination plots. Microbiome data are high dimensional, so visualization directly of the data is difficult. Here, let us examine the principal coordinates plot using the Bray-Curtis dissimilarity. 
+
+First calculate the distance matrices, using the `phyloseq` function `ordinate()`
+
+```{r, ordinate_tss}
+gp_raw_dist <- phyloseq::ordinate(gp_raw, "PCoA", "bray")
+gp_tss_dist <- phyloseq::ordinate(gp_tss, "PCoA", "bray")
+```
+
+Now plot the two ordinations. Even before normalization, the different communities are clearly clustered. 
+
+```{r, plot_ordinate_tss}
+plot_ordination(gp_raw, gp_raw_dist, color = "SampleType") + 
+plot_ordination(gp_tss, gp_tss_dist, color = "SampleType") +
+  plot_layout(guides = 'collect')
+```
+
+
+We can also compare the values of the distance matrices before and after normalization to see how normalization is impacting different types of points.
+
+```{r}
+plot_norm_changes <- function(data_norm, data_raw, dist_method = "bray", x_lab = "raw", y_lab = "norm"){
+    # calculate the Bray-Cutris distance matrix for the raw data, the normalized data, 
+    # and calculate the pairwise difference between the original library sizes between samples
+    plot <- data.frame(raw = as.numeric(phyloseq::distance(data_raw, dist_method)), 
+                       norm = as.numeric(phyloseq::distance(data_norm, dist_method)), 
+                       diff = as.numeric(dist(get_variable(data_raw, "depth")))) %>% 
+    ggplot(aes(x = raw, y = norm, color = diff)) + 
+        geom_point() + 
+        geom_abline() + 
+        xlab(x_lab) + ylab(y_lab) + xlim(c(0,1)) + ylim(c(0,1))
+    return(plot)
+}
+
+plot_norm_changes(gp_tss, gp_raw, x_lab = "Raw counts", y_lab = "TSS props")
+    
+```
+
+Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are 'more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, unnormalized data, and became marked as more similar after TSS normalization. 
+
+
+<!-- ## HMP TSS -->
+
+<!-- Normalize the HMP data by TSS  -->
+
+<!-- ```{r, eval = F} -->
+<!-- hmp_tss <- norm_TSS(hmp_raw) -->
+<!-- ``` -->
+
+<!-- Look at ordination plots  -->
+
+<!-- ```{r, eval = F} -->
+<!-- hmp_raw_ord <- phyloseq::ordinate(hmp_raw, "PCoA", "bray") -->
+<!-- hmp_tss_ord <- phyloseq::ordinate(hmp_tss, "PCoA", "bray") -->
+<!-- sample_variables(hmp_raw) -->
+<!-- plot_ordination(hmp_raw, -->
+<!--                 raw_ord, -->
+<!--                 color = "sampling_depth") -->
+<!-- plot_ordination(hmp_tss, -->
+<!--                 hmp_tss_ord, -->
+<!--                 color = "HMP_BODY_SITE") -->
+<!-- ``` -->
+
+<!-- Examine how the distance matrices change before/after normalization  -->
+
+<!-- ```{r, eval = F} -->
+<!-- plot_norm_changes(hmp_raw, hmp_tss) -->
+<!-- ``` -->
+
+<!-- (Harder to see here and takes longer since we have so much more samples. ) -->

@@ -1,0 +1,40 @@
+# GMPR 
+
+A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are  many shared taxa between pairs. Use pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxas. It addresses sparsity, but not composition. 
+The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.
+
+```{r}
+norm_GMPR <- function(ps, scale = 1e6){
+  require(GMPR, quietly = T)
+  #browser()
+    # Calculate GMPR size factor
+    # Row - features, column - samples
+    otu <- as(otu_table(ps), "matrix")
+    if(taxa_are_rows(ps)){otu <- t(otu)}
+    otu_df = as.data.frame(otu)
+    otu.tab <- matrix(otu, ncol = ncol(otu))
+    gmpr.size.factor <- GMPR::GMPR(otu_df, intersect_no = 4, min_ct = 2)
+    
+    # normalize
+    otu.tab.norm <- t(t(otu) / (gmpr.size.factor/scale))
+    
+    # convert back to PS
+    sam <- access(ps, "sam_data")
+    sam$scaling_factor <- gmpr.size.factor
+    tax <- access(ps, "tax_table")
+    phy <- access(ps, "phy_tree")
+    ps_GMPR <- phyloseq(otu_table(otu.tab.norm, taxa_are_rows = F),sam,tax,phy)
+    return(ps_GMPR)
+}
+
+```
+
+## Global Patterns GMPR
+
+```{r}
+gp_gmpr <- norm_GMPR(gp_raw)
+plot_norm_changes(gp_gmpr, gp_raw)
+plot_norm_changes(gp_gmpr, gp_tss, x_lab = "TSS", y_lab = "GMPR")
+plot_norm_changes(gp_gmpr, gp_css, x_lab = "CSS", y_lab = "GMPR")
+```
+

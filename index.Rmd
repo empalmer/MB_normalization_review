@@ -1,0 +1,12 @@
+--- 
+title: "Tutorial on Microbiome Normalization"
+author: "Emily Palmer"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "A tutorial on normalization methods for microbiome data and discussion of thier uses and performance"
+---
+
