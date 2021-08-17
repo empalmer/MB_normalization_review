@@ -10,3 +10,6 @@ link-citations: yes
 description: "A tutorial on normalization methods for microbiome data and discussion of thier uses and performance"
 ---
 
+# Prerecs
+
+Download R + Rstudio

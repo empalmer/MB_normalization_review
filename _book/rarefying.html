@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Rarefying | Tutorial on Microbiome Normalization</title>
+  <title>Chapter 5 Rarefying | Tutorial on Microbiome Normalization</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Rarefying | Tutorial on Microbiome Normalization" />
+  <meta property="og:title" content="Chapter 5 Rarefying | Tutorial on Microbiome Normalization" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Rarefying | Tutorial on Microbiome Normalization" />
+  <meta name="twitter:title" content="Chapter 5 Rarefying | Tutorial on Microbiome Normalization" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -137,56 +137,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">MB Normalization</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerecs</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>2.1</b> The importance of normalization</a></li>
+<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>2.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="1.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="2.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>2.2.1</b> Log ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
+<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>2.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
+<li class="chapter" data-level="3" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>3</b> Importing Data</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>2.1</b> Global Patterns</a></li>
-<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.2</b> Pre-procesing Quality Control and Filtering</a></li>
+<li class="chapter" data-level="3.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>3.1</b> Global Patterns</a></li>
+<li class="chapter" data-level="3.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>3.2</b> Pre-procesing Quality Control and Filtering</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>3</b> Total Sum scaling (TSS)</a>
+<li class="chapter" data-level="4" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>4</b> Total Sum scaling (TSS)</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>3.1</b> About TSS</a></li>
-<li class="chapter" data-level="3.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>3.2</b> TSS Implementation</a></li>
-<li class="chapter" data-level="3.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>3.3</b> TSS on Global Patterns</a></li>
+<li class="chapter" data-level="4.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>4.1</b> About TSS</a></li>
+<li class="chapter" data-level="4.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>4.2</b> TSS Implementation</a></li>
+<li class="chapter" data-level="4.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>4.3</b> TSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>4</b> Rarefying</a>
+<li class="chapter" data-level="5" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>5</b> Rarefying</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.1</b> Rarefying on Global Patterns</a></li>
+<li class="chapter" data-level="5.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>5.1</b> Rarefying on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>5</b> DESeq</a>
+<li class="chapter" data-level="6" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>6</b> DESeq</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>5.1</b> About DESeq</a></li>
-<li class="chapter" data-level="5.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>5.2</b> DESeq Implementation</a></li>
-<li class="chapter" data-level="5.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>5.3</b> DESeq on Global Patterns</a></li>
+<li class="chapter" data-level="6.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>6.1</b> About DESeq</a></li>
+<li class="chapter" data-level="6.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>6.2</b> DESeq Implementation</a></li>
+<li class="chapter" data-level="6.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>6.3</b> DESeq on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>6</b> edgeR TMM</a>
+<li class="chapter" data-level="7" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>7</b> edgeR TMM</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementatin</a></li>
-<li class="chapter" data-level="6.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
+<li class="chapter" data-level="7.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>7.1</b> EdgeR TMM implementatin</a></li>
+<li class="chapter" data-level="7.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>7.2</b> TMM on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>7</b> Cumulative sum scaling (CSS)</a>
+<li class="chapter" data-level="8" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>8</b> Cumulative sum scaling (CSS)</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.1</b> CSS on Global Patterns</a></li>
+<li class="chapter" data-level="8.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>8.1</b> CSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>8</b> GMPR</a>
+<li class="chapter" data-level="9" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>9</b> GMPR</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>8.1</b> Global Patterns GMPR</a></li>
+<li class="chapter" data-level="9.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>9.1</b> Global Patterns GMPR</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>9</b> Wrench</a>
+<li class="chapter" data-level="10" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>10</b> Wrench</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>9.1</b> Wrench Implementation</a></li>
-<li class="chapter" data-level="9.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>9.2</b> Wrench on Global Patterns</a></li>
+<li class="chapter" data-level="10.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>10.1</b> Wrench Implementation</a></li>
+<li class="chapter" data-level="10.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>10.2</b> Wrench on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>10</b> Log-Ratio Approaches</a></li>
-<li class="chapter" data-level="11" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>11</b> Comparisions</a></li>
+<li class="chapter" data-level="11" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>11</b> Log-Ratio Approaches</a></li>
+<li class="chapter" data-level="12" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>12</b> Comparisions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -208,16 +209,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="rarefying" class="section level1" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Rarefying</h1>
+<div id="rarefying" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Rarefying</h1>
 <p>Another common technique that standardizes the library size across samples is to perform rarefying. Rarefying takes subsamples of the counts from the original sample of size of the new minimum library size.</p>
 <p>One very common method is Rarefying, a method originally used in ecology. This method standardizes the read depth across all samples. To perform this method we first choose a minimum library size. Looking at rarefaction/collectors curves, or using a certain percentile can guide choosing this cutoff. Then all samples that have a read depth below this cutoff are discarded. Thus this method has a built-in filtering step.
 Next, we sample without replacement of the size of the chosen cutoff.
 It can be a standalone method or combined with other methods and transformations.</p>
 <p>This is a very commonly used method, but it has also been criticized. First of all, it throws away valid data, and this results in a loss of power and an increase in false positives. Rare taxa can be removed in this approach too.
 It is however encouraged when we have widely different library sizes as it can lower the false discovery rate, and has also been shown to perform well in community-level analysis, as it completely standardizes the read count depth, and some methods are sensitive to differences in read count. Has been shown to separate by biological signal in ordination methods based on presence/absence</p>
-<div id="rarefying-on-global-patterns" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Rarefying on Global Patterns</h2>
+<div id="rarefying-on-global-patterns" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Rarefying on Global Patterns</h2>
 <p>The first difficulty is choosing a minimum sampling depth. The Global Patterns dataset already has a very high sampling depth for all samples, so we will chose the lowest as the minimum depth to rarefy to.</p>
 <p>The following function returns a rarefied <code>phyloseq</code> object. Since we chose the minimum sampling depth, no samples have been dropped. In data sets where we have low sampling depth there is a balance between how many samples to drop and how low to set the minimum depth to.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="rarefying.html#cb17-1"></a>norm_rarefy &lt;-<span class="st"> </span><span class="cf">function</span>(phyloseq, <span class="dt">depth =</span> <span class="kw">min</span>(<span class="kw">sample_sums</span>(phyloseq))){</span>

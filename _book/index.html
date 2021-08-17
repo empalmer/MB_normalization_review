@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 GMPR | Tutorial on Microbiome Normalization</title>
+  <title>Tutorial on Microbiome Normalization</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 GMPR | Tutorial on Microbiome Normalization" />
+  <meta property="og:title" content="Tutorial on Microbiome Normalization" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 GMPR | Tutorial on Microbiome Normalization" />
+  <meta name="twitter:title" content="Tutorial on Microbiome Normalization" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="cumulative-sum-scaling-css.html"/>
-<link rel="next" href="wrench.html"/>
+
+<link rel="next" href="intro.html"/>
 <script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -209,51 +209,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="gmpr" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> GMPR</h1>
-<p>A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are many shared taxa between pairs. Use pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxas. It addresses sparsity, but not composition.
-The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="gmpr.html#cb51-1"></a>norm_GMPR &lt;-<span class="st"> </span><span class="cf">function</span>(ps, <span class="dt">scale =</span> <span class="fl">1e6</span>){</span>
-<span id="cb51-2"><a href="gmpr.html#cb51-2"></a>  <span class="kw">require</span>(GMPR, <span class="dt">quietly =</span> T)</span>
-<span id="cb51-3"><a href="gmpr.html#cb51-3"></a>  <span class="co">#browser()</span></span>
-<span id="cb51-4"><a href="gmpr.html#cb51-4"></a>    <span class="co"># Calculate GMPR size factor</span></span>
-<span id="cb51-5"><a href="gmpr.html#cb51-5"></a>    <span class="co"># Row - features, column - samples</span></span>
-<span id="cb51-6"><a href="gmpr.html#cb51-6"></a>    otu &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">otu_table</span>(ps), <span class="st">&quot;matrix&quot;</span>)</span>
-<span id="cb51-7"><a href="gmpr.html#cb51-7"></a>    <span class="cf">if</span>(<span class="kw">taxa_are_rows</span>(ps)){otu &lt;-<span class="st"> </span><span class="kw">t</span>(otu)}</span>
-<span id="cb51-8"><a href="gmpr.html#cb51-8"></a>    otu_df =<span class="st"> </span><span class="kw">as.data.frame</span>(otu)</span>
-<span id="cb51-9"><a href="gmpr.html#cb51-9"></a>    otu.tab &lt;-<span class="st"> </span><span class="kw">matrix</span>(otu, <span class="dt">ncol =</span> <span class="kw">ncol</span>(otu))</span>
-<span id="cb51-10"><a href="gmpr.html#cb51-10"></a>    gmpr.size.factor &lt;-<span class="st"> </span>GMPR<span class="op">::</span><span class="kw">GMPR</span>(otu_df, <span class="dt">intersect_no =</span> <span class="dv">4</span>, <span class="dt">min_ct =</span> <span class="dv">2</span>)</span>
-<span id="cb51-11"><a href="gmpr.html#cb51-11"></a>    </span>
-<span id="cb51-12"><a href="gmpr.html#cb51-12"></a>    <span class="co"># normalize</span></span>
-<span id="cb51-13"><a href="gmpr.html#cb51-13"></a>    otu.tab.norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(otu) <span class="op">/</span><span class="st"> </span>(gmpr.size.factor<span class="op">/</span>scale))</span>
-<span id="cb51-14"><a href="gmpr.html#cb51-14"></a>    </span>
-<span id="cb51-15"><a href="gmpr.html#cb51-15"></a>    <span class="co"># convert back to PS</span></span>
-<span id="cb51-16"><a href="gmpr.html#cb51-16"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb51-17"><a href="gmpr.html#cb51-17"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>gmpr.size.factor</span>
-<span id="cb51-18"><a href="gmpr.html#cb51-18"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb51-19"><a href="gmpr.html#cb51-19"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb51-20"><a href="gmpr.html#cb51-20"></a>    ps_GMPR &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(<span class="kw">otu_table</span>(otu.tab.norm, <span class="dt">taxa_are_rows =</span> F),sam,tax,phy)</span>
-<span id="cb51-21"><a href="gmpr.html#cb51-21"></a>    <span class="kw">return</span>(ps_GMPR)</span>
-<span id="cb51-22"><a href="gmpr.html#cb51-22"></a>}</span></code></pre></div>
-<div id="global-patterns-gmpr" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Global Patterns GMPR</h2>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gmpr.html#cb52-1"></a>gp_gmpr &lt;-<span class="st"> </span><span class="kw">norm_GMPR</span>(gp_raw)</span>
-<span id="cb52-2"><a href="gmpr.html#cb52-2"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_raw)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="gmpr.html#cb53-1"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_tss, <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;GMPR&quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gmpr.html#cb54-1"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_css, <span class="dt">x_lab =</span> <span class="st">&quot;CSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;GMPR&quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-15-3.png" width="672" /></p>
-
+<div id="header">
+<h1 class="title">Tutorial on Microbiome Normalization</h1>
+<p class="author"><em>Emily Palmer</em></p>
+<p class="date" style="margin-top: 1.5em;"><em>2021-08-17</em></p>
 </div>
+<div id="prerecs" class="section level1" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Prerecs</h1>
+<p>Download R + Rstudio</p>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="cumulative-sum-scaling-css.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="wrench.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+
+<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

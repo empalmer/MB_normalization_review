@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Tutorial on Microbiome Normalization</title>
+  <title>Chapter 2 Introduction | Tutorial on Microbiome Normalization</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Tutorial on Microbiome Normalization" />
+  <meta property="og:title" content="Chapter 2 Introduction | Tutorial on Microbiome Normalization" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Tutorial on Microbiome Normalization" />
+  <meta name="twitter:title" content="Chapter 2 Introduction | Tutorial on Microbiome Normalization" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -31,7 +31,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
+<link rel="prev" href="index.html"/>
 <link rel="next" href="importing-data.html"/>
 <script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -137,56 +137,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">MB Normalization</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerecs</a></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>2.1</b> The importance of normalization</a></li>
+<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>2.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="1.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="2.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>2.2.1</b> Log ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
+<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>2.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
+<li class="chapter" data-level="3" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>3</b> Importing Data</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>2.1</b> Global Patterns</a></li>
-<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.2</b> Pre-procesing Quality Control and Filtering</a></li>
+<li class="chapter" data-level="3.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>3.1</b> Global Patterns</a></li>
+<li class="chapter" data-level="3.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>3.2</b> Pre-procesing Quality Control and Filtering</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>3</b> Total Sum scaling (TSS)</a>
+<li class="chapter" data-level="4" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>4</b> Total Sum scaling (TSS)</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>3.1</b> About TSS</a></li>
-<li class="chapter" data-level="3.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>3.2</b> TSS Implementation</a></li>
-<li class="chapter" data-level="3.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>3.3</b> TSS on Global Patterns</a></li>
+<li class="chapter" data-level="4.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>4.1</b> About TSS</a></li>
+<li class="chapter" data-level="4.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>4.2</b> TSS Implementation</a></li>
+<li class="chapter" data-level="4.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>4.3</b> TSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>4</b> Rarefying</a>
+<li class="chapter" data-level="5" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>5</b> Rarefying</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.1</b> Rarefying on Global Patterns</a></li>
+<li class="chapter" data-level="5.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>5.1</b> Rarefying on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>5</b> DESeq</a>
+<li class="chapter" data-level="6" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>6</b> DESeq</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>5.1</b> About DESeq</a></li>
-<li class="chapter" data-level="5.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>5.2</b> DESeq Implementation</a></li>
-<li class="chapter" data-level="5.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>5.3</b> DESeq on Global Patterns</a></li>
+<li class="chapter" data-level="6.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>6.1</b> About DESeq</a></li>
+<li class="chapter" data-level="6.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>6.2</b> DESeq Implementation</a></li>
+<li class="chapter" data-level="6.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>6.3</b> DESeq on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>6</b> edgeR TMM</a>
+<li class="chapter" data-level="7" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>7</b> edgeR TMM</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementatin</a></li>
-<li class="chapter" data-level="6.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
+<li class="chapter" data-level="7.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>7.1</b> EdgeR TMM implementatin</a></li>
+<li class="chapter" data-level="7.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>7.2</b> TMM on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>7</b> Cumulative sum scaling (CSS)</a>
+<li class="chapter" data-level="8" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>8</b> Cumulative sum scaling (CSS)</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.1</b> CSS on Global Patterns</a></li>
+<li class="chapter" data-level="8.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>8.1</b> CSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>8</b> GMPR</a>
+<li class="chapter" data-level="9" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>9</b> GMPR</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>8.1</b> Global Patterns GMPR</a></li>
+<li class="chapter" data-level="9.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>9.1</b> Global Patterns GMPR</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>9</b> Wrench</a>
+<li class="chapter" data-level="10" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>10</b> Wrench</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>9.1</b> Wrench Implementation</a></li>
-<li class="chapter" data-level="9.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>9.2</b> Wrench on Global Patterns</a></li>
+<li class="chapter" data-level="10.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>10.1</b> Wrench Implementation</a></li>
+<li class="chapter" data-level="10.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>10.2</b> Wrench on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>10</b> Log-Ratio Approaches</a></li>
-<li class="chapter" data-level="11" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>11</b> Comparisions</a></li>
+<li class="chapter" data-level="11" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>11</b> Log-Ratio Approaches</a></li>
+<li class="chapter" data-level="12" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>12</b> Comparisions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -208,15 +209,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Tutorial on Microbiome Normalization</h1>
-<p class="author"><em>Emily Palmer</em></p>
-<p class="date" style="margin-top: 1.5em;"><em>2021-08-17</em></p>
-</div>
-<div id="intro" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<div id="the-importance-of-normalization" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> The importance of normalization</h2>
+<div id="intro" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Introduction</h1>
+<div id="the-importance-of-normalization" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> The importance of normalization</h2>
 <p>Microbiome data must be normalized before any analysis can be performed. Following sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data is in the form of a matrix of counts of the observed abundance in each sample. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.</p>
 <!-- insert table example of what MB data look like??  -->
 <p>Ideally, any analysis of composition, differences, connections, etc. should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal library sizes <span class="citation">(Salter et al. <a href="#ref-salter2014" role="doc-biblioref">2014</a>)</span>. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals. Currently, there is no known ‘best’ normalization method that removes all technical artifacts leaving only biological signals.</p>
@@ -226,8 +222,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This demonstrates the importance of normalization, but also the artifacts that can occur depending on the method.</p>
 <p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 </div>
-<div id="the-compositional-nature-of-microbiome-data" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> The compositional nature of microbiome data</h2>
+<div id="the-compositional-nature-of-microbiome-data" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> The compositional nature of microbiome data</h2>
 <p>Microbiome data are inherently compositional. This means that the count of each sampled taxa is a portion of a larger whole. Each observed taxa is not independent. As we saw in the above example, before normalization, <code>ASV2</code> was equal between samples. After converting to proportions, <code>ASV2</code> was no longer equal. With compositional data, each sample has a total sum constraint. Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.</p>
 <!-- We do not have knowledge of the absolute abundance. -->
 <!-- Consider the library size as fixed.  s-->
@@ -256,8 +252,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>In the after sample, the blue counts have decreased, as we would expect from our knowledge of the population. However, the red counts have increased, even though there is no change in the red population. This observed increase in red counts is due to the compositional nature of the sampled points, and not any true difference in the red population.</p>
-<div id="log-ratio" class="section level3" number="1.2.1">
-<h3><span class="header-section-number">1.2.1</span> Log ratio</h3>
+<div id="log-ratio" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Log ratio</h3>
 <p>The methodology developed by Aitchison in the 1980s is useful for analyzing compositional data. The theory developed there, however, is for data with different characteristics than microbiome data.</p>
 <p>Microbiome data is high dimensional, and.</p>
 <p>Taking the logarithm of ratios can be an appropriate transformation for compositional data, so standard statistical tests can be appropriate again. This transformation removes the issue of standardizing/normalizing different library sizes. The library size for a given sample will not distort the biological covariance or correlation structure.
@@ -272,8 +268,8 @@ The alternative method is using the data to create a pseudo-reference sample. Th
 <!-- INCLUDE EXAMPLE?  -->
 </div>
 </div>
-<div id="zero-inflation-of-microbiome-data" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> Zero-inflation of microbiome data</h2>
+<div id="zero-inflation-of-microbiome-data" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Zero-inflation of microbiome data</h2>
 <p>Include section on considerations that are necessary to account for zero-inflation.</p>
 <!-- ## Intro to the phyloseq package -->
 <!-- ## Phyloseq wrapper function -->
@@ -299,8 +295,8 @@ The alternative method is using the data to create a pseudo-reference sample. Th
           </div>
         </div>
       </div>
-
-<a href="importing-data.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="importing-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
