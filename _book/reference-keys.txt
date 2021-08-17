@@ -1,4 +1,3 @@
-prerecs
 intro
 the-importance-of-normalization
 the-compositional-nature-of-microbiome-data

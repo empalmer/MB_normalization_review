@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 GMPR | Tutorial on Microbiome Normalization</title>
+  <title>Chapter 8 GMPR | Tutorial on Microbiome Normalization</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 GMPR | Tutorial on Microbiome Normalization" />
+  <meta property="og:title" content="Chapter 8 GMPR | Tutorial on Microbiome Normalization" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 GMPR | Tutorial on Microbiome Normalization" />
+  <meta name="twitter:title" content="Chapter 8 GMPR | Tutorial on Microbiome Normalization" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -137,57 +137,56 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">MB Normalization</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerecs</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>2.1</b> The importance of normalization</a></li>
-<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>2.2</b> The compositional nature of microbiome data</a>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>2.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>2.3</b> Zero-inflation of microbiome data</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>3</b> Importing Data</a>
+<li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>3.1</b> Global Patterns</a></li>
-<li class="chapter" data-level="3.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>3.2</b> Pre-procesing Quality Control and Filtering</a></li>
+<li class="chapter" data-level="2.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>2.1</b> Global Patterns</a></li>
+<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.2</b> Pre-procesing Quality Control and Filtering</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>4</b> Total Sum scaling (TSS)</a>
+<li class="chapter" data-level="3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>3</b> Total Sum scaling (TSS)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>4.1</b> About TSS</a></li>
-<li class="chapter" data-level="4.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>4.2</b> TSS Implementation</a></li>
-<li class="chapter" data-level="4.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>4.3</b> TSS on Global Patterns</a></li>
+<li class="chapter" data-level="3.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>3.1</b> About TSS</a></li>
+<li class="chapter" data-level="3.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>3.2</b> TSS Implementation</a></li>
+<li class="chapter" data-level="3.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>3.3</b> TSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>5</b> Rarefying</a>
+<li class="chapter" data-level="4" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>4</b> Rarefying</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>5.1</b> Rarefying on Global Patterns</a></li>
+<li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.1</b> Rarefying on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>6</b> DESeq</a>
+<li class="chapter" data-level="5" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>5</b> DESeq</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>6.1</b> About DESeq</a></li>
-<li class="chapter" data-level="6.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>6.2</b> DESeq Implementation</a></li>
-<li class="chapter" data-level="6.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>6.3</b> DESeq on Global Patterns</a></li>
+<li class="chapter" data-level="5.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>5.1</b> About DESeq</a></li>
+<li class="chapter" data-level="5.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>5.2</b> DESeq Implementation</a></li>
+<li class="chapter" data-level="5.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>5.3</b> DESeq on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>7</b> edgeR TMM</a>
+<li class="chapter" data-level="6" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>6</b> edgeR TMM</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>7.1</b> EdgeR TMM implementatin</a></li>
-<li class="chapter" data-level="7.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>7.2</b> TMM on Global Patterns</a></li>
+<li class="chapter" data-level="6.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementatin</a></li>
+<li class="chapter" data-level="6.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>8</b> Cumulative sum scaling (CSS)</a>
+<li class="chapter" data-level="7" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>7</b> Cumulative sum scaling (CSS)</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>8.1</b> CSS on Global Patterns</a></li>
+<li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.1</b> CSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>9</b> GMPR</a>
+<li class="chapter" data-level="8" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>8</b> GMPR</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>9.1</b> Global Patterns GMPR</a></li>
+<li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>8.1</b> Global Patterns GMPR</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>10</b> Wrench</a>
+<li class="chapter" data-level="9" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>9</b> Wrench</a>
 <ul>
-<li class="chapter" data-level="10.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>10.1</b> Wrench Implementation</a></li>
-<li class="chapter" data-level="10.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>10.2</b> Wrench on Global Patterns</a></li>
+<li class="chapter" data-level="9.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>9.1</b> Wrench Implementation</a></li>
+<li class="chapter" data-level="9.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>9.2</b> Wrench on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>11</b> Log-Ratio Approaches</a></li>
-<li class="chapter" data-level="12" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>12</b> Comparisions</a></li>
+<li class="chapter" data-level="10" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>10</b> Log-Ratio Approaches</a></li>
+<li class="chapter" data-level="11" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>11</b> Comparisions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -209,41 +208,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="gmpr" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> GMPR</h1>
+<div id="gmpr" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> GMPR</h1>
 <p>A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are many shared taxa between pairs. Use pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxas. It addresses sparsity, but not composition.
 The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="gmpr.html#cb51-1"></a>norm_GMPR &lt;-<span class="st"> </span><span class="cf">function</span>(ps, <span class="dt">scale =</span> <span class="fl">1e6</span>){</span>
-<span id="cb51-2"><a href="gmpr.html#cb51-2"></a>  <span class="kw">require</span>(GMPR, <span class="dt">quietly =</span> T)</span>
-<span id="cb51-3"><a href="gmpr.html#cb51-3"></a>  <span class="co">#browser()</span></span>
-<span id="cb51-4"><a href="gmpr.html#cb51-4"></a>    <span class="co"># Calculate GMPR size factor</span></span>
-<span id="cb51-5"><a href="gmpr.html#cb51-5"></a>    <span class="co"># Row - features, column - samples</span></span>
-<span id="cb51-6"><a href="gmpr.html#cb51-6"></a>    otu &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">otu_table</span>(ps), <span class="st">&quot;matrix&quot;</span>)</span>
-<span id="cb51-7"><a href="gmpr.html#cb51-7"></a>    <span class="cf">if</span>(<span class="kw">taxa_are_rows</span>(ps)){otu &lt;-<span class="st"> </span><span class="kw">t</span>(otu)}</span>
-<span id="cb51-8"><a href="gmpr.html#cb51-8"></a>    otu_df =<span class="st"> </span><span class="kw">as.data.frame</span>(otu)</span>
-<span id="cb51-9"><a href="gmpr.html#cb51-9"></a>    otu.tab &lt;-<span class="st"> </span><span class="kw">matrix</span>(otu, <span class="dt">ncol =</span> <span class="kw">ncol</span>(otu))</span>
-<span id="cb51-10"><a href="gmpr.html#cb51-10"></a>    gmpr.size.factor &lt;-<span class="st"> </span>GMPR<span class="op">::</span><span class="kw">GMPR</span>(otu_df, <span class="dt">intersect_no =</span> <span class="dv">4</span>, <span class="dt">min_ct =</span> <span class="dv">2</span>)</span>
-<span id="cb51-11"><a href="gmpr.html#cb51-11"></a>    </span>
-<span id="cb51-12"><a href="gmpr.html#cb51-12"></a>    <span class="co"># normalize</span></span>
-<span id="cb51-13"><a href="gmpr.html#cb51-13"></a>    otu.tab.norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(otu) <span class="op">/</span><span class="st"> </span>(gmpr.size.factor<span class="op">/</span>scale))</span>
-<span id="cb51-14"><a href="gmpr.html#cb51-14"></a>    </span>
-<span id="cb51-15"><a href="gmpr.html#cb51-15"></a>    <span class="co"># convert back to PS</span></span>
-<span id="cb51-16"><a href="gmpr.html#cb51-16"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb51-17"><a href="gmpr.html#cb51-17"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>gmpr.size.factor</span>
-<span id="cb51-18"><a href="gmpr.html#cb51-18"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb51-19"><a href="gmpr.html#cb51-19"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb51-20"><a href="gmpr.html#cb51-20"></a>    ps_GMPR &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(<span class="kw">otu_table</span>(otu.tab.norm, <span class="dt">taxa_are_rows =</span> F),sam,tax,phy)</span>
-<span id="cb51-21"><a href="gmpr.html#cb51-21"></a>    <span class="kw">return</span>(ps_GMPR)</span>
-<span id="cb51-22"><a href="gmpr.html#cb51-22"></a>}</span></code></pre></div>
-<div id="global-patterns-gmpr" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Global Patterns GMPR</h2>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="gmpr.html#cb52-1"></a>gp_gmpr &lt;-<span class="st"> </span><span class="kw">norm_GMPR</span>(gp_raw)</span>
-<span id="cb52-2"><a href="gmpr.html#cb52-2"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_raw)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="gmpr.html#cb53-1"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_tss, <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;GMPR&quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="gmpr.html#cb54-1"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_css, <span class="dt">x_lab =</span> <span class="st">&quot;CSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;GMPR&quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-15-3.png" width="672" /></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="gmpr.html#cb55-1"></a>norm_GMPR &lt;-<span class="st"> </span><span class="cf">function</span>(ps, <span class="dt">scale =</span> <span class="fl">1e6</span>){</span>
+<span id="cb55-2"><a href="gmpr.html#cb55-2"></a>  <span class="kw">require</span>(GMPR, <span class="dt">quietly =</span> T)</span>
+<span id="cb55-3"><a href="gmpr.html#cb55-3"></a>  <span class="co">#browser()</span></span>
+<span id="cb55-4"><a href="gmpr.html#cb55-4"></a>    <span class="co"># Calculate GMPR size factor</span></span>
+<span id="cb55-5"><a href="gmpr.html#cb55-5"></a>    <span class="co"># Row - features, column - samples</span></span>
+<span id="cb55-6"><a href="gmpr.html#cb55-6"></a>    otu &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">otu_table</span>(ps), <span class="st">&quot;matrix&quot;</span>)</span>
+<span id="cb55-7"><a href="gmpr.html#cb55-7"></a>    <span class="cf">if</span>(<span class="kw">taxa_are_rows</span>(ps)){otu &lt;-<span class="st"> </span><span class="kw">t</span>(otu)}</span>
+<span id="cb55-8"><a href="gmpr.html#cb55-8"></a>    otu_df =<span class="st"> </span><span class="kw">as.data.frame</span>(otu)</span>
+<span id="cb55-9"><a href="gmpr.html#cb55-9"></a>    otu.tab &lt;-<span class="st"> </span><span class="kw">matrix</span>(otu, <span class="dt">ncol =</span> <span class="kw">ncol</span>(otu))</span>
+<span id="cb55-10"><a href="gmpr.html#cb55-10"></a>    gmpr.size.factor &lt;-<span class="st"> </span>GMPR<span class="op">::</span><span class="kw">GMPR</span>(otu_df, <span class="dt">intersect_no =</span> <span class="dv">4</span>, <span class="dt">min_ct =</span> <span class="dv">2</span>)</span>
+<span id="cb55-11"><a href="gmpr.html#cb55-11"></a>    </span>
+<span id="cb55-12"><a href="gmpr.html#cb55-12"></a>    <span class="co"># normalize</span></span>
+<span id="cb55-13"><a href="gmpr.html#cb55-13"></a>    otu.tab.norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(otu) <span class="op">/</span><span class="st"> </span>(gmpr.size.factor<span class="op">/</span>scale))</span>
+<span id="cb55-14"><a href="gmpr.html#cb55-14"></a>    </span>
+<span id="cb55-15"><a href="gmpr.html#cb55-15"></a>    <span class="co"># convert back to PS</span></span>
+<span id="cb55-16"><a href="gmpr.html#cb55-16"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb55-17"><a href="gmpr.html#cb55-17"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>gmpr.size.factor</span>
+<span id="cb55-18"><a href="gmpr.html#cb55-18"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb55-19"><a href="gmpr.html#cb55-19"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb55-20"><a href="gmpr.html#cb55-20"></a>    ps_GMPR &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(<span class="kw">otu_table</span>(otu.tab.norm, <span class="dt">taxa_are_rows =</span> F),sam,tax,phy)</span>
+<span id="cb55-21"><a href="gmpr.html#cb55-21"></a>    <span class="kw">return</span>(ps_GMPR)</span>
+<span id="cb55-22"><a href="gmpr.html#cb55-22"></a>}</span></code></pre></div>
+<div id="global-patterns-gmpr" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Global Patterns GMPR</h2>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="gmpr.html#cb56-1"></a>gp_gmpr &lt;-<span class="st"> </span><span class="kw">norm_GMPR</span>(gp_raw)</span>
+<span id="cb56-2"><a href="gmpr.html#cb56-2"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_raw)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="gmpr.html#cb57-1"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_tss, <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;GMPR&quot;</span>)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="gmpr.html#cb58-1"></a><span class="kw">plot_norm_changes</span>(gp_gmpr, gp_css, <span class="dt">x_lab =</span> <span class="st">&quot;CSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;GMPR&quot;</span>)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-14-3.png" width="672" /></p>
 
 </div>
 </div>

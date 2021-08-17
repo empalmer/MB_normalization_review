@@ -137,14 +137,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">MB Normalization</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="1.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
 <ul>
@@ -224,51 +224,51 @@ It is possible to provide the size factors calculated by another method to DESeq
 </div>
 <div id="deseq-implementation" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> DESeq Implementation</h2>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="deseq.html#cb31-1"></a>norm_DESeq_RLE_poscounts &lt;-<span class="st"> </span><span class="cf">function</span>(ps, <span class="dt">group =</span> <span class="dv">1</span>){</span>
-<span id="cb31-2"><a href="deseq.html#cb31-2"></a>  <span class="kw">require</span>(DESeq2, <span class="dt">quietly =</span> T)</span>
-<span id="cb31-3"><a href="deseq.html#cb31-3"></a>    <span class="co"># keep arbitrary design for normalization </span></span>
-<span id="cb31-4"><a href="deseq.html#cb31-4"></a>    <span class="co"># Convert to DESeq object</span></span>
-<span id="cb31-5"><a href="deseq.html#cb31-5"></a>    ps_dds &lt;-<span class="st"> </span><span class="kw">phyloseq_to_deseq2</span>(ps, <span class="op">~</span><span class="dv">1</span>)</span>
-<span id="cb31-6"><a href="deseq.html#cb31-6"></a>    <span class="co"># Calculate the size factors (scaling)</span></span>
-<span id="cb31-7"><a href="deseq.html#cb31-7"></a>    ps_dds &lt;-<span class="st"> </span><span class="kw">estimateSizeFactors</span>(ps_dds, <span class="dt">type =</span> <span class="st">&quot;poscounts&quot;</span>)</span>
-<span id="cb31-8"><a href="deseq.html#cb31-8"></a>    <span class="co"># Extract counts</span></span>
-<span id="cb31-9"><a href="deseq.html#cb31-9"></a>    counts &lt;-<span class="st"> </span>DESeq2<span class="op">::</span><span class="kw">counts</span>(ps_dds, <span class="dt">normalized =</span> T)</span>
-<span id="cb31-10"><a href="deseq.html#cb31-10"></a>    <span class="co"># Convert back to phyloseq</span></span>
-<span id="cb31-11"><a href="deseq.html#cb31-11"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(counts, <span class="dt">taxa_are_rows =</span> T)</span>
-<span id="cb31-12"><a href="deseq.html#cb31-12"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb31-13"><a href="deseq.html#cb31-13"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span><span class="kw">sizeFactors</span>(ps_dds)</span>
-<span id="cb31-14"><a href="deseq.html#cb31-14"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb31-15"><a href="deseq.html#cb31-15"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb31-16"><a href="deseq.html#cb31-16"></a>    ps_DESeq &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
-<span id="cb31-17"><a href="deseq.html#cb31-17"></a>    <span class="kw">return</span>(ps_DESeq)</span>
-<span id="cb31-18"><a href="deseq.html#cb31-18"></a>}</span>
-<span id="cb31-19"><a href="deseq.html#cb31-19"></a></span>
-<span id="cb31-20"><a href="deseq.html#cb31-20"></a></span>
-<span id="cb31-21"><a href="deseq.html#cb31-21"></a>norm_DESeq_vs &lt;-<span class="st"> </span><span class="cf">function</span>(ps, <span class="dt">group =</span> <span class="dv">1</span>){</span>
-<span id="cb31-22"><a href="deseq.html#cb31-22"></a>  <span class="kw">require</span>(DESeq2, <span class="dt">quietly =</span> T)</span>
-<span id="cb31-23"><a href="deseq.html#cb31-23"></a>  ps_dds &lt;-<span class="st"> </span><span class="kw">phyloseq_to_deseq2</span>(ps, <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb31-24"><a href="deseq.html#cb31-24"></a>  ps_dds &lt;-<span class="st"> </span><span class="kw">estimateSizeFactors</span>(ps_dds, <span class="dt">type =</span> <span class="st">&quot;poscounts&quot;</span>)</span>
-<span id="cb31-25"><a href="deseq.html#cb31-25"></a>  <span class="co"># Variance transformation</span></span>
-<span id="cb31-26"><a href="deseq.html#cb31-26"></a>  ps_dds &lt;-<span class="st"> </span><span class="kw">estimateDispersions</span>(ps_dds)</span>
-<span id="cb31-27"><a href="deseq.html#cb31-27"></a>  abund &lt;-<span class="st"> </span><span class="kw">getVarianceStabilizedData</span>(ps_dds)</span>
-<span id="cb31-28"><a href="deseq.html#cb31-28"></a>  <span class="co"># don’t allow deseq to return negative counts</span></span>
-<span id="cb31-29"><a href="deseq.html#cb31-29"></a>  <span class="co"># add the minimum count to all values</span></span>
-<span id="cb31-30"><a href="deseq.html#cb31-30"></a>  <span class="co"># another option is to replace negative counts with 0</span></span>
-<span id="cb31-31"><a href="deseq.html#cb31-31"></a>  abund &lt;-<span class="st"> </span>abund <span class="op">+</span><span class="st"> </span><span class="kw">abs</span>(<span class="kw">min</span>(abund)) </span>
-<span id="cb31-32"><a href="deseq.html#cb31-32"></a>  otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(abund, <span class="dt">taxa_are_rows =</span> T)</span>
-<span id="cb31-33"><a href="deseq.html#cb31-33"></a>  sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb31-34"><a href="deseq.html#cb31-34"></a>  tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb31-35"><a href="deseq.html#cb31-35"></a>  phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb31-36"><a href="deseq.html#cb31-36"></a>  ps_DESeq &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
-<span id="cb31-37"><a href="deseq.html#cb31-37"></a>  <span class="kw">return</span>(ps_DESeq)</span>
-<span id="cb31-38"><a href="deseq.html#cb31-38"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="deseq.html#cb35-1"></a>norm_DESeq_RLE_poscounts &lt;-<span class="st"> </span><span class="cf">function</span>(ps, <span class="dt">group =</span> <span class="dv">1</span>){</span>
+<span id="cb35-2"><a href="deseq.html#cb35-2"></a>  <span class="kw">require</span>(DESeq2, <span class="dt">quietly =</span> T)</span>
+<span id="cb35-3"><a href="deseq.html#cb35-3"></a>    <span class="co"># keep arbitrary design for normalization </span></span>
+<span id="cb35-4"><a href="deseq.html#cb35-4"></a>    <span class="co"># Convert to DESeq object</span></span>
+<span id="cb35-5"><a href="deseq.html#cb35-5"></a>    ps_dds &lt;-<span class="st"> </span><span class="kw">phyloseq_to_deseq2</span>(ps, <span class="op">~</span><span class="dv">1</span>)</span>
+<span id="cb35-6"><a href="deseq.html#cb35-6"></a>    <span class="co"># Calculate the size factors (scaling)</span></span>
+<span id="cb35-7"><a href="deseq.html#cb35-7"></a>    ps_dds &lt;-<span class="st"> </span><span class="kw">estimateSizeFactors</span>(ps_dds, <span class="dt">type =</span> <span class="st">&quot;poscounts&quot;</span>)</span>
+<span id="cb35-8"><a href="deseq.html#cb35-8"></a>    <span class="co"># Extract counts</span></span>
+<span id="cb35-9"><a href="deseq.html#cb35-9"></a>    counts &lt;-<span class="st"> </span>DESeq2<span class="op">::</span><span class="kw">counts</span>(ps_dds, <span class="dt">normalized =</span> T)</span>
+<span id="cb35-10"><a href="deseq.html#cb35-10"></a>    <span class="co"># Convert back to phyloseq</span></span>
+<span id="cb35-11"><a href="deseq.html#cb35-11"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(counts, <span class="dt">taxa_are_rows =</span> T)</span>
+<span id="cb35-12"><a href="deseq.html#cb35-12"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb35-13"><a href="deseq.html#cb35-13"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span><span class="kw">sizeFactors</span>(ps_dds)</span>
+<span id="cb35-14"><a href="deseq.html#cb35-14"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb35-15"><a href="deseq.html#cb35-15"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb35-16"><a href="deseq.html#cb35-16"></a>    ps_DESeq &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
+<span id="cb35-17"><a href="deseq.html#cb35-17"></a>    <span class="kw">return</span>(ps_DESeq)</span>
+<span id="cb35-18"><a href="deseq.html#cb35-18"></a>}</span>
+<span id="cb35-19"><a href="deseq.html#cb35-19"></a></span>
+<span id="cb35-20"><a href="deseq.html#cb35-20"></a></span>
+<span id="cb35-21"><a href="deseq.html#cb35-21"></a>norm_DESeq_vs &lt;-<span class="st"> </span><span class="cf">function</span>(ps, <span class="dt">group =</span> <span class="dv">1</span>){</span>
+<span id="cb35-22"><a href="deseq.html#cb35-22"></a>  <span class="kw">require</span>(DESeq2, <span class="dt">quietly =</span> T)</span>
+<span id="cb35-23"><a href="deseq.html#cb35-23"></a>  ps_dds &lt;-<span class="st"> </span><span class="kw">phyloseq_to_deseq2</span>(ps, <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb35-24"><a href="deseq.html#cb35-24"></a>  ps_dds &lt;-<span class="st"> </span><span class="kw">estimateSizeFactors</span>(ps_dds, <span class="dt">type =</span> <span class="st">&quot;poscounts&quot;</span>)</span>
+<span id="cb35-25"><a href="deseq.html#cb35-25"></a>  <span class="co"># Variance transformation</span></span>
+<span id="cb35-26"><a href="deseq.html#cb35-26"></a>  ps_dds &lt;-<span class="st"> </span><span class="kw">estimateDispersions</span>(ps_dds)</span>
+<span id="cb35-27"><a href="deseq.html#cb35-27"></a>  abund &lt;-<span class="st"> </span><span class="kw">getVarianceStabilizedData</span>(ps_dds)</span>
+<span id="cb35-28"><a href="deseq.html#cb35-28"></a>  <span class="co"># don’t allow deseq to return negative counts</span></span>
+<span id="cb35-29"><a href="deseq.html#cb35-29"></a>  <span class="co"># add the minimum count to all values</span></span>
+<span id="cb35-30"><a href="deseq.html#cb35-30"></a>  <span class="co"># another option is to replace negative counts with 0</span></span>
+<span id="cb35-31"><a href="deseq.html#cb35-31"></a>  abund &lt;-<span class="st"> </span>abund <span class="op">+</span><span class="st"> </span><span class="kw">abs</span>(<span class="kw">min</span>(abund)) </span>
+<span id="cb35-32"><a href="deseq.html#cb35-32"></a>  otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(abund, <span class="dt">taxa_are_rows =</span> T)</span>
+<span id="cb35-33"><a href="deseq.html#cb35-33"></a>  sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb35-34"><a href="deseq.html#cb35-34"></a>  tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb35-35"><a href="deseq.html#cb35-35"></a>  phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb35-36"><a href="deseq.html#cb35-36"></a>  ps_DESeq &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
+<span id="cb35-37"><a href="deseq.html#cb35-37"></a>  <span class="kw">return</span>(ps_DESeq)</span>
+<span id="cb35-38"><a href="deseq.html#cb35-38"></a>}</span></code></pre></div>
 </div>
 <div id="deseq-on-global-patterns" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> DESeq on Global Patterns</h2>
 <p>Perform DESeq RLE normalization as well as DESeq variance stabalised transformation.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="deseq.html#cb32-1"></a>gp_deseq_rle &lt;-<span class="st"> </span><span class="kw">norm_DESeq_RLE_poscounts</span>(gp_raw)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="deseq.html#cb36-1"></a>gp_deseq_rle &lt;-<span class="st"> </span><span class="kw">norm_DESeq_RLE_poscounts</span>(gp_raw)</span></code></pre></div>
 <pre><code>## converting counts to integer mode</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="deseq.html#cb34-1"></a>gp_deseq_vs &lt;-<span class="st"> </span><span class="kw">norm_DESeq_vs</span>(gp_raw)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="deseq.html#cb38-1"></a>gp_deseq_vs &lt;-<span class="st"> </span><span class="kw">norm_DESeq_vs</span>(gp_raw)</span></code></pre></div>
 <pre><code>## converting counts to integer mode</code></pre>
 <pre><code>## gene-wise dispersion estimates</code></pre>
 <pre><code>## mean-dispersion relationship</code></pre>
@@ -277,20 +277,20 @@ It is possible to provide the size factors calculated by another method to DESeq
 ##    specify fitType=&#39;local&#39; or &#39;mean&#39; to avoid this message next time.</code></pre>
 <pre><code>## final dispersion estimates</code></pre>
 <p>Examine principal coordinate plots between raw data and DESeq normalized data.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="deseq.html#cb40-1"></a>gp_raw_dist &lt;-<span class="st"> </span>phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_raw, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) </span>
-<span id="cb40-2"><a href="deseq.html#cb40-2"></a>gp_rle_dist &lt;-<span class="st"> </span>phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_deseq_rle, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) </span>
-<span id="cb40-3"><a href="deseq.html#cb40-3"></a>gp_vs_dist &lt;-<span class="st"> </span>phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_deseq_vs, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) </span>
-<span id="cb40-4"><a href="deseq.html#cb40-4"></a></span>
-<span id="cb40-5"><a href="deseq.html#cb40-5"></a><span class="kw">plot_ordination</span>(gp_raw, gp_raw_dist, <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Raw&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb40-6"><a href="deseq.html#cb40-6"></a><span class="kw">plot_ordination</span>(gp_deseq_rle, gp_rle_dist, <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;RLE&quot;</span>) <span class="op">+</span></span>
-<span id="cb40-7"><a href="deseq.html#cb40-7"></a><span class="kw">plot_ordination</span>(gp_deseq_vs, gp_vs_dist, <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;RLE&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb40-8"><a href="deseq.html#cb40-8"></a><span class="st">  </span><span class="kw">plot_layout</span>(<span class="dt">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="deseq.html#cb44-1"></a>gp_raw_dist &lt;-<span class="st"> </span>phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_raw, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) </span>
+<span id="cb44-2"><a href="deseq.html#cb44-2"></a>gp_rle_dist &lt;-<span class="st"> </span>phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_deseq_rle, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) </span>
+<span id="cb44-3"><a href="deseq.html#cb44-3"></a>gp_vs_dist &lt;-<span class="st"> </span>phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_deseq_vs, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) </span>
+<span id="cb44-4"><a href="deseq.html#cb44-4"></a></span>
+<span id="cb44-5"><a href="deseq.html#cb44-5"></a><span class="kw">plot_ordination</span>(gp_raw, gp_raw_dist, <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Raw&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-6"><a href="deseq.html#cb44-6"></a><span class="kw">plot_ordination</span>(gp_deseq_rle, gp_rle_dist, <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;RLE&quot;</span>) <span class="op">+</span></span>
+<span id="cb44-7"><a href="deseq.html#cb44-7"></a><span class="kw">plot_ordination</span>(gp_deseq_vs, gp_vs_dist, <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;RLE&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-8"><a href="deseq.html#cb44-8"></a><span class="st">  </span><span class="kw">plot_layout</span>(<span class="dt">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/deseq-ordination-1.png" width="672" /></p>
 <p>See how dissimilarity matrices differ from raw count dissimilarity matrices.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="deseq.html#cb41-1"></a><span class="kw">plot_norm_changes</span>(gp_deseq_rle, gp_raw)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="deseq.html#cb42-1"></a><span class="kw">plot_norm_changes</span>(gp_deseq_vs, gp_raw)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="deseq.html#cb45-1"></a><span class="kw">plot_norm_changes</span>(gp_deseq_rle, gp_raw)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="deseq.html#cb46-1"></a><span class="kw">plot_norm_changes</span>(gp_deseq_vs, gp_raw)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
 <!-- Look at differences between scaling factors -->
 <!-- do we need to exponentiate?  -->
 <!-- ```{r} -->

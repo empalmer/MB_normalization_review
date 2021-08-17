@@ -137,14 +137,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">MB Normalization</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="1.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
 <ul>
@@ -211,28 +211,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="cumulative-sum-scaling-css" class="section level1" number="7">
 <h1><span class="header-section-number">Chapter 7</span> Cumulative sum scaling (CSS)</h1>
 <p>Cumulative sum scaling is, another scaling method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner <span class="citation">(Paulson et al. <a href="#ref-paulson2013" role="doc-biblioref">2013</a>)</span>. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found, so this is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. It initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods <span class="citation">(Costea et al. <a href="#ref-costea2014" role="doc-biblioref">2014</a>)</span>.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="cumulative-sum-scaling-css.html#cb47-1"></a>norm_CSS &lt;-<span class="st"> </span><span class="cf">function</span>(ps){</span>
-<span id="cb47-2"><a href="cumulative-sum-scaling-css.html#cb47-2"></a>  <span class="kw">require</span>(metagenomeSeq, <span class="dt">quietly =</span> T)</span>
-<span id="cb47-3"><a href="cumulative-sum-scaling-css.html#cb47-3"></a>  ps.metaG&lt;-<span class="kw">phyloseq_to_metagenomeSeq</span>(ps)</span>
-<span id="cb47-4"><a href="cumulative-sum-scaling-css.html#cb47-4"></a>  p_stat =<span class="st"> </span><span class="kw">cumNormStatFast</span>(ps.metaG)</span>
-<span id="cb47-5"><a href="cumulative-sum-scaling-css.html#cb47-5"></a>  ps.metaG =<span class="st"> </span><span class="kw">cumNorm</span>(ps.metaG, <span class="dt">p =</span> p_stat)</span>
-<span id="cb47-6"><a href="cumulative-sum-scaling-css.html#cb47-6"></a>  ps.metaG.norm &lt;-<span class="st"> </span><span class="kw">MRcounts</span>(ps.metaG, <span class="dt">norm =</span> T)</span>
-<span id="cb47-7"><a href="cumulative-sum-scaling-css.html#cb47-7"></a></span>
-<span id="cb47-8"><a href="cumulative-sum-scaling-css.html#cb47-8"></a>  otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(ps.metaG.norm, <span class="dt">taxa_are_rows =</span> T)</span>
-<span id="cb47-9"><a href="cumulative-sum-scaling-css.html#cb47-9"></a>  sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb47-10"><a href="cumulative-sum-scaling-css.html#cb47-10"></a>  sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span><span class="kw">normFactors</span>(ps.metaG)<span class="op">/</span><span class="fl">1e6</span></span>
-<span id="cb47-11"><a href="cumulative-sum-scaling-css.html#cb47-11"></a>  tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb47-12"><a href="cumulative-sum-scaling-css.html#cb47-12"></a>  phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb47-13"><a href="cumulative-sum-scaling-css.html#cb47-13"></a>  ps_CSS &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
-<span id="cb47-14"><a href="cumulative-sum-scaling-css.html#cb47-14"></a>  <span class="kw">return</span>(ps_CSS)</span>
-<span id="cb47-15"><a href="cumulative-sum-scaling-css.html#cb47-15"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="cumulative-sum-scaling-css.html#cb51-1"></a>norm_CSS &lt;-<span class="st"> </span><span class="cf">function</span>(ps){</span>
+<span id="cb51-2"><a href="cumulative-sum-scaling-css.html#cb51-2"></a>  <span class="kw">require</span>(metagenomeSeq, <span class="dt">quietly =</span> T)</span>
+<span id="cb51-3"><a href="cumulative-sum-scaling-css.html#cb51-3"></a>  ps.metaG&lt;-<span class="kw">phyloseq_to_metagenomeSeq</span>(ps)</span>
+<span id="cb51-4"><a href="cumulative-sum-scaling-css.html#cb51-4"></a>  p_stat =<span class="st"> </span><span class="kw">cumNormStatFast</span>(ps.metaG)</span>
+<span id="cb51-5"><a href="cumulative-sum-scaling-css.html#cb51-5"></a>  ps.metaG =<span class="st"> </span><span class="kw">cumNorm</span>(ps.metaG, <span class="dt">p =</span> p_stat)</span>
+<span id="cb51-6"><a href="cumulative-sum-scaling-css.html#cb51-6"></a>  ps.metaG.norm &lt;-<span class="st"> </span><span class="kw">MRcounts</span>(ps.metaG, <span class="dt">norm =</span> T)</span>
+<span id="cb51-7"><a href="cumulative-sum-scaling-css.html#cb51-7"></a></span>
+<span id="cb51-8"><a href="cumulative-sum-scaling-css.html#cb51-8"></a>  otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(ps.metaG.norm, <span class="dt">taxa_are_rows =</span> T)</span>
+<span id="cb51-9"><a href="cumulative-sum-scaling-css.html#cb51-9"></a>  sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb51-10"><a href="cumulative-sum-scaling-css.html#cb51-10"></a>  sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span><span class="kw">normFactors</span>(ps.metaG)<span class="op">/</span><span class="fl">1e6</span></span>
+<span id="cb51-11"><a href="cumulative-sum-scaling-css.html#cb51-11"></a>  tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb51-12"><a href="cumulative-sum-scaling-css.html#cb51-12"></a>  phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb51-13"><a href="cumulative-sum-scaling-css.html#cb51-13"></a>  ps_CSS &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
+<span id="cb51-14"><a href="cumulative-sum-scaling-css.html#cb51-14"></a>  <span class="kw">return</span>(ps_CSS)</span>
+<span id="cb51-15"><a href="cumulative-sum-scaling-css.html#cb51-15"></a>}</span></code></pre></div>
 <div id="css-on-global-patterns" class="section level2" number="7.1">
 <h2><span class="header-section-number">7.1</span> CSS on Global Patterns</h2>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="cumulative-sum-scaling-css.html#cb48-1"></a>gp_css &lt;-<span class="st"> </span><span class="kw">norm_CSS</span>(gp_raw)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="cumulative-sum-scaling-css.html#cb52-1"></a>gp_css &lt;-<span class="st"> </span><span class="kw">norm_CSS</span>(gp_raw)</span></code></pre></div>
 <pre><code>## Default value being used.</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="cumulative-sum-scaling-css.html#cb50-1"></a><span class="kw">plot_norm_changes</span>(gp_css, gp_tss, </span>
-<span id="cb50-2"><a href="cumulative-sum-scaling-css.html#cb50-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;CSS&quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="cumulative-sum-scaling-css.html#cb54-1"></a><span class="kw">plot_norm_changes</span>(gp_css, gp_tss, </span>
+<span id="cb54-2"><a href="cumulative-sum-scaling-css.html#cb54-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;CSS&quot;</span>)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>CSS normalization appears to consider pairs as more different than TSS normalization, and pairs with high sequencing depth differences even more so.</p>
 
 </div>

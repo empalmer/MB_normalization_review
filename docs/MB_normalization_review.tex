@@ -128,42 +128,75 @@
 \hypertarget{the-importance-of-normalization}{%
 \section{The importance of normalization}\label{the-importance-of-normalization}}
 
-Microbiome data must be normalized before any analysis can be performed. Following sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data is in the form of a matrix of counts of the observed abundance in each sample. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.
+Microbiome data must be normalized before any analysis can be performed.
+Following the process of sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data are in the form of a matrix of read counts. Normalization is the process of transforming raw read count data into data that can be compared between samples. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.
 
-Ideally, any analysis of composition, differences, connections, etc. should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal library sizes \citep{salter2014}. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals. Currently, there is no known `best' normalization method that removes all technical artifacts leaving only biological signals.
+Analysis of composition, differences, connections, etc. should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal sequencing depths \citep{salter2014}. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals such as sequencing depth. Currently, there is no known `best' normalization method that removes all technical artifacts leaving only biological signals.
 
-Due to the sequencing technology, samples will have different library sizes (also known as sequencing depth), so directly comparing counts between samples is not possible. To illustrate this, consider the counts of one taxon across two samples. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples?
+Due to the sequencing technology, samples will have different sequencing depths, or the sum of all the counts in a sample. Directly comparing raw counts between samples is not possible. To illustrate this, consider the counts of one taxon, labeled \texttt{ASV1}, across two samples shown below. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples?
+
+\begin{verbatim}
+## 
+## Attaching package: 'gridExtra'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:Biobase':
+## 
+##     combine
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:BiocGenerics':
+## 
+##     combine
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     combine
+\end{verbatim}
 
 \includegraphics{MB_normalization_review_files/figure-latex/demo_normalization_importance-1.pdf}
 
-Normalization in the context of microbiome data often refers to standardizing sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and then the counts for each taxon in a given sample are divided by its scaling factor. Figure B shows the same data as figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in \texttt{ASV1} between samples appears much smaller. However, now there appears to be a difference in \texttt{ASV2}, even though the counts were originally the same. This is because in sample B \texttt{ASV1} consists of a higher proportion of the total count than in sample A.
+Normalization for microbiome data often refers to standardizing sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in \texttt{ASV1} between samples appears much smaller. However, now there appears to be a difference in \texttt{ASV2}, even though the counts were originally the same. This is because in sample B \texttt{ASV1} consists of a higher proportion of the total count than in sample A.
 
 This demonstrates the importance of normalization, but also the artifacts that can occur depending on the method.
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-1-1.pdf}
 
 \hypertarget{the-compositional-nature-of-microbiome-data}{%
 \section{The compositional nature of microbiome data}\label{the-compositional-nature-of-microbiome-data}}
 
-Microbiome data are inherently compositional. This means that the count of each sampled taxa is a portion of a larger whole. Each observed taxa is not independent. As we saw in the above example, before normalization, \texttt{ASV2} was equal between samples. After converting to proportions, \texttt{ASV2} was no longer equal. With compositional data, each sample has a total sum constraint. Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.
+Microbiome data are inherently compositional. The counts of the collection of taxa that make up each sample are constrained by the total sum, or sequencing depth for that sample. This means that the count of each sampled taxon is a portion of a larger whole. Each observed taxon is not independent. As we saw in the above example, before normalization, \texttt{ASV2} was equal between samples. After converting to proportions, \texttt{ASV2} no longer appears equal. If there is a difference between two samples it is unclear if that difference is because of a true difference on that taxon or that taxon is changing because of differences in another taxon.
+Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.
 
-With the library size as the sum constraint for each sample, if we know in a biological system that after an event occurs (treatment), ASV1 decreases, this will change the composition of the observed ASV2 regardless of what.
+With library size as the sum constraint for each sample, if we know in a biological system that after an event occurs (treatment), ASV1 decreases, this will change the composition of the sampled ASV2 regardless of its change or lack thereof in the underlying population.
 
-\includegraphics{MB_normalization_review_files/figure-latex/compositional-plot-1.pdf} \includegraphics{MB_normalization_review_files/figure-latex/compositional-plot-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/compositional-plot-1.pdf}
 
-Consider again two samples consisting of red and blue points. We can think of the samples as before and after treatment. In the second plot, the number of blue dots has decreased, but the red remains the same. Consider the following potential observation from this population:
+Consider again two samples consisting of red and blue points. We can think of the samples as before and after treatment. In the second plot, the number of blue dots in the population and in the observed sample has decreased, but the red remains the same.
 
 \begin{tabular}{l|r|r}
 \hline
 Sample & blue & red\\
 \hline
-Before & 90 & 10\\
+Before & 20 & 10\\
 \hline
-After & 40 & 80\\
+After & 4 & 10\\
 \hline
 \end{tabular}
 
-In the after sample, the blue counts have decreased, as we would expect from our knowledge of the population. However, the red counts have increased, even though there is no change in the red population. This observed increase in red counts is due to the compositional nature of the sampled points, and not any true difference in the red population.
+\begin{tabular}{l|r|r}
+\hline
+Sample & blue & red\\
+\hline
+Before & 0.6666667 & 0.2857143\\
+\hline
+After & 0.3333333 & 0.7142857\\
+\hline
+\end{tabular}
+
+This observed increase in red is due to the compositional nature of the sampled points, and not any true difference in the red population.
 
 \hypertarget{log-ratio}{%
 \subsection{Log ratio}\label{log-ratio}}
@@ -391,7 +424,7 @@ We can also compare the values of the distance matrices before and after normali
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-3-1.pdf}
 
 Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are `more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, unnormalized data, and became marked as more similar after TSS normalization.
 
@@ -681,7 +714,7 @@ See how dissimilarity matrices differ from raw count dissimilarity matrices.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-7-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-6-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -689,7 +722,7 @@ See how dissimilarity matrices differ from raw count dissimilarity matrices.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-7-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-6-2.pdf}
 
 \hypertarget{edger-tmm}{%
 \chapter{edgeR TMM}\label{edger-tmm}}
@@ -762,7 +795,7 @@ Perform normalization
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-10-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -770,7 +803,7 @@ Perform normalization
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-10-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-9-2.pdf}
 
 \hypertarget{cumulative-sum-scaling-css}{%
 \chapter{Cumulative sum scaling (CSS)}\label{cumulative-sum-scaling-css}}
@@ -817,7 +850,7 @@ Cumulative sum scaling is, another scaling method, developed for marker gene seq
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-13-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-12-1.pdf}
 
 CSS normalization appears to consider pairs as more different than TSS normalization, and pairs with high sequencing depth differences even more so.
 
@@ -864,7 +897,7 @@ The size factors can be inputted to DESeq and a VST transformation applied addit
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-15-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-14-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -872,7 +905,7 @@ The size factors can be inputted to DESeq and a VST transformation applied addit
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-15-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-14-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -880,7 +913,7 @@ The size factors can be inputted to DESeq and a VST transformation applied addit
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-15-3.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-14-3.pdf}
 
 \hypertarget{wrench}{%
 \chapter{Wrench}\label{wrench}}
@@ -959,7 +992,7 @@ Wrench is a recent normalization method developed for microbiome data. This meth
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-18-1.pdf}
 
   \bibliography{book.bib,packages.bib}
 

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Importing Data | Tutorial on Microbiome Normalization</title>
+  <title>Chapter 2 Importing Data | Tutorial on Microbiome Normalization</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Importing Data | Tutorial on Microbiome Normalization" />
+  <meta property="og:title" content="Chapter 2 Importing Data | Tutorial on Microbiome Normalization" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Importing Data | Tutorial on Microbiome Normalization" />
+  <meta name="twitter:title" content="Chapter 2 Importing Data | Tutorial on Microbiome Normalization" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -31,7 +31,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="intro.html"/>
+<link rel="prev" href="index.html"/>
 <link rel="next" href="total-sum-scaling-tss.html"/>
 <script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -137,57 +137,56 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">MB Normalization</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerecs</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>2.1</b> The importance of normalization</a></li>
-<li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>2.2</b> The compositional nature of microbiome data</a>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>2.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>2.3</b> Zero-inflation of microbiome data</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>3</b> Importing Data</a>
+<li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>3.1</b> Global Patterns</a></li>
-<li class="chapter" data-level="3.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>3.2</b> Pre-procesing Quality Control and Filtering</a></li>
+<li class="chapter" data-level="2.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>2.1</b> Global Patterns</a></li>
+<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.2</b> Pre-procesing Quality Control and Filtering</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>4</b> Total Sum scaling (TSS)</a>
+<li class="chapter" data-level="3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>3</b> Total Sum scaling (TSS)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>4.1</b> About TSS</a></li>
-<li class="chapter" data-level="4.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>4.2</b> TSS Implementation</a></li>
-<li class="chapter" data-level="4.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>4.3</b> TSS on Global Patterns</a></li>
+<li class="chapter" data-level="3.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>3.1</b> About TSS</a></li>
+<li class="chapter" data-level="3.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>3.2</b> TSS Implementation</a></li>
+<li class="chapter" data-level="3.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>3.3</b> TSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>5</b> Rarefying</a>
+<li class="chapter" data-level="4" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>4</b> Rarefying</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>5.1</b> Rarefying on Global Patterns</a></li>
+<li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.1</b> Rarefying on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>6</b> DESeq</a>
+<li class="chapter" data-level="5" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>5</b> DESeq</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>6.1</b> About DESeq</a></li>
-<li class="chapter" data-level="6.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>6.2</b> DESeq Implementation</a></li>
-<li class="chapter" data-level="6.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>6.3</b> DESeq on Global Patterns</a></li>
+<li class="chapter" data-level="5.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>5.1</b> About DESeq</a></li>
+<li class="chapter" data-level="5.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>5.2</b> DESeq Implementation</a></li>
+<li class="chapter" data-level="5.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>5.3</b> DESeq on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>7</b> edgeR TMM</a>
+<li class="chapter" data-level="6" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>6</b> edgeR TMM</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>7.1</b> EdgeR TMM implementatin</a></li>
-<li class="chapter" data-level="7.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>7.2</b> TMM on Global Patterns</a></li>
+<li class="chapter" data-level="6.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementatin</a></li>
+<li class="chapter" data-level="6.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>8</b> Cumulative sum scaling (CSS)</a>
+<li class="chapter" data-level="7" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>7</b> Cumulative sum scaling (CSS)</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>8.1</b> CSS on Global Patterns</a></li>
+<li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.1</b> CSS on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>9</b> GMPR</a>
+<li class="chapter" data-level="8" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>8</b> GMPR</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>9.1</b> Global Patterns GMPR</a></li>
+<li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>8.1</b> Global Patterns GMPR</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>10</b> Wrench</a>
+<li class="chapter" data-level="9" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>9</b> Wrench</a>
 <ul>
-<li class="chapter" data-level="10.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>10.1</b> Wrench Implementation</a></li>
-<li class="chapter" data-level="10.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>10.2</b> Wrench on Global Patterns</a></li>
+<li class="chapter" data-level="9.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>9.1</b> Wrench Implementation</a></li>
+<li class="chapter" data-level="9.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>9.2</b> Wrench on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>11</b> Log-Ratio Approaches</a></li>
-<li class="chapter" data-level="12" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>12</b> Comparisions</a></li>
+<li class="chapter" data-level="10" data-path="log-ratio-approaches.html"><a href="log-ratio-approaches.html"><i class="fa fa-check"></i><b>10</b> Log-Ratio Approaches</a></li>
+<li class="chapter" data-level="11" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>11</b> Comparisions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -209,16 +208,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="importing-data" class="section level1" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Importing Data</h1>
+<div id="importing-data" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Importing Data</h1>
 <p>Luckily there are multiple publicly available pre-compiled microbiome data sets. These data sets begin after the bioinformatics pipeline and are matrices of counts of OTUs per sample.</p>
 <p>These data sets can exist as <code>phyloseq</code> objects or as separate tables of counts and metadata.</p>
-<div id="global-patterns" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Global Patterns</h2>
+<div id="global-patterns" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Global Patterns</h2>
 <p>The Global Patterns dataset is a publicly available dataset in the <code>phyloseq</code> package. These data contain samples from 25 different environmental samples and mock communities. The sampling depth of these samples averages 3.1 million samples.</p>
 <p>The following lines load the relevant packages and data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="importing-data.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="importing-data.html#cb1-2"></a><span class="kw">library</span>(phyloseq)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="importing-data.html#cb5-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb5-2"><a href="importing-data.html#cb5-2"></a><span class="kw">library</span>(phyloseq)</span></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;phyloseq&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:SummarizedExperiment&#39;:
@@ -233,28 +232,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## The following object is masked from &#39;package:IRanges&#39;:
 ## 
 ##     distance</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="importing-data.html#cb7-1"></a><span class="kw">data</span>(<span class="st">&quot;GlobalPatterns&quot;</span>)</span>
-<span id="cb7-2"><a href="importing-data.html#cb7-2"></a><span class="co"># examine object </span></span>
-<span id="cb7-3"><a href="importing-data.html#cb7-3"></a>GlobalPatterns</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="importing-data.html#cb11-1"></a><span class="kw">data</span>(<span class="st">&quot;GlobalPatterns&quot;</span>)</span>
+<span id="cb11-2"><a href="importing-data.html#cb11-2"></a><span class="co"># examine object </span></span>
+<span id="cb11-3"><a href="importing-data.html#cb11-3"></a>GlobalPatterns</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 19216 taxa and 26 samples ]
 ## sample_data() Sample Data:       [ 26 samples by 7 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 19216 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 19216 tips and 19215 internal nodes ]</code></pre>
 </div>
-<div id="pre-procesing-quality-control-and-filtering" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Pre-procesing Quality Control and Filtering</h2>
+<div id="pre-procesing-quality-control-and-filtering" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Pre-procesing Quality Control and Filtering</h2>
 <p>In addition to normalization, there are some steps we can perform that ideally remove technical artifacts from the sequencing process that only introduce noise.</p>
 <p>These filtering steps commonly consist of filtering out samples with a low total read depth and filtering out taxa that are rarely abundant.</p>
 <p>Let’s create a filtered version of the Global Patterns dataset. Note that there are only 26 samples, and all have a large library size, so we will not filter out any samples here.</p>
 <p>For taxa filtering, we will remove OTUs/ASVs that appear fewer than 5 times in more than half the samples.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="importing-data.html#cb9-1"></a><span class="co"># Determine which taxa to remove</span></span>
-<span id="cb9-2"><a href="importing-data.html#cb9-2"></a>filter_taxa &lt;-<span class="st"> </span><span class="kw">genefilter_sample</span>(GlobalPatterns,</span>
-<span id="cb9-3"><a href="importing-data.html#cb9-3"></a>                                 <span class="kw">filterfun_sample</span>(<span class="cf">function</span>(x) x <span class="op">&gt;</span><span class="st"> </span><span class="dv">5</span>),</span>
-<span id="cb9-4"><a href="importing-data.html#cb9-4"></a>                                 <span class="dt">A=</span><span class="fl">0.5</span><span class="op">*</span><span class="kw">nsamples</span>(GlobalPatterns))</span>
-<span id="cb9-5"><a href="importing-data.html#cb9-5"></a><span class="co"># Remove those taxa from the GlobalPatterns dataset</span></span>
-<span id="cb9-6"><a href="importing-data.html#cb9-6"></a>gp_raw &lt;-<span class="st"> </span><span class="kw">prune_taxa</span>(filter_taxa, GlobalPatterns)</span>
-<span id="cb9-7"><a href="importing-data.html#cb9-7"></a>gp_raw</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="importing-data.html#cb13-1"></a><span class="co"># Determine which taxa to remove</span></span>
+<span id="cb13-2"><a href="importing-data.html#cb13-2"></a>filter_taxa &lt;-<span class="st"> </span><span class="kw">genefilter_sample</span>(GlobalPatterns,</span>
+<span id="cb13-3"><a href="importing-data.html#cb13-3"></a>                                 <span class="kw">filterfun_sample</span>(<span class="cf">function</span>(x) x <span class="op">&gt;</span><span class="st"> </span><span class="dv">5</span>),</span>
+<span id="cb13-4"><a href="importing-data.html#cb13-4"></a>                                 <span class="dt">A=</span><span class="fl">0.5</span><span class="op">*</span><span class="kw">nsamples</span>(GlobalPatterns))</span>
+<span id="cb13-5"><a href="importing-data.html#cb13-5"></a><span class="co"># Remove those taxa from the GlobalPatterns dataset</span></span>
+<span id="cb13-6"><a href="importing-data.html#cb13-6"></a>gp_raw &lt;-<span class="st"> </span><span class="kw">prune_taxa</span>(filter_taxa, GlobalPatterns)</span>
+<span id="cb13-7"><a href="importing-data.html#cb13-7"></a>gp_raw</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 219 taxa and 26 samples ]
 ## sample_data() Sample Data:       [ 26 samples by 7 sample variables ]
@@ -263,7 +262,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This decreases the number of taxa from 19216 to 219. This is not surprising, because this dataset contains samples from widely different locations (gut, soil, etc), and few taxa are shared among all samples and locations. One potential problem with this approach is the widely different locations, so it is possible that the remaining taxa could be some technical artifact, or could be a general ‘core’ set of taxa shared across the disparate environments.</p>
 <p>Additionally, let us save the total sampling depth as the variable <code>depth</code> in the metadata for the GlobalPatterns dataset.</p>
 <!-- (Is this original sampling depth or after filtering? Shoudl be initial yes?) -->
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="importing-data.html#cb11-1"></a>gp_raw<span class="op">@</span>sam_data<span class="op">$</span>depth &lt;-<span class="st"> </span><span class="kw">sample_sums</span>(gp_raw)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="importing-data.html#cb15-1"></a>gp_raw<span class="op">@</span>sam_data<span class="op">$</span>depth &lt;-<span class="st"> </span><span class="kw">sample_sums</span>(gp_raw)</span></code></pre></div>
 <!-- ## HMP -->
 <!-- Another dataset, not included in analysis yet since it takes very long to load and run analhysis on. Could be a more 'realistic' dataset to use.  -->
 <!-- About the HMP dataset.....  -->
@@ -310,7 +309,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="total-sum-scaling-tss.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

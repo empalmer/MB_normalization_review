@@ -137,14 +137,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">MB Normalization</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="1.2.1" data-path="intro.html"><a href="intro.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
 <ul>
@@ -215,32 +215,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- "In the absence of such control features, effective correc- tion for compositional bias can still be hoped for, as it can be shown that this correction amounts to resolv- ing a linear technical bias [13]. This fact allows one to exploit several widely used non- spike-in normalization approaches [13, 15–17], which approximate the afore- mentioned spike-in strategy by assuming that most fea- tures do not change on average across samples/conditions. For the same reason, such an interpretation can also be given to approaches like centered logarithmic transforms (CLR) from the theory of compositional data, which many analysts favor when working with relative abundances [18–24]. In this paper, we analyze the behavior of these existing scaling normalization techniques in light of com- positional bias. This method develops a compositional bias correction technique for sparse count data based on an empirical Bayes approach that borrows information across features and samples. The scaling factor is the average of ratios of relative abundances across taxa." -->
 <div id="wrench-implementation" class="section level2" number="9.1">
 <h2><span class="header-section-number">9.1</span> Wrench Implementation</h2>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="wrench.html#cb55-1"></a>norm_wrench &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_col){</span>
-<span id="cb55-2"><a href="wrench.html#cb55-2"></a>    <span class="kw">require</span>(Wrench, <span class="dt">quietly =</span> T)</span>
-<span id="cb55-3"><a href="wrench.html#cb55-3"></a>    <span class="cf">if</span>( <span class="kw">identical</span>(<span class="kw">all.equal</span>(<span class="kw">length</span>(group_col), <span class="dv">1</span>), <span class="ot">TRUE</span>) <span class="op">&amp;</span><span class="st"> </span><span class="kw">nsamples</span>(ps) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span> ){</span>
-<span id="cb55-4"><a href="wrench.html#cb55-4"></a>        <span class="co"># Assume that group was a sample variable name (must be categorical)</span></span>
-<span id="cb55-5"><a href="wrench.html#cb55-5"></a>        group =<span class="st"> </span><span class="kw">get_variable</span>(ps, group_col)</span>
-<span id="cb55-6"><a href="wrench.html#cb55-6"></a>    }</span>
-<span id="cb55-7"><a href="wrench.html#cb55-7"></a>    otu_tab &lt;-<span class="st"> </span><span class="kw">otu_table</span>(ps)</span>
-<span id="cb55-8"><a href="wrench.html#cb55-8"></a>    W &lt;-<span class="st"> </span><span class="kw">wrench</span>(otu_tab, group)</span>
-<span id="cb55-9"><a href="wrench.html#cb55-9"></a>    </span>
-<span id="cb55-10"><a href="wrench.html#cb55-10"></a>    compositionalFactors &lt;-<span class="st"> </span>W<span class="op">$</span>ccf</span>
-<span id="cb55-11"><a href="wrench.html#cb55-11"></a>    normalizationFactors &lt;-<span class="st"> </span>W<span class="op">$</span>nf</span>
-<span id="cb55-12"><a href="wrench.html#cb55-12"></a>    </span>
-<span id="cb55-13"><a href="wrench.html#cb55-13"></a>    normed_otu &lt;-<span class="st"> </span>otu_tab<span class="op">/</span>(normalizationFactors<span class="op">/</span><span class="fl">1e6</span>)</span>
-<span id="cb55-14"><a href="wrench.html#cb55-14"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(normed_otu, <span class="dt">taxa_are_rows =</span> T)</span>
-<span id="cb55-15"><a href="wrench.html#cb55-15"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb55-16"><a href="wrench.html#cb55-16"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>normalizationFactors</span>
-<span id="cb55-17"><a href="wrench.html#cb55-17"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb55-18"><a href="wrench.html#cb55-18"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb55-19"><a href="wrench.html#cb55-19"></a>    ps_wrench &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
-<span id="cb55-20"><a href="wrench.html#cb55-20"></a>    </span>
-<span id="cb55-21"><a href="wrench.html#cb55-21"></a>    <span class="kw">return</span>(ps_wrench)</span>
-<span id="cb55-22"><a href="wrench.html#cb55-22"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="wrench.html#cb59-1"></a>norm_wrench &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_col){</span>
+<span id="cb59-2"><a href="wrench.html#cb59-2"></a>    <span class="kw">require</span>(Wrench, <span class="dt">quietly =</span> T)</span>
+<span id="cb59-3"><a href="wrench.html#cb59-3"></a>    <span class="cf">if</span>( <span class="kw">identical</span>(<span class="kw">all.equal</span>(<span class="kw">length</span>(group_col), <span class="dv">1</span>), <span class="ot">TRUE</span>) <span class="op">&amp;</span><span class="st"> </span><span class="kw">nsamples</span>(ps) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span> ){</span>
+<span id="cb59-4"><a href="wrench.html#cb59-4"></a>        <span class="co"># Assume that group was a sample variable name (must be categorical)</span></span>
+<span id="cb59-5"><a href="wrench.html#cb59-5"></a>        group =<span class="st"> </span><span class="kw">get_variable</span>(ps, group_col)</span>
+<span id="cb59-6"><a href="wrench.html#cb59-6"></a>    }</span>
+<span id="cb59-7"><a href="wrench.html#cb59-7"></a>    otu_tab &lt;-<span class="st"> </span><span class="kw">otu_table</span>(ps)</span>
+<span id="cb59-8"><a href="wrench.html#cb59-8"></a>    W &lt;-<span class="st"> </span><span class="kw">wrench</span>(otu_tab, group)</span>
+<span id="cb59-9"><a href="wrench.html#cb59-9"></a>    </span>
+<span id="cb59-10"><a href="wrench.html#cb59-10"></a>    compositionalFactors &lt;-<span class="st"> </span>W<span class="op">$</span>ccf</span>
+<span id="cb59-11"><a href="wrench.html#cb59-11"></a>    normalizationFactors &lt;-<span class="st"> </span>W<span class="op">$</span>nf</span>
+<span id="cb59-12"><a href="wrench.html#cb59-12"></a>    </span>
+<span id="cb59-13"><a href="wrench.html#cb59-13"></a>    normed_otu &lt;-<span class="st"> </span>otu_tab<span class="op">/</span>(normalizationFactors<span class="op">/</span><span class="fl">1e6</span>)</span>
+<span id="cb59-14"><a href="wrench.html#cb59-14"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(normed_otu, <span class="dt">taxa_are_rows =</span> T)</span>
+<span id="cb59-15"><a href="wrench.html#cb59-15"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb59-16"><a href="wrench.html#cb59-16"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>normalizationFactors</span>
+<span id="cb59-17"><a href="wrench.html#cb59-17"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb59-18"><a href="wrench.html#cb59-18"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb59-19"><a href="wrench.html#cb59-19"></a>    ps_wrench &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
+<span id="cb59-20"><a href="wrench.html#cb59-20"></a>    </span>
+<span id="cb59-21"><a href="wrench.html#cb59-21"></a>    <span class="kw">return</span>(ps_wrench)</span>
+<span id="cb59-22"><a href="wrench.html#cb59-22"></a>}</span></code></pre></div>
 </div>
 <div id="wrench-on-global-patterns" class="section level2" number="9.2">
 <h2><span class="header-section-number">9.2</span> Wrench on Global Patterns</h2>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="wrench.html#cb56-1"></a>gp_wrench &lt;-<span class="st"> </span><span class="kw">norm_wrench</span>(gp_raw, <span class="dt">group_col =</span> <span class="st">&quot;SampleType&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="wrench.html#cb60-1"></a>gp_wrench &lt;-<span class="st"> </span><span class="kw">norm_wrench</span>(gp_raw, <span class="dt">group_col =</span> <span class="st">&quot;SampleType&quot;</span>)</span></code></pre></div>
 <!-- # ```{r} -->
 <!-- # norm_ms_wrench <- function(ps, group_col){ -->
 <!-- #   require(metagenomeSeq, quietly = T) -->
