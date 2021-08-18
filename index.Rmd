@@ -1,7 +1,7 @@
---- 
-title: "Tutorial on Microbiome Normalization"
-author: "Emily Palmer"
-date: "`r Sys.Date()`"
+---
+title: "Tutorial on  Normalization of Microbiome Data"
+# author: "Emily Palmer"
+# date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -10,13 +10,12 @@ link-citations: yes
 description: "A tutorial on normalization methods for microbiome data and discussion of thier uses and performance"
 ---
 
-
-
 # Introduction {#intro}
 
 ```{r, packages, include = F, echo = F}
 library(tidyverse)
 library(patchwork)
+library(gridExtra)
 library(viridis)
 library(DESeq2)
 library(edgeR)
@@ -28,17 +27,18 @@ set.seed(238)
 
 ## The importance of normalization
 
-Microbiome data must be normalized before any analysis can be performed. 
-Following the process of sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data are in the form of a matrix of read counts. Normalization is the process of transforming raw read count data into data that can be compared between samples. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis. 
+Microbiome data must be normalized before any statistical analysis can be performed. Following the process of sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data are in the form of a matrix of read counts. Normalization is the process of transforming raw read count data into data that can be compared between samples. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.
 
-<!-- insert table example of what MB data look like??  -->
+<!-- Microbiome data are usually in the form of a matrix of read counts by samples, which was calculated following sequencing of raw reads and classification of reads into counts per observed taxa/OTU/ASV (depending on the granularity of the data.) -->
+
+<!-- insert table example of what MB data look like??  what is a raw read/what are asvs or otus -->
 
 Analysis of composition, differences, connections, etc. should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal sequencing depths [@salter2014]. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals such as sequencing depth. Currently, there is no known 'best' normalization method that removes all technical artifacts leaving only biological signals.
 
 Due to the sequencing technology, samples will have different sequencing depths, or the sum of all the counts in a sample. Directly comparing raw counts between samples is not possible. To illustrate this, consider the counts of one taxon, labeled `ASV1`, across two samples shown below. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples?
 
 ```{r, demo_normalization_importance, echo = F}
-library(gridExtra)
+
 sampleA <- c(230,5)
 sampleB <- c(23,5)
 ASVs <- c("ASV1", "ASV2")
@@ -69,7 +69,7 @@ p2 <- data.frame(sampleA = sampleA/sum(sampleA), sampleB = sampleB/sum(sampleB),
   scale_color_viridis(discrete = TRUE, option = "E")+
   scale_fill_viridis(discrete = TRUE) 
 
-p1 + p2 + plot_annotation(tag_levels = 'A', tag_prefix = 'Figure')+
+p1 / p2 + plot_annotation(tag_levels = 'A', tag_prefix = 'Figure')+
   plot_layout(guides = 'collect')
 # grid.arrange(tableGrob(df),p1,p1, nrow = 1)
 ```
@@ -78,18 +78,15 @@ Normalization for microbiome data often refers to standardizing sequencing depth
 
 This demonstrates the importance of normalization, but also the artifacts that can occur depending on the method.
 
-
-
 ## The compositional nature of microbiome data
 
-Microbiome data are inherently compositional. The counts of the collection of taxa that make up each sample are constrained by the total sum, or sequencing depth for that sample. This means that the count of each sampled taxon is a portion of a larger whole. Each observed taxon is not independent. As we saw in the above example, before normalization, `ASV2` was equal between samples. After converting to proportions, `ASV2` no longer appears equal. If there is a difference between two samples it is unclear if that difference is because of a true difference on that taxon or that taxon is changing because of differences in another taxon. 
-Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.
+Microbiome data are inherently compositional. The counts of the collection of taxa that make up each sample are constrained by the total sum, or sequencing depth for that sample. This means that the count of each sampled taxon is a portion of a larger whole. Each observed taxon is not independent. As we saw in the above example, before normalization, `ASV2` was equal between samples. After converting to proportions, `ASV2` no longer appears equal. If there is a difference between two samples it is unclear if that difference is because of a true difference in that taxon or if that taxon is changing because of differences in another taxon. Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.
 
 <!-- We do not have knowledge of the absolute abundance. -->
 
-<!-- Consider the library size as fixed.  s-->
+<!-- Add figure number and legend  -->
 
-With library size as the sum constraint for each sample, if we know in a biological system that after an event occurs (treatment), ASV1 decreases, this will change the composition of the sampled ASV2 regardless of its change or lack thereof in the underlying population. 
+With library size as the sum constraint for each sample, if we know in a biological system that after an event occurs (treatment), the red taxon decreases, this will change the composition of the sampled blue taxon regardless of its change or lack thereof in the underlying population.
 
 ```{r, compositional-plot, echo = F}
 sampleA_ASV1x <- rnorm(90)
@@ -117,7 +114,7 @@ pc1 <- dfb4  %>%
 sampleB_index <- sample(1:90, 10)
 sampleBx <- c(sampleA_ASV1x[sampleB_index],sampleA_ASV2x)
 sampleBy <- c(sampleA_ASV1y[sampleB_index],sampleA_ASV2y)
-asv2 <- c(rep("red",10), rep("blue",40))
+asv2 <- c(rep("blue",10), rep("red",40))
 
 dfafter <- data.frame(sampleBx, sampleBy, asv2)
 dfsampledafter <- dfafter[c(1:4,10:20),]
@@ -142,54 +139,55 @@ pc2 <- dfafter %>%
 pc1 + pc2
 ```
 
-Consider again two samples consisting of red and blue points. We can think of the samples as before and after treatment. In the second plot, the number of blue dots in the population and in the observed sample has decreased, but the red remains the same.  
+Consider again two samples consisting of red and blue points. We can think of the samples as before and after treatment. In the second plot, the number of red dots in the population and in the observed sample has decreased, but the blue remains the same.
 
 ```{r, compositional-tibble, echo = F}
 sample <- c("Before", "After")
-blue <- c(20, 4)
-red <- c(10 , 10)
+red <- c(20, 4)
+blue <- c(10 , 10)
 opts <- options(knitr.kable.NA = "")
 
 tibble(sample, blue, red) %>% 
-    knitr::kable(col.names = c("Sample", "blue", "red"))
+    knitr::kable(col.names = c("Sample", "blue", "red"), 
+                 caption = "Counts of sampled red and blue taxa before and after")
 
 
-blue_a <- c(20/30, 10/30)
-red_a <- c(4/14, 10/14)
+red_a <- c(20/30, 10/30)
+blue_a <- c(4/14, 10/14)
 tibble(sample, blue_a, red_a) %>% 
-    knitr::kable(col.names = c("Sample", "blue", "red"))
+    knitr::kable(col.names = c("Sample", "blue", "red"), 
+                 caption = "Proportions of sampled red and blue taxa before and after")
 ```
 
 <!-- In the after sample, the blue counts have decreased, as we would expect from our knowledge of the population. However, the red counts have increased, even though there is no change in the red population.  -->
 
-This observed increase in red is due to the compositional nature of the sampled points, and not any true difference in the red population.
+This observed increase in the proportion of blue is due to the compositional nature of the sampled points, and not any true difference in the blue population.
 
-### Log ratio
+### Log ratio methods
 
-The methodology developed by Aitchison in the 1980s is useful for analyzing compositional data. The theory developed there, however, is for data with different characteristics than microbiome data.
-
-Microbiome data is high dimensional, and.
-
-Taking the logarithm of ratios can be an appropriate transformation for compositional data, so standard statistical tests can be appropriate again. This transformation removes the issue of standardizing/normalizing different library sizes. The library size for a given sample will not distort the biological covariance or correlation structure. 
-<!-- (cite Aitchison) -->
+The log-ratio based methodology developed by Aitchison in the 1980s is useful for analyzing compositional data [@aitchison1982]. Taking the logarithm of ratios can be an appropriate transformation for compositional data, so standard statistical tests can be appropriate again. This transformation removes the issue of standardizing/normalizing different sampling depths. The sampling depth for a given sample will not distort the biological covariance or correlation structure.
 
 <!-- Explain logs, log ratios.  -->
 
-This log-ratio method has a drawback, which is the decision of how to define the denominator. Two approaches to this problem can be to use one sample as the reference. This sample should be 'representative'. The log-ratio transformation is then the ratio of every other taxon to that representative sample. Of course, knowledge of what makes a sample representative is hard to come by and often unknown, and subsequent results can be affected by this choice. This method is frequently called the additive log-ratio approach (alr). 
-The alternative method is using the data to create a pseudo-reference sample. This pseudo-reference sample is the geometric mean of the counts of all taxa. This is called the centered log-ratio method. 
+This log-ratio method has a drawback, which is the decision of how to define the denominator. One approach to this problem is to use one sample as the reference. This sample should be 'representative'. The log-ratio transformation is then the ratio of every other taxon to that representative sample. Of course, knowledge of what makes a sample representative is hard to come by and often unknown, and subsequent results can be affected by this choice. This method is frequently called the additive log-ratio approach (alr). The alternative approach is to use the data to create a pseudo-reference sample. This pseudo-reference sample is the geometric mean of the counts of all taxa. This is called the centered log-ratio method.
 
 <!-- A further method is the isometric log-ratio transofrmation (ilr), which is the product of the clr and the transpose of a matrix which consists of elements that are clr-transformed components of an orthonomal basis. -->
+
 <!-- (REWORD).  -->
 
-While promising, these log-ratio methods have drawbacks in current metagenomic literature. Microbiome data are often incredibly sparse, with up to 80-90% of count matrices containing zero counts. For ratio transformations, if we have sparse data, the geometric mean can be zero. Then the ratio is undefined, and further, so is the log. 
+<!-- The theory developed there, however, is for data with different characteristics than microbiome data. -->
 
-One solution to this is adding a small pseudo count to every element in the data. This removes problems occurring from having zero counts in the data, but there is not a clear best choice of what pseudo count to use, and it the choice can impact downstream results. 
+<!-- Microbiome data is high dimensional, and. -->
+
+While promising, these log-ratio methods have drawbacks in practice. Microbiome data are often incredibly sparse, with up to 80-90% of count matrices containing zero counts. For ratio transformations, if we have sparse data, the geometric mean can be zero. Then the ratio is undefined, and further, so is the logarithm of zero count taxa.
+
+One solution to this is adding a small pseudo count to every element in the data. This removes problems occurring from having zero counts in the data, but there is not a clear best choice of what pseudo count to use, and it the choice can impact downstream results.
 
 <!-- INCLUDE EXAMPLE?  -->
 
-## Zero-inflation of microbiome data
+<!-- ## Zero-inflation of microbiome data -->
 
-Include section on considerations that are necessary to account for zero-inflation.
+<!-- Include section on considerations that are necessary to account for zero-inflation. -->
 
 <!-- ## Intro to the phyloseq package -->
 

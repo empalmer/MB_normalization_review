@@ -4,7 +4,7 @@
 
 The first method described is Total Sum Scaling (TSS). This method is also referred to as Total Count (TC), converting into proportions, or relative abundance. This is a scaling method to normalize the different library sizes across samples. For every entry in the count matrix, we scale by the total read depth of that sample. This converts the counts into the proportion of abundance present in each given sample. 
 
-Though a more straightforward method, TSS normalization is not without its drawbacks. In microbiome data, it is common to have numerous low or zero-count observations, and that only a few most common OTUs contribute to the majority of the total sum of the library size. These high-count, frequent, taxa could be an artifact of the sequencing step, where high abundance  observations are preferentially sampled. Using these large counts can dominate the scaling factor for each sample. As seen below, we see that the scaling factor for each sample is completely dominated by `ASV1`. 
+Though a more straightforward method, TSS normalization is not without its drawbacks. In microbiome data, it is common to have numerous low or zero-count observations, and that only a few most common OTUs contribute to the majority of the total sum of the sampling depth. These high-count, frequent, taxa could be an artifact of the sequencing step, where high abundance  observations are preferentially sampled. Using these large counts can dominate the scaling factor for each sample. As seen below, we see that the scaling factor for each sample is completely dominated by `ASV1`, if that one taxon were not included in the sample, the scaling factor would be widely different.
 
 ```{r, tss_ex, echo = F}
 sample <- c("Sample A", "Sample B")
@@ -39,7 +39,7 @@ norm_TSS <- function(ps, keep_prop = F){
 
 ## TSS on Global Patterns
 
-Now lets use this method on the Global Patterns data. 
+Using the above function, we apply this normalization to the Global Patterns data. 
 
 ```{r, gp_tss}
 gp_tss <- norm_TSS(gp_raw)
@@ -47,9 +47,7 @@ gp_tss <- norm_TSS(gp_raw)
 sample_data(gp_tss)$scaling_factor <- sample_data(gp_tss)$depth
 ```
 
-Now lets see the differences between the un-normalized, raw data, and the TSS transformed normalized data. 
-
-One possible way to do this is by looking at ordination plots. Microbiome data are high dimensional, so visualization directly of the data is difficult. Here, let us examine the principal coordinates plot using the Bray-Curtis dissimilarity. 
+To see the differences between the un-normalized, raw data, and the TSS transformed normalized data, one possible way is to look at ordination plots. Microbiome data are high dimensional, so visualization directly of the data is difficult. Here, let us examine the principal coordinates plot using the Bray-Curtis dissimilarity. 
 
 First calculate the distance matrices, using the `phyloseq` function `ordinate()`
 
@@ -60,17 +58,22 @@ gp_tss_dist <- phyloseq::ordinate(gp_tss, "PCoA", "bray")
 
 Now plot the two ordinations. Even before normalization, the different communities are clearly clustered. 
 
+(Note to self: perhaps choose a different dataset to use for walk-through, currently using Global Patterns since it is small and quick for computations, but harder to see differences.)
+
 ```{r, plot_ordinate_tss}
-plot_ordination(gp_raw, gp_raw_dist, color = "SampleType") + 
-plot_ordination(gp_tss, gp_tss_dist, color = "SampleType") +
+plot_ordination(gp_raw, gp_raw_dist, color = "SampleType", 
+                title = "PCoA on Raw Counts") + 
+plot_ordination(gp_tss, gp_tss_dist, color = "SampleType", 
+                title = "PCoA on TSS normalized counts") +
   plot_layout(guides = 'collect')
 ```
 
 
-We can also compare the values of the distance matrices before and after normalization to see how normalization is impacting different types of points.
+We can also compare the values of the distance matrices before and after normalization to see how the normalization method is impacting different types of points.
 
 ```{r}
-plot_norm_changes <- function(data_norm, data_raw, dist_method = "bray", x_lab = "raw", y_lab = "norm"){
+# Function to visualize potential differences and changes after normalization methods
+plot_norm_changes <- function(data_norm, data_raw, dist_method = "bray", x_lab = "raw", y_lab = "norm", title = "Plot title"){
     # calculate the Bray-Cutris distance matrix for the raw data, the normalized data, 
     # and calculate the pairwise difference between the original library sizes between samples
     plot <- data.frame(raw = as.numeric(phyloseq::distance(data_raw, dist_method)), 
@@ -79,15 +82,20 @@ plot_norm_changes <- function(data_norm, data_raw, dist_method = "bray", x_lab =
     ggplot(aes(x = raw, y = norm, color = diff)) + 
         geom_point() + 
         geom_abline() + 
-        xlab(x_lab) + ylab(y_lab) + xlim(c(0,1)) + ylim(c(0,1))
+        ggtitle(title) +
+        xlab(x_lab) + ylab(y_lab) +
+        labs(color = "Pairwise difference in sampling depth")+
+      xlim(c(0,1)) + ylim(c(0,1))
     return(plot)
 }
 
-plot_norm_changes(gp_tss, gp_raw, x_lab = "Raw counts", y_lab = "TSS props")
+plot_norm_changes(gp_tss, gp_raw,
+                  x_lab = "Raw counts", y_lab = "TSS props", 
+                  title = "Distance metric comparision between Raw counts and TSS normalized counts ")
     
 ```
 
-Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are 'more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, unnormalized data, and became marked as more similar after TSS normalization. 
+Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are 'more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, un-normalized data, and became marked as more similar after TSS normalization. 
 
 
 <!-- ## HMP TSS -->

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Tutorial on Microbiome Normalization</title>
+  <title>References | Tutorial on Normalization of Microbiome Data</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Tutorial on Microbiome Normalization" />
+  <meta property="og:title" content="References | Tutorial on Normalization of Microbiome Data" />
   <meta property="og:type" content="book" />
   
   
@@ -16,15 +16,13 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Tutorial on Microbiome Normalization" />
+  <meta name="twitter:title" content="References | Tutorial on Normalization of Microbiome Data" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
 
-<meta name="author" content="Emily Palmer" />
 
 
-<meta name="date" content="2021-08-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -142,14 +140,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio-methods"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio methods</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#zero-inflation-of-microbiome-data"><i class="fa fa-check"></i><b>1.3</b> Zero-inflation of microbiome data</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>2.1</b> Global Patterns</a></li>
-<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#pre-procesing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.2</b> Pre-procesing Quality Control and Filtering</a></li>
+<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#pre-processing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.2</b> Pre-processing Quality Control and Filtering</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>3</b> Total Sum scaling (TSS)</a>
 <ul>
@@ -159,7 +156,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>4</b> Rarefying</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.1</b> Rarefying on Global Patterns</a></li>
+<li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#about-rarefying"><i class="fa fa-check"></i><b>4.1</b> About Rarefying</a></li>
+<li class="chapter" data-level="4.2" data-path="rarefying.html"><a href="rarefying.html#rarefying-implementation"><i class="fa fa-check"></i><b>4.2</b> Rarefying implementation</a></li>
+<li class="chapter" data-level="4.3" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.3</b> Rarefying on Global Patterns</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>5</b> DESeq</a>
 <ul>
@@ -167,18 +166,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>5.2</b> DESeq Implementation</a></li>
 <li class="chapter" data-level="5.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>5.3</b> DESeq on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="edger-tmm.html"><a href="edger-tmm.html"><i class="fa fa-check"></i><b>6</b> edgeR TMM</a>
+<li class="chapter" data-level="6" data-path="tmm-edger.html"><a href="tmm-edger.html"><i class="fa fa-check"></i><b>6</b> TMM (edgeR)</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="edger-tmm.html"><a href="edger-tmm.html#edger-tmm-implementatin"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementatin</a></li>
-<li class="chapter" data-level="6.2" data-path="edger-tmm.html"><a href="edger-tmm.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
+<li class="chapter" data-level="6.1" data-path="tmm-edger.html"><a href="tmm-edger.html#edger-tmm-implementation"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementation</a></li>
+<li class="chapter" data-level="6.2" data-path="tmm-edger.html"><a href="tmm-edger.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>7</b> Cumulative sum scaling (CSS)</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.1</b> CSS on Global Patterns</a></li>
+<li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-implementation"><i class="fa fa-check"></i><b>7.1</b> CSS implementation</a></li>
+<li class="chapter" data-level="7.2" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.2</b> CSS on Global Patterns</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>8</b> GMPR</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>8.1</b> Global Patterns GMPR</a></li>
+<li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#gmpr-implementation"><i class="fa fa-check"></i><b>8.1</b> GMPR Implementation</a></li>
+<li class="chapter" data-level="8.2" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>8.2</b> Global Patterns GMPR</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>9</b> Wrench</a>
 <ul>
@@ -200,7 +201,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tutorial on Microbiome Normalization</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tutorial on Normalization of Microbiome Data</a>
           </h1>
         </div>
 
@@ -213,13 +214,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="refs" class="references hanging-indent">
 <div>
+<p>Aitchison, J. 1982. “The Statistical Analysis of Compositional Data.” <em>Journal of the Royal Statistical Society: Series B (Methodological)</em> 44 (2): 139–60. <a href="https://doi.org/10.1111/j.2517-6161.1982.tb01195.x">https://doi.org/10.1111/j.2517-6161.1982.tb01195.x</a>.</p>
+</div>
+<div>
+<p>Anders, Simon, and Wolfgang Huber. 2010. “Differential Expression Analysis for Sequence Count Data.” <em>Genome Biology</em> 11 (10): R106. <a href="https://doi.org/10.1186/gb-2010-11-10-r106">https://doi.org/10.1186/gb-2010-11-10-r106</a>.</p>
+</div>
+<div>
+<p>Caporaso, J. Gregory, Christian L. Lauber, William A. Walters, Donna Berg-Lyons, Catherine A. Lozupone, Peter J. Turnbaugh, Noah Fierer, and Rob Knight. 2011. “Global Patterns of 16S rRNA Diversity at a Depth of Millions of Sequences Per Sample.” <em>Proceedings of the National Academy of Sciences</em> 108 (Supplement 1): 4516–22. <a href="https://doi.org/10.1073/pnas.1000080107">https://doi.org/10.1073/pnas.1000080107</a>.</p>
+</div>
+<div>
+<p>Chen, Li, James Reeve, Lujun Zhang, Shengbing Huang, Xuefeng Wang, and Jun Chen. 2018. “GMPR: A Robust Normalization Method for Zero-Inflated Count Data with Application to Microbiome Sequencing Data.” <em>PeerJ</em> 6 (April): e4600. <a href="https://doi.org/10.7717/peerj.4600">https://doi.org/10.7717/peerj.4600</a>.</p>
+</div>
+<div>
 <p>Costea, Paul I., Georg Zeller, Shinichi Sunagawa, and Peer Bork. 2014. “A Fair Comparison.” <em>Nature Methods</em> 11 (4): 359–59. <a href="https://doi.org/10.1038/nmeth.2897">https://doi.org/10.1038/nmeth.2897</a>.</p>
+</div>
+<div>
+<p>Kumar, M. Senthil, Eric V. Slud, Kwame Okrah, Stephanie C. Hicks, Sridhar Hannenhalli, and Héctor Corrada Bravo. 2018. “Analysis and Correction of Compositional Bias in Sparse Sequencing Count Data.” <em>BMC Genomics</em> 19 (1): 799. <a href="https://doi.org/10.1186/s12864-018-5160-5">https://doi.org/10.1186/s12864-018-5160-5</a>.</p>
+</div>
+<div>
+<p>McKnight, Donald T., Roger Huerlimann, Deborah S. Bower, Lin Schwarzkopf, Ross A. Alford, and Kyall R. Zenger. 2019. “Methods for Normalizing Microbiome Data: An Ecological Perspective.” <em>Methods in Ecology and Evolution</em> 10 (3): 389–400. <a href="https://doi.org/10.1111/2041-210X.13115">https://doi.org/10.1111/2041-210X.13115</a>.</p>
+</div>
+<div>
+<p>McMurdie, Paul J., and Susan Holmes. 2013. “Phyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data.” <em>PLOS ONE</em> 8 (4): e61217. <a href="https://doi.org/10.1371/journal.pone.0061217">https://doi.org/10.1371/journal.pone.0061217</a>.</p>
+</div>
+<div>
+<p>———. 2014. “Waste Not, Want Not: Why Rarefying Microbiome Data Is Inadmissible.” <em>PLOS Computational Biology</em> 10 (4): e1003531. <a href="https://doi.org/10.1371/journal.pcbi.1003531">https://doi.org/10.1371/journal.pcbi.1003531</a>.</p>
 </div>
 <div>
 <p>Paulson, Joseph N., O. Colin Stine, Héctor Corrada Bravo, and Mihai Pop. 2013. “Differential Abundance Analysis for Microbial Marker-Gene Surveys.” <em>Nature Methods</em> 10 (12): 1200–1202. <a href="https://doi.org/10.1038/nmeth.2658">https://doi.org/10.1038/nmeth.2658</a>.</p>
 </div>
 <div>
+<p>Robinson, Mark D., and Alicia Oshlack. 2010. “A Scaling Normalization Method for Differential Expression Analysis of Rna-Seq Data.” <em>Genome Biology</em> 11 (3): R25. <a href="https://doi.org/10.1186/gb-2010-11-3-r25">https://doi.org/10.1186/gb-2010-11-3-r25</a>.</p>
+</div>
+<div>
 <p>Salter, Susannah J., Michael J. Cox, Elena M. Turek, Szymon T. Calus, William O. Cookson, Miriam F. Moffatt, Paul Turner, Julian Parkhill, Nicholas J. Loman, and Alan W. Walker. 2014. “Reagent and Laboratory Contamination Can Critically Impact Sequence-Based Microbiome Analyses.” <em>BMC Biology</em> 12 (1): 87. <a href="https://doi.org/10.1186/s12915-014-0087-z">https://doi.org/10.1186/s12915-014-0087-z</a>.</p>
+</div>
+<div>
+<p>Weiss, Sophie, Zhenjiang Zech Xu, Shyamal Peddada, Amnon Amir, Kyle Bittinger, Antonio Gonzalez, Catherine Lozupone, et al. 2017. “Normalization and Microbial Differential Abundance Strategies Depend Upon Data Characteristics.” <em>Microbiome</em> 5 (1): 27. <a href="https://doi.org/10.1186/s40168-017-0237-y">https://doi.org/10.1186/s40168-017-0237-y</a>.</p>
 </div>
 </div>
 </div>

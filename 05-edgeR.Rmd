@@ -1,9 +1,8 @@
-# edgeR TMM
+# TMM (edgeR)
 
-TMM (Trimmed median of m-values) is another method borrowed from RNA-Seq analysis. This method uses, or calculates a reference sample, and compares all other samples to the reference sample. The size factor is the mean of the log-ratios after excluding the highest count taxa and taxa with the largest fold change. As taxa with zero counts are excluded, a pseudocount is needed. Additionally, there is the TMMwsp option which is encouraged as it is more robust to zero counts. Positive counts are reused to increase the number of features when we compared. The singleton positive counts are paired up in decreasing order of size and then a modified TMM method is applied to the re-ordered libraries.
+TMM (Trimmed median of m-values) is another method borrowed from RNA-Seq analysis, and implemented in `edgeR` [@robinson2010]. This method uses, or calculates a reference sample, and compares all other samples to the reference sample. The size factor is the mean of the log-ratios after excluding the highest count taxa and taxa with the largest fold change. As taxa with zero counts are excluded, a pseudo count is needed. Additionally, there is the `TMMwsp` option which is encouraged as it is more robust to zero counts. Positive counts are reused to increase the number of features when we compared. The singleton positive counts are paired up in decreasing order of size and then a modified TMM method is applied to the re-ordered libraries.
 
-
-## EdgeR TMM implementatin 
+## EdgeR TMM implementation
 
 ```{r}
 norm_TMM <- function(physeq, group = 1, method="TMM", pseudocount = 1, ...){
@@ -48,17 +47,25 @@ norm_TMM <- function(physeq, group = 1, method="TMM", pseudocount = 1, ...){
 }
 ```
 
-## TMM on Global Patterns 
+## TMM on Global Patterns
 
-Perform normalization
+Perform normalization:
+
 ```{r}
-# Use the normalization function 
 gp_tmm <- norm_TMM(gp_raw)
 ```
 
+View PCoA plots
 
 ```{r}
-plot_norm_changes(gp_tmm, gp_raw)
-plot_norm_changes(gp_tmm, gp_deseq_rle, x_lab = "DESeq", y_lab = "TMM")
+plot_ordination(gp_tmm, phyloseq::ordinate(gp_tmm, "PCoA", "bray") , color = "SampleType", title = "PCoA on Raw data")
 ```
 
+View how TMM normalization changes distance metrics differently than raw counts.
+
+```{r}
+plot_norm_changes(gp_tmm, gp_raw,
+                  x_lab = "Raw", y_lab = "TMM",
+                  title = "Distance metric comparision between TMM normalization and Raw counts ")
+
+```
