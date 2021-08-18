@@ -30,5 +30,4 @@ global-patterns-gmpr
 wrench
 wrench-implementation
 wrench-on-global-patterns
-log-ratio-approaches
 comparisions

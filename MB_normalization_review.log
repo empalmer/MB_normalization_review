@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.4.16)  17 AUG 2021 17:17
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.4.16)  17 AUG 2021 17:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1489,19 +1489,15 @@ Chapter 9.
 
 ] [40]
 Chapter 10.
-[41
-
-] [42
-
-]
-Chapter 11.
 File: MB_normalization_review_files/figure-latex/unnamed-chunk-20-1.pdf Graphic
  file (type pdf)
 <use MB_normalization_review_files/figure-latex/unnamed-chunk-20-1.pdf>
 (./MB_normalization_review.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[43] [44] [45
+[41
+
+] [42] [43
 
 ]
 Underfull \hbox (badness 1430) in paragraph at lines 72--79
@@ -1510,24 +1506,24 @@ ential
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 995.
-[46]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 995.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 992.
+[44]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 992.
 (./MB_normalization_review.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 995.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 995.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 992.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 992.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 995.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 992.
  ) 
 Here is how much of TeX's memory you used:
- 26365 strings out of 492970
- 482331 string characters out of 6133938
- 698270 words of memory out of 5000000
- 30096 multiletter control sequences out of 15000+600000
+ 26363 strings out of 492970
+ 482303 string characters out of 6133938
+ 698224 words of memory out of 5000000
+ 30094 multiletter control sequences out of 15000+600000
  536617 words of font info for 76 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  58i,8n,117p,10418b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on MB_normalization_review.pdf (46 pages).
+Output written on MB_normalization_review.pdf (44 pages).
