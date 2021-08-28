@@ -1,14 +1,14 @@
 # Importing Data
 
-There are multiple publicly available pre-compiled microbiome data sets. These data sets begin after the bioinformatics pipeline and are matrices of counts of OTUs per sample. These data sets can exist as `phyloseq` objects, a popular R package for microbiome analysis [@mcmurdie2013], or as separate tables of counts and metadata.
+There are multiple publicly available pre-compiled microbiome data sets of feature tables. These data sets begin after the bioinformatics pipeline and are matrices of counts of OTUs per sample. These data sets can exist as `phyloseq` objects, a popular R package for microbiome analysis [@mcmurdie2013], or as separate tables of feature counts and metadata. For this tutorial, we will provide code that assumes a `phyloseq` object as input, and outputs a normalized `phyloseq` object. Converting between separate tables and `phyloseq` objects is straightforward using the `otu_table()`, `sample_data()`, `taxa_table()`, and `phyloseq()` functions. For more information on the `phyloseq` package, see <https://joey711.github.io/phyloseq/>. In this tutorial we will use two data sets that are included in the `phyloseq` package. 
 
 ## Global Patterns
 
-The Global Patterns dataset [@caporaso2011] is an available dataset in the `phyloseq` package. These data contain samples from 25 different environmental samples and mock communities. The sampling depth of these samples averages 3.1 million total counts. We will use this dataset to work through the different normalization methods.
+The Global Patterns dataset [@caporaso2011] is a dataset available in the `phyloseq` package. These data contain samples from 25 different environmental samples and mock communities. The sampling depth of these samples averages 3.1 million total counts. We will use this dataset to work through the different normalization methods.
 
 The following lines load the relevant packages and data.
 
-```{r}
+```{r, load-gp, warning=FALSE,message=FALSE}
 library(tidyverse)
 library(phyloseq)
 
@@ -16,6 +16,28 @@ data("GlobalPatterns")
 # examine phyloseq object 
 GlobalPatterns
 ```
+
+## Colorectal cancer
+
+Another publicly available dataset is from a study on colorectal cancer [@kostic2012]. See the abstract of this study below: 
+
+> The tumor microenvironment of colorectal carcinoma is a complex community of genomically altered cancer cells, nonneoplastic cells, and a diverse collection of microorganisms. Each of these components may contribute to carcinogenesis; however, the role of the microbiota is the least well understood. We have characterized the composition of the microbiota in colorectal carcinoma using whole genome sequences from nine tumor/normal pairs. Fusobacterium sequences were enriched in carcinomas, confirmed by quantitative PCR and 16S rDNA sequence analysis of 95 carcinoma/normal DNA pairs, while the Bacteroidetes and Firmicutes phyla were depleted in tumors. Fusobacteria were also visualized within colorectal tumors using FISH. These findings reveal alterations in the colorectal cancer microbiota; however, the precise role of Fusobacteria in colorectal carcinoma pathogenesis requires further investigation. 
+
+This dataset is downloaded with the `phyloseq` package as a .biom file and can be loaded in using the following code, showing how to load qiime files as `phyloseq` objects. These data contain observations from 2505 taxa across 185 samples, which are categorized as 'Tumor' or 'Healthy'. We remove samples that are not categorized into these two categories. 
+
+```{r, warning=FALSE,message=FALSE}
+# Load the data from a system file that is downloaded if the phyloseq package is installed
+filepath <-  system.file("extdata", "study_1457_split_library_seqs_and_mapping.zip", package="phyloseq")
+kostic <-  microbio_me_qiime(filepath)
+
+# Some samples are labeled as "none" as a dignosis; remove these samples. 
+# Save as an object with the un-normalized counts
+k_raw <- subset_samples(kostic, DIAGNOSIS != "None")
+k_raw
+
+```
+
+
 
 ## Pre-processing Quality Control and Filtering
 
@@ -42,14 +64,11 @@ This decreases the number of taxa from 19216 to 219. This is not surprising, bec
 
 Additionally, let us save the total sampling depth as the variable `depth` in the metadata for the Global Patterns dataset.
 
-<!-- (Is this original sampling depth or after filtering? Should be initial yes?) -->
-
 ```{r}
 gp_raw@sam_data$depth <- sample_sums(gp_raw)
 ```
 
-
-We can visualize technical artifacts of sapling depth is by looking at  principal coordinates plots using the Bray-Curtis dissimilarity, coloring by sampling depth too see how much variation can be explained by the original sampling depth. 
+We can visualize technical artifacts of sapling depth is by looking at principal coordinates plots using the Bray-Curtis dissimilarity, coloring by sampling depth too see how much variation can be explained by the original sampling depth.
 
 ```{r, rare_depth_ordcolor}
 gp_raw_dist <- phyloseq::ordinate(gp_raw, "PCoA", "bray")
@@ -61,15 +80,34 @@ plot_ordination(gp_raw,
 
 We don't see any extreme patterns with sampling depth, but this might additionally be due to the differences in different locations might have different sampling depths. This comparison might be more interesting when we only have one location we are sampling from.
 
+Repeat this same process for the `kostic` data. Use a prevalence filter to only include taxa that have nonzero counts in over 10% of samples. This results in 478 taxa across 185 samples. 
+
+```{r}
+# Prevalence filter
+prevalenceThreshold <- 0.10 * nsamples(k_raw)
+toKeep <- apply(data.frame(otu_table(k_raw)), 1, function(taxa)
+    return(sum(taxa > 0) > prevalenceThreshold))
+k_raw <- prune_taxa(toKeep, k_raw)
+k_raw
+
+# Save sampling depth as a sample variable
+k_raw@sam_data$depth <- sample_sums(k_raw)
+
+k_raw_dist <- phyloseq::ordinate(k_raw, "PCoA", "bray")
+plot_ordination(k_raw,
+                k_raw_dist,
+                color = "depth", 
+                shape = "DIAGNOSIS",
+                title = "PCoA on Raw counts")
+
+```
+
+
+When considering a normalization method, it is important to know if between sample (DA methods) or within sample (community) analysis is of interest. 
+
 <!-- ## HMP -->
 
-<!-- Another dataset, not included in analysis yet since it takes very long to load and run analysis on. Could be a more 'realistic' dataset to use.  -->
-
-<!-- About the HMP dataset.....  -->
-
-<!-- This data comes from healthy subjects.  -->
-
-<!-- Data from the Human Microbiome Project from 16S sequences can most easily be accessed using the `HMP16SData` Bioconductor package.  -->
+<!-- Another dataset, not included in analysis yet since it takes very long to load and run analysis on. Could be a more 'realistic' dataset to use.This data comes from healthy subjects.  Data from the Human Microbiome Project from 16S sequences can most easily be accessed using the `HMP16SData` Bioconductor package.  -->
 
 <!-- ```{r, eval = F} -->
 
@@ -79,60 +117,11 @@ We don't see any extreme patterns with sampling depth, but this might additional
 
 <!-- hmp <- as_phyloseq(V13()) -->
 
-<!-- hmp -->
 
-<!-- V35() -->
 
-<!-- # I was having issues using the V35 dataset, even though it is larger (works on old computer...) -->
 
-<!-- ``` -->
 
-<!-- Now do similar filtering steps  -->
 
-<!-- ```{r, eval = F} -->
 
-<!-- # Save original sampling depth as variable  -->
 
-<!-- hmp@sam_data$sampling_depth <- sample_sums(hmp) -->
 
-<!-- # Filter low prevalence OTUs  -->
-
-<!-- filterTaxaByPrevalence <- function(ps, percentSamplesPresentIn = .1){ -->
-
-<!--   #define threshold -->
-
-<!--   prevalenceThreshold <- percentSamplesPresentIn * nsamples(ps) -->
-
-<!--   #apply a function to all samples that determines if a taxa is fully absent from a particular sample -->
-
-<!--   # change to 1?? -->
-
-<!--   toKeep <- apply(data.frame(otu_table(ps)), 1, -->
-
-<!--                   function(taxa) return(sum(taxa > 0) > prevalenceThreshold)) -->
-
-<!--   #this is placed into toKeep which is a TRUE/FALSE vector of whether or not a that taxa is present in enough samples  -->
-
-<!--   ps_filt <- prune_taxa(toKeep, ps) -->
-
-<!--   return(ps_filt) -->
-
-<!-- } -->
-
-<!-- hmp_raw <- filterTaxaByPrevalence(hmp, .05) -->
-
-<!-- hmp_raw -->
-
-<!-- # Filter by low sampling depth  -->
-
-<!-- hist(sample_sums(hmp)) -->
-
-<!-- summary(hmp_raw@sam_data$sampling_depth) -->
-
-<!-- summary(sample_sums(hmp_raw)) -->
-
-<!-- hmp_raw <- prune_samples(sample_sums(hmp_raw) > 2000,hmp_raw) -->
-
-<!-- hmp_raw -->
-
-<!-- ``` -->

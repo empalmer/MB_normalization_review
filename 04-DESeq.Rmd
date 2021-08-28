@@ -16,7 +16,7 @@ If differential abundance is of interest to calculate, DESeq uses a negative bin
 
 Here we provide two normalization functions using DESeq methods. The first calculates the RLE normalization using the `poscounts` option for microbiome data. The second calculates the variance stabalizing transformation. 
 
-```{r}
+```{r, deseq-implementation, warning=FALSE,message=FALSE}
 norm_DESeq_RLE_poscounts <- function(ps, group = 1){
   require(DESeq2, quietly = T)
     # keep arbitrary design for normalization 
@@ -63,14 +63,14 @@ norm_DESeq_vs <- function(ps, group = 1){
 
 Perform DESeq RLE normalization as well as DESeq variance stabilized transformation on Global Patterns:
 
-```{r}
+```{r, warning=FALSE,message=FALSE}
 gp_deseq_rle <- norm_DESeq_RLE_poscounts(gp_raw)
 gp_deseq_vs <- norm_DESeq_vs(gp_raw)
 ```
 
 Examine principal coordinate plots between raw data and both DESeq normalized data.
 
-```{r deseq-ordination}
+```{r deseq-ordination, warning=FALSE,message=FALSE}
 # First calculate distance matrices 
 gp_rle_dist <- phyloseq::ordinate(gp_deseq_rle, "PCoA", "bray") 
 gp_vs_dist <- phyloseq::ordinate(gp_deseq_vs, "PCoA", "bray") 
@@ -84,7 +84,7 @@ plot_ordination(gp_deseq_vs, gp_vs_dist, color = "SampleType", title = "PCoA on 
 
 See how dissimilarity matrices differ from raw counts and each DESeq transformation.
 
-```{r}
+```{r, warning=FALSE,message=FALSE}
 plot_norm_changes(gp_deseq_rle, gp_raw, 
                   x_lab = "Raw", y_lab = "RLE", 
                   title = "Distance metric comparision between RLE normalization and Raw counts ") / 
@@ -95,6 +95,30 @@ plot_norm_changes(gp_deseq_vs, gp_raw,
 ```
 
 
+## DESeq on Kostic data 
+
+```{r, warning=FALSE,message=FALSE}
+k_deseq_rle <- norm_DESeq_RLE_poscounts(k_raw)
+k_deseq_vs <- norm_DESeq_vs(k_raw)
+
+# First calculate distance matrices 
+k_rle_dist <- phyloseq::ordinate(k_deseq_rle, "PCoA", "bray") 
+k_vs_dist <- phyloseq::ordinate(k_deseq_vs, "PCoA", "bray") 
+
+# Plot ordinations
+plot_ordination(k_raw, k_raw_dist, color = "DIAGNOSIS", title = "PCoA on Raw data") + 
+plot_ordination(k_deseq_rle, k_rle_dist, color = "DIAGNOSIS", title = "PCoA on RLE") +
+plot_ordination(k_deseq_vs, k_vs_dist, color = "DIAGNOSIS", title = "PCoA on VST") + 
+  plot_layout(guides = 'collect')
+
+plot_norm_changes(k_deseq_rle, k_raw, 
+                  x_lab = "Raw", y_lab = "RLE", 
+                  title = "Distance metric comparision between RLE normalization and Raw counts ") / 
+plot_norm_changes(k_deseq_vs, k_raw, 
+                  x_lab = "Raw", y_lab = "VST", 
+                  title = "Distance metric comparision between VST normalization and Raw counts ") + 
+  plot_layout(guides = 'collect')
+```
 
 <!-- Look at differences between scaling factors -->
 

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.4.16)  17 AUG 2021 17:55
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.4.16)  27 AUG 2021 17:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1265,265 +1265,368 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 
 [4]
 Chapter 1.
+[5
+
+]
 File: MB_normalization_review_files/figure-latex/demo_normalization_importance-
 1.pdf Graphic file (type pdf)
 <use MB_normalization_review_files/figure-latex/demo_normalization_importance-1
 .pdf>
-[5
-
-] [6]
+[6]
 File: MB_normalization_review_files/figure-latex/compositional-plot-1.pdf Graph
 ic file (type pdf)
 <use MB_normalization_review_files/figure-latex/compositional-plot-1.pdf>
-
-Underfull \vbox (badness 1082) has occurred while \output is active []
-
-[7] [8]
-Chapter 2.
-LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 210.
-
-Overfull \hbox (22.5pt too wide) in paragraph at lines 224--224
-[]\TU/lmtt/m/n/10 ## The following object is masked from []package:SummarizedEx
-periment[]:[] 
- []
-
-[9
+[7] [8] [9] [10
 
 ]
-Overfull \hbox (33.0pt too wide) in paragraph at lines 258--258
+Chapter 2.
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 227.
+[11]
+Overfull \hbox (33.0pt too wide) in paragraph at lines 242--242
 []\TU/lmtt/m/n/10 ## sample_data() Sample Data:       [ 26 samples by 7 sample 
 variables ][] 
  []
 
 
-Overfull \hbox (27.75pt too wide) in paragraph at lines 258--258
+Overfull \hbox (27.75pt too wide) in paragraph at lines 242--242
 []\TU/lmtt/m/n/10 ## tax_table()   Taxonomy Table:    [ 19216 taxa by 7 taxonom
 ic ranks ][] 
  []
 
 
-Overfull \hbox (48.75pt too wide) in paragraph at lines 258--258
+Overfull \hbox (48.75pt too wide) in paragraph at lines 242--242
 []\TU/lmtt/m/n/10 ## phy_tree()    Phylogenetic Tree: [ 19216 tips and 19215 in
 ternal nodes ][] 
  []
 
+[12]
+Overfull \hbox (43.5pt too wide) in paragraph at lines 286--286
+[]\TU/lmtt/m/n/10 ## sample_data() Sample Data:       [ 185 samples by 71 sampl
+e variables ][] 
+ []
 
-Overfull \hbox (33.0pt too wide) in paragraph at lines 290--290
+
+Overfull \hbox (22.5pt too wide) in paragraph at lines 286--286
+[]\TU/lmtt/m/n/10 ## tax_table()   Taxonomy Table:    [ 2505 taxa by 7 taxonomi
+c ranks ][] 
+ []
+
+
+Overfull \hbox (33.0pt too wide) in paragraph at lines 318--318
 []\TU/lmtt/m/n/10 ## sample_data() Sample Data:       [ 26 samples by 7 sample 
 variables ][] 
  []
 
 
-Overfull \hbox (17.25pt too wide) in paragraph at lines 290--290
+Overfull \hbox (17.25pt too wide) in paragraph at lines 318--318
 []\TU/lmtt/m/n/10 ## tax_table()   Taxonomy Table:    [ 219 taxa by 7 taxonomic
  ranks ][] 
  []
 
 
-Overfull \hbox (27.75pt too wide) in paragraph at lines 290--290
+Overfull \hbox (27.75pt too wide) in paragraph at lines 318--318
 []\TU/lmtt/m/n/10 ## phy_tree()    Phylogenetic Tree: [ 219 tips and 218 intern
 al nodes ][] 
  []
 
-[10]
+[13]
 File: MB_normalization_review_files/figure-latex/rare_depth_ordcolor-1.pdf Grap
 hic file (type pdf)
 <use MB_normalization_review_files/figure-latex/rare_depth_ordcolor-1.pdf>
-[11] [12
+
+Overfull \vbox (0.71179pt too high) detected at line 357
+ []
+
+[14]
+Overfull \hbox (43.5pt too wide) in paragraph at lines 364--364
+[]\TU/lmtt/m/n/10 ## sample_data() Sample Data:       [ 185 samples by 71 sampl
+e variables ][] 
+ []
+
+
+Overfull \hbox (17.25pt too wide) in paragraph at lines 364--364
+[]\TU/lmtt/m/n/10 ## tax_table()   Taxonomy Table:    [ 478 taxa by 7 taxonomic
+ ranks ][] 
+ []
+
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-3-1.pdf Graphic 
+file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-3-1.pdf>
+[15] [16
 
 ]
 Chapter 3.
 
-Overfull \hbox (77.01009pt too wide) in paragraph at lines 328--337
-[][] 
+Overfull \hbox (77.01009pt too wide) in paragraph at lines 394--403
+ [][] 
  []
 
-[13]
+[17] [18]
 File: MB_normalization_review_files/figure-latex/plot_ordinate_tss-1.pdf Graphi
 c file (type pdf)
 <use MB_normalization_review_files/figure-latex/plot_ordinate_tss-1.pdf>
-[14]
-File: MB_normalization_review_files/figure-latex/unnamed-chunk-3-1.pdf Graphic 
+
+Underfull \vbox (badness 2302) detected at line 490
+ []
+
+
+Underfull \vbox (badness 1199) has occurred while \output is active []
+
+[19]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-4-1.pdf Graphic 
 file (type pdf)
-<use MB_normalization_review_files/figure-latex/unnamed-chunk-3-1.pdf>
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-4-1.pdf>
+[20]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-5-1.pdf Graphic 
+file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-5-1.pdf>
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-5-2.pdf Graphic 
+file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-5-2.pdf>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[15] [16]
+[21]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-5-3.pdf Graphic 
+file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-5-3.pdf>
+[22]
 Chapter 4.
-[17
+[23
 
-]
-Overfull \hbox (43.5pt too wide) in paragraph at lines 499--499
+] [24] [25]
+Overfull \hbox (43.5pt too wide) in paragraph at lines 695--695
 []\TU/lmtt/m/n/10 ##      CL3      CC1      SV1  M31Fcsw  M11Fcsw  M31Plmr  M11
 Plmr  F21Plmr[] 
  []
 
 
-Overfull \hbox (43.5pt too wide) in paragraph at lines 499--499
+Overfull \hbox (43.5pt too wide) in paragraph at lines 695--695
 []\TU/lmtt/m/n/10 ##    15905    15905    15905    15905    15905    15905    1
 5905    15905[] 
  []
 
 
-Overfull \hbox (43.5pt too wide) in paragraph at lines 499--499
+Overfull \hbox (43.5pt too wide) in paragraph at lines 695--695
 []\TU/lmtt/m/n/10 ##  M31Tong  M11Tong LMEpi24M SLEpi20M   AQC1cm   AQC4cm   AQ
 C7cm      NP2[] 
  []
 
 
-Overfull \hbox (43.5pt too wide) in paragraph at lines 499--499
+Overfull \hbox (43.5pt too wide) in paragraph at lines 695--695
 []\TU/lmtt/m/n/10 ##    15905    15905    15905    15905    15905    15905    1
 5905    15905[] 
  []
 
 
-Overfull \hbox (43.5pt too wide) in paragraph at lines 499--499
+Overfull \hbox (43.5pt too wide) in paragraph at lines 695--695
 []\TU/lmtt/m/n/10 ##      NP3      NP5  TRRsed1  TRRsed2  TRRsed3     TS28     
 TS29    Even1[] 
  []
 
 
-Overfull \hbox (43.5pt too wide) in paragraph at lines 499--499
+Overfull \hbox (43.5pt too wide) in paragraph at lines 695--695
 []\TU/lmtt/m/n/10 ##    15905    15905    15905    15905    15905    15905    1
 5905    15905[] 
  []
 
-[18]
 File: MB_normalization_review_files/figure-latex/rare_ordination-1.pdf Graphic 
 file (type pdf)
 <use MB_normalization_review_files/figure-latex/rare_ordination-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[26]
 File: MB_normalization_review_files/figure-latex/rare_plot_ordination-1.pdf Gra
 phic file (type pdf)
 <use MB_normalization_review_files/figure-latex/rare_plot_ordination-1.pdf>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[19]
+[27]
 File: MB_normalization_review_files/figure-latex/rare_plot_ordination-2.pdf Gra
 phic file (type pdf)
 <use MB_normalization_review_files/figure-latex/rare_plot_ordination-2.pdf>
-[20]
-Chapter 5.
-[21
-
-] [22]
-Overfull \hbox (111.75pt too wide) in paragraph at lines 648--648
-[]\TU/lmtt/m/n/10 ## -- note: fitType=[]parametric[], but the dispersion trend 
-was not well captured by the[] 
- []
-
-
-Overfull \hbox (106.5pt too wide) in paragraph at lines 648--648
-[]\TU/lmtt/m/n/10 ##    function: y = a/x + b, and a local regression fit was a
-utomatically substituted.[] 
- []
-
-
-Overfull \hbox (33.0pt too wide) in paragraph at lines 648--648
-[]\TU/lmtt/m/n/10 ##    specify fitType=[]local[] or []mean[] to avoid this mes
-sage next time.[] 
- []
-
-File: MB_normalization_review_files/figure-latex/deseq-ordination-1.pdf Graphic
- file (type pdf)
-<use MB_normalization_review_files/figure-latex/deseq-ordination-1.pdf>
-[23]
-File: MB_normalization_review_files/figure-latex/unnamed-chunk-7-1.pdf Graphic 
-file (type pdf)
-<use MB_normalization_review_files/figure-latex/unnamed-chunk-7-1.pdf>
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[24] [25] [26
-
-]
-Chapter 6.
-[27]
+[28]
 File: MB_normalization_review_files/figure-latex/unnamed-chunk-10-1.pdf Graphic
  file (type pdf)
 <use MB_normalization_review_files/figure-latex/unnamed-chunk-10-1.pdf>
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[28]
-File: MB_normalization_review_files/figure-latex/unnamed-chunk-11-1.pdf Graphic
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-10-2.pdf Graphic
  file (type pdf)
-<use MB_normalization_review_files/figure-latex/unnamed-chunk-11-1.pdf>
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-10-2.pdf>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [29] [30]
-Chapter 7.
+Chapter 5.
 [31
 
-]
-File: MB_normalization_review_files/figure-latex/unnamed-chunk-14-1.pdf Graphic
+] [32]
+File: MB_normalization_review_files/figure-latex/deseq-ordination-1.pdf Graphic
  file (type pdf)
-<use MB_normalization_review_files/figure-latex/unnamed-chunk-14-1.pdf>
-File: MB_normalization_review_files/figure-latex/unnamed-chunk-14-2.pdf Graphic
+<use MB_normalization_review_files/figure-latex/deseq-ordination-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[33]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-12-1.pdf Graphic
  file (type pdf)
-<use MB_normalization_review_files/figure-latex/unnamed-chunk-14-2.pdf>
-[32] [33] [34
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-12-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[34]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-13-1.pdf Graphic
+ file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-13-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[35]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-13-2.pdf Graphic
+ file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-13-2.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[36] [37] [38
 
 ]
-Chapter 8.
-[35]
+Chapter 6.
+[39]
 File: MB_normalization_review_files/figure-latex/unnamed-chunk-16-1.pdf Graphic
  file (type pdf)
 <use MB_normalization_review_files/figure-latex/unnamed-chunk-16-1.pdf>
-[36]
-File: MB_normalization_review_files/figure-latex/unnamed-chunk-16-2.pdf Graphic
- file (type pdf)
-<use MB_normalization_review_files/figure-latex/unnamed-chunk-16-2.pdf>
-File: MB_normalization_review_files/figure-latex/unnamed-chunk-16-3.pdf Graphic
- file (type pdf)
-<use MB_normalization_review_files/figure-latex/unnamed-chunk-16-3.pdf>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[37] [38]
-Chapter 9.
-[39
+[40]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-17-1.pdf Graphic
+ file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-17-1.pdf>
 
-] [40]
-Chapter 10.
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[41]
+File: MB_normalization_review_files/figure-latex/edgeR-kostic-1.pdf Graphic fil
+e (type pdf)
+<use MB_normalization_review_files/figure-latex/edgeR-kostic-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[42]
+File: MB_normalization_review_files/figure-latex/edgeR-kostic-2.pdf Graphic fil
+e (type pdf)
+<use MB_normalization_review_files/figure-latex/edgeR-kostic-2.pdf>
+[43] [44
+
+]
+Chapter 7.
+[45]
 File: MB_normalization_review_files/figure-latex/unnamed-chunk-20-1.pdf Graphic
  file (type pdf)
 <use MB_normalization_review_files/figure-latex/unnamed-chunk-20-1.pdf>
+[46]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-20-2.pdf Graphic
+ file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-20-2.pdf>
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-21-1.pdf Graphic
+ file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-21-1.pdf>
+[47]
+File: MB_normalization_review_files/figure-latex/unnamed-chunk-21-2.pdf Graphic
+ file (type pdf)
+<use MB_normalization_review_files/figure-latex/unnamed-chunk-21-2.pdf>
+[48]
+Chapter 8.
+[49
+
+] [50]
+Chapter 9.
+[51
+
+] [52]
+Chapter 10.
+[53
+
+]
+Overfull \vbox (2.21999pt too high) detected at line 1334
+ []
+
+[54] [55]
+Overfull \hbox (59.25pt too wide) in paragraph at lines 1379--1379
+[]\TU/lmtt/m/n/10 ## Warning in data_prep(phyloseq, group, zero_cut, lib_cut, g
+lobal = global):[] 
+ []
+
+
+Overfull \hbox (69.75pt too wide) in paragraph at lines 1379--1379
+[]\TU/lmtt/m/n/10 ## The multi-group comparison will be deactivated as the grou
+p variable has < 3[] 
+ []
+
+[56] [57] [58
+
+]
+Chapter 11.
+File: MB_normalization_review_files/figure-latex/comparisons-gp-1.pdf Graphic f
+ile (type pdf)
+<use MB_normalization_review_files/figure-latex/comparisons-gp-1.pdf>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[59]
+File: MB_normalization_review_files/figure-latex/comparisons-k-1.pdf Graphic fi
+le (type pdf)
+<use MB_normalization_review_files/figure-latex/comparisons-k-1.pdf>
 (./MB_normalization_review.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[41
+[60] [61] [62
 
-] [42] [43
+] [63]
+Underfull \hbox (badness 3098) in paragraph at lines 76--84
+[]\TU/lmr/m/n/10 Lin, H. and Peddada, S. (2020).  Analysis of compositions of m
+i-
+ []
 
-]
-Underfull \hbox (badness 1430) in paragraph at lines 72--79
+
+Underfull \hbox (badness 1694) in paragraph at lines 76--84
+\TU/lmr/m/n/10 crobiomes with bias correction.  \TU/lmr/m/it/10 Nature Communic
+ations\TU/lmr/m/n/10 , 11(1):3514.
+ []
+
+
+Underfull \hbox (badness 2042) in paragraph at lines 76--84
+\TU/lmr/m/n/10 Bandiera_abtest: a Cc_license_type: cc_by Cg_type: Nature Re-
+ []
+
+
+Underfull \hbox (badness 1430) in paragraph at lines 107--114
 []\TU/lmr/m/n/10 Paulson, J., Stine, O., Bravo, H., and Pop, M. (2013).  Differ
 ential
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 992.
-[44]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 992.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1490.
+[64]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1490.
 (./MB_normalization_review.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 992.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 992.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 1490.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 1490.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 992.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1490.
  ) 
 Here is how much of TeX's memory you used:
- 26363 strings out of 492970
- 482303 string characters out of 6133938
- 698224 words of memory out of 5000000
- 30094 multiletter control sequences out of 15000+600000
+ 26436 strings out of 492970
+ 485189 string characters out of 6133938
+ 702869 words of memory out of 5000000
+ 30157 multiletter control sequences out of 15000+600000
  536617 words of font info for 76 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 58i,8n,117p,10418b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 58i,8n,117p,10418b,491s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on MB_normalization_review.pdf (44 pages).
+Output written on MB_normalization_review.pdf (64 pages).

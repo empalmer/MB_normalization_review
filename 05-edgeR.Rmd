@@ -69,3 +69,25 @@ plot_norm_changes(gp_tmm, gp_raw,
                   title = "Distance metric comparision between TMM normalization and Raw counts ")
 
 ```
+
+## TMM on Kostic data
+
+```{r, edgeR-kostic}
+k_tmm <- norm_TMM(k_raw)
+plot_ordination(
+    k_tmm,
+    phyloseq::ordinate(k_tmm, "PCoA", "bray") ,
+    color = "DIAGNOSIS",
+    title = "PCoA on Raw data"
+) /
+    plot_ordination(
+        k_tmm,
+        phyloseq::ordinate(k_tmm, "PCoA", "bray") ,
+        color = "depth",
+        title = "PCoA on Raw data"
+    )
+plot_norm_changes(k_tmm, k_raw,
+                  x_lab = "Raw", y_lab = "TMM",
+                  title = "Distance metric comparision between TMM normalization and Raw counts ")
+```
+

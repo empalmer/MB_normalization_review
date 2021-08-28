@@ -20,11 +20,11 @@ tibble(sample, ASV1, ASV2, ASV3, ASV4, scaling_factor, sf_wo_asv1) %>%
     knitr::kable(col.names = c("Sample", "ASV1", "ASV2", "ASV3", "ASV4", "TSS Scaling Factor", "Scaling factor w/o ASV1"))
 ```
 
-Because this method does not account for the preferential sequencing over-abundance of `ASV1` it is possible to see an increase in false positives. However, this is a widely used method, and one of the few normalization methods that completely accounts for differing library sizes, which can be an important consideration depending on the analysis goal. Community level-analysis for example can be library-size dependent (ordination, some dissimiliarity measures).   
+Because this method does not account for the preferential sequencing over-abundance of `ASV1` it is possible to see an increase in false positives. However, this is a widely used method, and one of the few normalization methods that completely accounts for differing library sizes, which can be an important consideration depending on the analysis goal. Community level-analysis, for example, can be library-size dependent (ordination, some dissimiliarity measures).   
 
 
 ## TSS Implementation 
-Here, we provide a function that will normalize a `phyloseq` object by Total Sum Scaling. We have the option of keeping the result as proportions (having values 0-1), or transforming to an equal sequencing depth so the results are counts per million.
+Here, we provide a wrapper function that will normalize a `phyloseq` object by Total Sum Scaling. We have the option of keeping the result as proportions (having values 0-1), or transforming to an equal sequencing depth so the results are counts per million.
 
 ```{r, norm_tss_func}
 norm_TSS <- function(ps, keep_prop = F){
@@ -35,6 +35,14 @@ norm_TSS <- function(ps, keep_prop = F){
     return(ps_normed)
 }
 ```
+
+
+<!-- To perform the normalization, this method calculates scaling factors.   -->
+s
+<!-- ```{r, tss_table} -->
+
+<!-- ``` -->
+
 
 
 ## TSS on Global Patterns
@@ -96,6 +104,35 @@ plot_norm_changes(gp_tss, gp_raw,
 ```
 
 Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are 'more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, un-normalized data, and became marked as more similar after TSS normalization. 
+
+## TSS on Kostic data
+
+
+```{r}
+k_tss <- norm_TSS(k_raw)
+k_raw_dist <- phyloseq::ordinate(k_raw, "PCoA", "bray")
+k_tss_dist <- phyloseq::ordinate(k_tss, "PCoA", "bray")
+
+# Ordination with Diagnosis as color 
+plot_ordination(k_raw, k_raw_dist, color = "DIAGNOSIS", 
+                title = "PCoA on Raw Counts") + 
+plot_ordination(k_tss, k_tss_dist, color = "DIAGNOSIS", 
+                title = "PCoA on TSS normalized counts") +
+  plot_layout(guides = 'collect')
+
+# Ordination with original sampling depth as color
+plot_ordination(k_raw, k_raw_dist, color = "depth", 
+                title = "PCoA on Raw Counts") + 
+plot_ordination(k_tss, k_tss_dist, color = "depth", 
+                title = "PCoA on TSS normalized counts") +
+  plot_layout(guides = 'collect')
+
+plot_norm_changes(k_tss, k_raw,
+                  x_lab = "Raw counts", y_lab = "TSS props", 
+                  title = "Distance metric comparision between Raw counts and TSS normalized counts ")
+```
+
+
 
 
 <!-- ## HMP TSS -->

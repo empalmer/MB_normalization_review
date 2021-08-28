@@ -22,33 +22,42 @@ library(edgeR)
 library(metagenomeSeq)
 library(Wrench)
 library(GMPR)
+library(ALDEx2)
 set.seed(238)
 ```
 
 ## The importance of normalization
 
-Microbiome data must be normalized before any statistical analysis can be performed. Following the process of sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data are in the form of a matrix of read counts. Normalization is the process of transforming raw read count data into data that can be compared between samples. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.
+Microbiome data must be normalized before any statistical analysis can be performed. Following the process of sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data are in the form of a matrix of read counts, referred to as a feature table of raw counts. Normalization is the process of transforming raw read count data into data that can be compared between samples. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.
 
-<!-- Microbiome data are usually in the form of a matrix of read counts by samples, which was calculated following sequencing of raw reads and classification of reads into counts per observed taxa/OTU/ASV (depending on the granularity of the data.) -->
+<!-- Terminology "feature table" and taxonomy table, and metadata" , and potentially phyloenetic tree -->
 
 <!-- insert table example of what MB data look like??  what is a raw read/what are asvs or otus -->
 
 Analysis of composition, differences, connections, etc. should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal sequencing depths [@salter2014]. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals such as sequencing depth. Currently, there is no known 'best' normalization method that removes all technical artifacts leaving only biological signals.
 
-Due to the sequencing technology, samples will have different sequencing depths, or the sum of all the counts in a sample. Directly comparing raw counts between samples is not possible. To illustrate this, consider the counts of one taxon, labeled `ASV1`, across two samples shown below. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples?
+Due to the sequencing technology, samples will have different sequencing depths, or the sum of all the counts in a sample. Directly comparing raw counts between samples is not possible. To illustrate this, consider the counts of one taxon, labeled `taxon1`, across two samples shown below. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples? As we see below, the way we normalize the data can change how we would answer this question. 
+
+
+```{r, demo_data_table_raw_counts, echo = F}
+sampleA <- c(230,5)
+sampleB <- c(23,5)
+ASVs <- c("taxon1", "taxon2")
+tibble(ASVs, sampleA, sampleB) %>% 
+    knitr::kable(col.names = c("Sample A", "Sample B", "Taxa"), 
+                 caption = "The raw counts of taxon 1 are different, and the raw counts of taxon 2 are equal. Sampling depth is not accounted for")
+```
+
 
 ```{r, demo_normalization_importance, echo = F}
 
-sampleA <- c(230,5)
-sampleB <- c(23,5)
-ASVs <- c("ASV1", "ASV2")
 df <- data.frame(sampleA, sampleB, ASVs)
 p1 <- data.frame(sampleA, sampleB, ASVs) %>% 
     pivot_longer(sampleA:sampleB, names_to = "sample", values_to = "Count") %>% 
     ggplot(aes(y = Count, x = ASVs, fill = sample)) + 
         geom_bar(stat = "identity", position = position_dodge()) + 
-    ggtitle("Observed raw counts of 2 ASVS in 2 samples", 
-            subtitle = "Is there a difference between samples in ASV1? In ASV2?") + 
+    ggtitle("Observed raw counts of 2 taxa in 2 samples", 
+            subtitle = "The raw counts of taxon 1 are different, and the raw counts of taxon 2 are equal. Sampling depth is not accounted for") + 
     theme_minimal() + 
     theme(legend.position="bottom", 
           legend.title = element_blank(), 
@@ -60,8 +69,8 @@ p2 <- data.frame(sampleA = sampleA/sum(sampleA), sampleB = sampleB/sum(sampleB),
     pivot_longer(sampleA:sampleB, names_to = "sample", values_to = "Proportion") %>% 
     ggplot(aes(y = Proportion, x = ASVs, fill = sample)) + 
         geom_bar(stat = "identity", position = position_dodge()) + 
-    ggtitle("Normalized counts of 2 ASVs in 2 samples", 
-            subtitle = "Is there a difference between samples in ASV1? In ASV2?")+ 
+    ggtitle("Normalized counts of 2 taxa in 2 samples", 
+            subtitle = "When library size is accounted for, the difference between sample A and B appears smaller, and there now appears to be a difference in taxon 2, even though the raw counts are identical")+ 
     theme_minimal() + 
     theme(legend.position="bottom", 
           legend.title = element_blank(), 
@@ -69,12 +78,12 @@ p2 <- data.frame(sampleA = sampleA/sum(sampleA), sampleB = sampleB/sum(sampleB),
   scale_color_viridis(discrete = TRUE, option = "E")+
   scale_fill_viridis(discrete = TRUE) 
 
-p1 / p2 + plot_annotation(tag_levels = 'A', tag_prefix = 'Figure')+
+p1 / p2 + plot_annotation(tag_levels = 'A', tag_prefix = 'Figure ')+
   plot_layout(guides = 'collect')
 # grid.arrange(tableGrob(df),p1,p1, nrow = 1)
 ```
 
-Normalization for microbiome data often refers to standardizing sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in `ASV1` between samples appears much smaller. However, now there appears to be a difference in `ASV2`, even though the counts were originally the same. This is because in sample B `ASV1` consists of a higher proportion of the total count than in sample A.
+Normalization for microbiome data often refers to standardizing sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as Figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in `ASV1` between samples appears much smaller. However, now there appears to be a difference in `ASV2`, even though the counts were originally the same. This is because in sample B `ASV1` consists of a higher proportion of the total count than in sample A.
 
 This demonstrates the importance of normalization, but also the artifacts that can occur depending on the method.
 
@@ -163,7 +172,7 @@ tibble(sample, blue_a, red_a) %>%
 
 This observed increase in the proportion of blue is due to the compositional nature of the sampled points, and not any true difference in the blue population.
 
-### Log ratio methods
+### Log ratio transformation methods
 
 The log-ratio based methodology developed by Aitchison in the 1980s is useful for analyzing compositional data [@aitchison1982]. Taking the logarithm of ratios can be an appropriate transformation for compositional data, so standard statistical tests can be appropriate again. This transformation removes the issue of standardizing/normalizing different sampling depths. The sampling depth for a given sample will not distort the biological covariance or correlation structure.
 

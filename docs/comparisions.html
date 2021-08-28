@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 10 Comparisions | Tutorial on Normalization of Microbiome Data</title>
+  <title>Chapter 11 Comparisions | Tutorial on Normalization of Microbiome Data</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 10 Comparisions | Tutorial on Normalization of Microbiome Data" />
+  <meta property="og:title" content="Chapter 11 Comparisions | Tutorial on Normalization of Microbiome Data" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 10 Comparisions | Tutorial on Normalization of Microbiome Data" />
+  <meta name="twitter:title" content="Chapter 11 Comparisions | Tutorial on Normalization of Microbiome Data" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="wrench.html"/>
+<link rel="prev" href="log-ratio-methods.html"/>
 <link rel="next" href="references.html"/>
 <script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -140,53 +140,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#the-importance-of-normalization"><i class="fa fa-check"></i><b>1.1</b> The importance of normalization</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-compositional-nature-of-microbiome-data"><i class="fa fa-check"></i><b>1.2</b> The compositional nature of microbiome data</a>
 <ul>
-<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio-methods"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio methods</a></li>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#log-ratio-transformation-methods"><i class="fa fa-check"></i><b>1.2.1</b> Log ratio transformation methods</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="importing-data.html"><a href="importing-data.html"><i class="fa fa-check"></i><b>2</b> Importing Data</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="importing-data.html"><a href="importing-data.html#global-patterns"><i class="fa fa-check"></i><b>2.1</b> Global Patterns</a></li>
-<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#pre-processing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.2</b> Pre-processing Quality Control and Filtering</a></li>
+<li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#colorectal-cancer"><i class="fa fa-check"></i><b>2.2</b> Colorectal cancer</a></li>
+<li class="chapter" data-level="2.3" data-path="importing-data.html"><a href="importing-data.html#pre-processing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.3</b> Pre-processing Quality Control and Filtering</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>3</b> Total Sum scaling (TSS)</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>3.1</b> About TSS</a></li>
 <li class="chapter" data-level="3.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>3.2</b> TSS Implementation</a></li>
 <li class="chapter" data-level="3.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>3.3</b> TSS on Global Patterns</a></li>
+<li class="chapter" data-level="3.4" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-kostic-data"><i class="fa fa-check"></i><b>3.4</b> TSS on Kostic data</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>4</b> Rarefying</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#about-rarefying"><i class="fa fa-check"></i><b>4.1</b> About Rarefying</a></li>
 <li class="chapter" data-level="4.2" data-path="rarefying.html"><a href="rarefying.html#rarefying-implementation"><i class="fa fa-check"></i><b>4.2</b> Rarefying implementation</a></li>
 <li class="chapter" data-level="4.3" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.3</b> Rarefying on Global Patterns</a></li>
+<li class="chapter" data-level="4.4" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-kostic-data"><i class="fa fa-check"></i><b>4.4</b> Rarefying on Kostic Data</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>5</b> DESeq</a>
 <ul>
 <li class="chapter" data-level="5.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>5.1</b> About DESeq</a></li>
 <li class="chapter" data-level="5.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>5.2</b> DESeq Implementation</a></li>
 <li class="chapter" data-level="5.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>5.3</b> DESeq on Global Patterns</a></li>
+<li class="chapter" data-level="5.4" data-path="deseq.html"><a href="deseq.html#deseq-on-kostic-data"><i class="fa fa-check"></i><b>5.4</b> DESeq on Kostic data</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="tmm-edger.html"><a href="tmm-edger.html"><i class="fa fa-check"></i><b>6</b> TMM (edgeR)</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="tmm-edger.html"><a href="tmm-edger.html#edger-tmm-implementation"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementation</a></li>
 <li class="chapter" data-level="6.2" data-path="tmm-edger.html"><a href="tmm-edger.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
+<li class="chapter" data-level="6.3" data-path="tmm-edger.html"><a href="tmm-edger.html#tmm-on-kostic-data"><i class="fa fa-check"></i><b>6.3</b> TMM on Kostic data</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>7</b> Cumulative sum scaling (CSS)</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-implementation"><i class="fa fa-check"></i><b>7.1</b> CSS implementation</a></li>
 <li class="chapter" data-level="7.2" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.2</b> CSS on Global Patterns</a></li>
+<li class="chapter" data-level="7.3" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-kostic-data"><i class="fa fa-check"></i><b>7.3</b> CSS on Kostic data</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>8</b> GMPR</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#gmpr-implementation"><i class="fa fa-check"></i><b>8.1</b> GMPR Implementation</a></li>
-<li class="chapter" data-level="8.2" data-path="gmpr.html"><a href="gmpr.html#global-patterns-gmpr"><i class="fa fa-check"></i><b>8.2</b> Global Patterns GMPR</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>9</b> Wrench</a>
 <ul>
 <li class="chapter" data-level="9.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>9.1</b> Wrench Implementation</a></li>
 <li class="chapter" data-level="9.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>9.2</b> Wrench on Global Patterns</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>10</b> Comparisions</a></li>
+<li class="chapter" data-level="10" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html"><i class="fa fa-check"></i><b>10</b> Log Ratio Methods</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html#ancom-ii"><i class="fa fa-check"></i><b>10.1</b> ANCOM II</a></li>
+<li class="chapter" data-level="10.2" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html#ancom-bc"><i class="fa fa-check"></i><b>10.2</b> ANCOM BC</a></li>
+<li class="chapter" data-level="10.3" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html#aldex2"><i class="fa fa-check"></i><b>10.3</b> ALDEx2</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>11</b> Comparisions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -208,23 +219,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="comparisions" class="section level1" number="10">
-<h1><span class="header-section-number">Chapter 10</span> Comparisions</h1>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="comparisions.html#cb55-1"></a><span class="kw">library</span>(GGally)</span></code></pre></div>
+<div id="comparisions" class="section level1" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Comparisions</h1>
+<p>See all distance comparisions for Global patterns data</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="comparisions.html#cb71-1"></a><span class="kw">library</span>(GGally)</span></code></pre></div>
 <pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
 ##   method from   
 ##   +.gg   ggplot2</code></pre>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="comparisions.html#cb57-1"></a><span class="kw">data.frame</span>(<span class="dt">raw =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_raw, <span class="st">&quot;bray&quot;</span>)), </span>
-<span id="cb57-2"><a href="comparisions.html#cb57-2"></a>           <span class="dt">tss =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tss, <span class="st">&quot;bray&quot;</span>)), </span>
-<span id="cb57-3"><a href="comparisions.html#cb57-3"></a>           <span class="dt">css =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_css, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb57-4"><a href="comparisions.html#cb57-4"></a>           <span class="dt">deseq_rle =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_rle, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb57-5"><a href="comparisions.html#cb57-5"></a>           <span class="dt">deseq_vs =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_vs, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb57-6"><a href="comparisions.html#cb57-6"></a>           <span class="dt">rare =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_rare, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb57-7"><a href="comparisions.html#cb57-7"></a>           <span class="dt">tmm =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tmm, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb57-8"><a href="comparisions.html#cb57-8"></a>           <span class="dt">diff =</span> <span class="kw">as.numeric</span>(<span class="kw">dist</span>(<span class="kw">get_variable</span>(gp_raw, <span class="st">&quot;depth&quot;</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb57-9"><a href="comparisions.html#cb57-9"></a><span class="st">    </span><span class="kw">ggpairs</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">upper =</span> <span class="st">&quot;blank&quot;</span>,</span>
-<span id="cb57-10"><a href="comparisions.html#cb57-10"></a>            <span class="dt">diag =</span> <span class="st">&quot;blank&quot;</span>,ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">colour=</span>diff))</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="comparisions.html#cb73-1"></a><span class="kw">data.frame</span>(<span class="dt">raw =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_raw, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb73-2"><a href="comparisions.html#cb73-2"></a>           <span class="dt">tss =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tss, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb73-3"><a href="comparisions.html#cb73-3"></a>           <span class="dt">css =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_css, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb73-4"><a href="comparisions.html#cb73-4"></a>           <span class="dt">deseq_rle =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_rle, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb73-5"><a href="comparisions.html#cb73-5"></a>           <span class="dt">deseq_vs =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_vs, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb73-6"><a href="comparisions.html#cb73-6"></a>           <span class="dt">rare =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_rare, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb73-7"><a href="comparisions.html#cb73-7"></a>           <span class="dt">tmm =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tmm, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb73-8"><a href="comparisions.html#cb73-8"></a>           <span class="dt">diff =</span> <span class="kw">as.numeric</span>(<span class="kw">dist</span>(<span class="kw">get_variable</span>(gp_raw, <span class="st">&quot;depth&quot;</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb73-9"><a href="comparisions.html#cb73-9"></a><span class="st">    </span><span class="kw">ggpairs</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">upper =</span> <span class="st">&quot;blank&quot;</span>,</span>
+<span id="cb73-10"><a href="comparisions.html#cb73-10"></a>            <span class="dt">diag =</span> <span class="st">&quot;blank&quot;</span>,ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">colour=</span>diff))</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/comparisons-gp-1.png" width="672" /></p>
+<p>See all distance comparisons for Kostic data</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="comparisions.html#cb74-1"></a><span class="kw">data.frame</span>(<span class="dt">raw =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_raw, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb74-2"><a href="comparisions.html#cb74-2"></a>           <span class="dt">tss =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_tss, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb74-3"><a href="comparisions.html#cb74-3"></a>           <span class="dt">css =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_css, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb74-4"><a href="comparisions.html#cb74-4"></a>           <span class="dt">deseq_rle =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_deseq_rle, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb74-5"><a href="comparisions.html#cb74-5"></a>           <span class="dt">deseq_vs =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_deseq_vs, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb74-6"><a href="comparisions.html#cb74-6"></a>           <span class="dt">rare =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_rare, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb74-7"><a href="comparisions.html#cb74-7"></a>           <span class="dt">tmm =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_tmm, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb74-8"><a href="comparisions.html#cb74-8"></a>           <span class="dt">diff =</span> <span class="kw">as.numeric</span>(<span class="kw">dist</span>(<span class="kw">get_variable</span>(k_raw, <span class="st">&quot;depth&quot;</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb74-9"><a href="comparisions.html#cb74-9"></a><span class="st">    </span><span class="kw">ggpairs</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">upper =</span> <span class="st">&quot;blank&quot;</span>,</span>
+<span id="cb74-10"><a href="comparisions.html#cb74-10"></a>            <span class="dt">diag =</span> <span class="st">&quot;blank&quot;</span>,ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">colour=</span>diff))</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/comparisons-k-1.png" width="672" /></p>
 
 </div>
             </section>
@@ -232,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="wrench.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="log-ratio-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -284,6 +308,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

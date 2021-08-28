@@ -10,7 +10,63 @@ This is a very commonly used method, but it has also been criticized [@mcmurdie2
 
 ## Rarefying implementation 
 
-The following function returns a rarefied `phyloseq` object. We can either pass in the minimum sampling depth as a second argument, or use the default minimum depth of the samples. 
+Consider the following example dataset. 
+
+
+```{r, echo = F}
+sample1 <- c(132, 7, 0, 23, 71)
+sample2 <- c(103, 48, 2, 15, 80)
+sample3 <- c(11, 3, 1, 2, 5)
+taxa <- paste("Taxon", 1:5)
+
+sampling_depth <- c(sum(sample1), sum(sample2), sum(sample3))
+
+tibble(taxa, sample1, sample2, sample3) %>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
+        caption =  "Example dataset - Raw Counts", 
+        format = "html"
+    ) 
+
+# %>% kableExtra::row_spec(5, extra_css = "border-bottom: 1px solid")
+```
+
+To normalize this data by rarefying, we first choose a minimum sampling depth, or in other words, the minimum column sum. After normalizing, the column sum of all samples will be this size. Any samples that are below this minimum will be dropped from analysis. We choose 200 as our minimum here. In practice the counts will normally be much higher. In this example, our sampling depths are 223, 248, and 20. Thus the third sample will be dropped in this procedure. 
+
+Since we are randomly sampling, we need to keep track of the seed so this process is reproducible. 
+
+```{r}
+set.seed(525)
+```
+
+We then randomly sample taxa from each sample/column in the proportions corresponding to the raw counts. The below table shows the table from above after we rarefy. Notice that the rare Taxon 3, which originally was present in Sample 1 and 3 is now completely removed from the analysis. 
+
+```{r, echo = F}
+
+# r1 <- data.frame(taxa, sample1) %>% 
+#     uncount() %>% 
+#     dplyr::pull(taxa) %>% 
+#     sample(size = 200 ) %>% table() %>% as.vector(
+#     )
+# 
+# r2 <- data.frame(taxa, sample2) %>% 
+#     uncount() %>% 
+#     dplyr::pull(taxa) %>% 
+#     sample(size = 200) %>% table() %>% as.vector()
+# r1
+# r2
+r1 <- c(115, 6, 0, 18, 61)
+r2 <- c(90, 39, 0, 11, 60)
+
+tibble(taxa, r1, r2) %>%
+    knitr::kable(col.names = c("Taxa", "Sample 1", "Sample2"),
+        caption =  "Rarefied counts") 
+```
+
+
+
+
+We now show the process of rarefying a real dataset. The following function returns a rarefied `phyloseq` object. We can either pass in the minimum sampling depth as a second argument, or use the default minimum depth of the samples. 
 
 ```{r, gp_rare}
 norm_rarefy <- function(phyloseq, depth = min(sample_sums(phyloseq))){
@@ -44,7 +100,7 @@ plot_ordination(gp_raw,
 plot_ordination(gp_rare,
                 phyloseq::ordinate(gp_rare, "PCoA", "bray"),
                 color = "SampleType", 
-                title = "PCoA on Rarefied counts")+
+                title = "PCoA on Rarefied counts") +
   plot_layout(guides = 'collect')
 ```
 
@@ -69,6 +125,19 @@ plot_norm_changes(gp_rare, gp_tss,
 
 
 
+## Rarefying on Kostic Data
+
+```{r}
+k_rare <- norm_rarefy(k_raw)
+
+plot_norm_changes(k_rare, k_raw,
+                  x_lab = "Raw counts", y_lab = "Rarefied counts", 
+                  title = "Distance metric comparision between Raw counts and Rarefied counts ")
+
+plot_norm_changes(k_rare, k_tss,
+                  x_lab = "TSS", y_lab = "Rarefied", 
+                  title = "Distance metric comparision between TSS normalization and Rarefied counts ")
+```
 
 
 <!-- Doesnt seem to be much difference between rarefied and tss -->

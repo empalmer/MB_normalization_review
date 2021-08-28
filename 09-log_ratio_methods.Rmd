@@ -1,0 +1,173 @@
+# Log Ratio Methods
+
+## ANCOM II
+
+ANCOM-II [@kaul2017] is a log-ratio approach for accounting for zero-inflation in log-ratio transformations. It uses a log-ratio transformation instead of library size normalization. If there are $m$ total taxa, this method performs $m-1$ differential abundance tests, each one using a different taxa as the reference taxa. Before the alr log-ratio transformation is performed, this method identifies and adjusts for three types of zeros that can exist. These three types of zeros are outlier zeros, structural zeros, and sampling zeros. Outlier zeros are zeros caused from some extraneous reasons separate from below detection limits due to sampling depth. To account for these zeros, they are replaced by NA in the data. Secondly, structural zeros are zeros which are zero due to the nature of the groups. If a taxa is structurally zero in a group, it is marked as automatically differentially abundant, and removed from further analysis. Finally, sampling zeros are other zeros that are zero perhaps caused by sampling depth. These are imputed by a small pseudocount. This method thus takes into account zero-inflation and compositionality. <!-- After this process, no numerical zeros remain, so log and log-ratio transformations can be performed. This method thus takes into account zero-inflation and compositionality.  -->
+
+After this correction of zeros, the data are log ratio transformed using each possible taxa as the reference sample. Tests for differential abundance are performed on each of iterations of the log-ratio transformed data, and the count of times the resulting test is significant is used to determining overall significance.
+
+<!-- This method is shown to be conservative,  -->
+
+<!-- Sensitive, good control of FDR -->
+
+It is possible that no outlier or structural zeros are detected, so as a normalization/transformation technique, this method can be equivalent to alr or clr transoformation on raw data with a pseudocount.
+
+```{r, ancom2, eval = F}
+## Load the Ancom function (it's not a package)
+devtools::source_url("https://raw.githubusercontent.com/FrederickHuangLin/ANCOM/master/scripts/ancom_v2.1.R")
+
+norm_ANCOM2 <- function(ps, group_var, outlier.replace = TRUE) {
+    feature_table <- as.data.frame(otu_table(ps))
+    groups <- as.factor(get_variable(ps, group_var))
+    meta_data <-
+        data.frame(sample_id = paste0("sample", seq(dim(raw)[2])), groups = groups)
+    #rownames(meta_data) <- meta_data$sample_id
+    colnames(feature_table) <- meta_data$sample_id
+    
+    # The main ANCOM2 zero-classification function 
+    prepro <-
+        feature_table_pre_process(
+            feature_table,
+            meta_data,
+            sample_var = "sample_id",
+            group_var = "groups",
+            out_cut = 0.05,
+            zero_cut = 0.9,
+            lib_cut = 0,
+            neg_lb = FALSE
+        )
+    feature_table <- prepro$feature_table
+    meta_data <- prepro$meta_data
+    struc_zero <- prepro$structure_zeros
+    
+    # OTU table transformation:
+    # (1) Discard taxa with structural zeros (if any); (2) Add pseudocount (1) and take logarithm.
+    if (!is.null(struc_zero)) {
+        num_struc_zero = apply(struc_zero, 1, sum)
+        comp_table = feature_table[num_struc_zero == 0,]
+    } else{
+        comp_table = feature_table
+    }
+    comp_table <- log(as.matrix(comp_table) + 1)
+    
+    # Replace outlier zeros with the mean of the rest genes in each
+    if (outlier.replace) {
+        for (col in 1:ncol(comp_table)) {
+            comp_table[is.na(comp_table[, col]), col] <-
+                mean(comp_table[, col], na.rm = T)
+        }
+    }
+    # Calculate ratio
+    n_taxa <- dim(comp_table)[1]
+    taxa_id <- rownames(comp_table)
+    n_samp <- dim(comp_table)[2]
+    log_geo_mean <-
+        apply(comp_table, 2, function(x) {
+            mean(x, na.rm = T)
+        })
+    mu_group_1 <- mean(log_geo_mean[groups == levels(groups)[1]])
+    mu_group_2 <- mean(log_geo_mean[groups == levels(groups)[2]])
+    mu <- rep(mu_group_1, n_samp)
+    mu[groups == levels(groups)[2]] <- mu_group_2
+    bias <- log_geo_mean - mu
+    dat.normed <-
+        comp_table - matrix(rep(bias, n_taxa), nrow = n_taxa, byrow = T)
+    colnames(dat.normed) <- colnames(raw)
+    
+    
+    # Convert to phyloseq
+    otu <- otu_table(dat.normed, taxa_are_rows = T)
+    sam <- access(ps, "sam_data")
+    sam$scaling_factor <- exp(bias)
+    tax <- access(ps, "tax_table")
+    phy <- access(ps, "phy_tree")
+    ps_ancom2 <- phyloseq(otu, sam, tax, phy)
+    return(ps_ancom2)
+}
+
+
+k_ancom2 <- norm_ANCOM2(k_raw, "DIAGNOSIS")
+k_ancom2
+```
+
+## ANCOM BC
+
+ANCOM BC [@lin2020] includes a normalization method that accounts for zero inflation and compositionality.
+
+This method corrects bias by estimating a sampling fraction, which is.... It accounts for sampling fraction by introducing a sample-specific offset in a linear regression framework, estimated form observed data. The offset term is the bias correction, and the linear regression in log scale is analogous to the log ratio transformation to deal with compositionality.
+
+This method also identifies and accounts for outlier zeros, structural zeros, and sampling zeros, using the same methodology as ANCOM2.
+
+```{r, ancombc}
+library(ANCOMBC)
+norm_ANCOMBC <- function(ps, group_var) {
+    out = ancombc(ps,
+                  formula = group_var,
+                  group = group_var,
+                  struc_zero = T, 
+                  neg_lb = T, 
+                  zero_cut = .9)
+    #it is recommended to set neg_lb = TRUE when the sample size per group is relatively large (e.g. > 30)
+    sampling.fraction <- exp(out$samp_frac)
+    # Normalize counts
+    # feature_table <- otu_table(ps, taxa_are_rows = T)
+    feature_table <- out$feature_table
+    # otu_norm <- t(t(otu) / sampling.fraction)
+    otu_norm <- t(t(feature_table) / sampling.fraction)
+    otu <- otu_table(otu_norm, T)
+    sam <- access(ps, "sam_data")
+    sam$scaling_factor <- sampling.fraction
+    tax <- access(ps, "tax_table")
+    phy <- access(ps, "phy_tree")
+    ps_ancombc <- phyloseq(otu, sam, tax, phy)
+    return(ps_ancombc)
+}
+
+k_ancombc <- norm_ANCOMBC(k_raw, group_var = "DIAGNOSIS")
+
+```
+
+## ALDEx2
+
+<!-- https://www.bioconductor.org/packages/devel/bioc/vignettes/ALDEx2/inst/doc/ALDEx2_vignette.html -->
+
+ALDEx2 [@fernandes2014] is a method for differential abundance analysis developed for use with microbiome or any other sequencing setting. It uses a clr log-ratio transformation instead of library size normalization. To deal with sparsity, it creates randomized instances via Monte Carlo draws based on Dirichlet-Multinomial distribution with probabilities from the raw count data, These are zero-free, so log-ratio transformations are possible.
+
+The idea is to estimate biological and sampling variation to calculate expected false discovery rate given variation. The method estimates technical variation within each sample using MC draws from Dirichlet distribution. For differential abundance, statistical tests are performed on each instance, p-values averaged, then corrected for multiple comparisons This method has been shown to be conservative compared to many of the library size normalization methods.
+
+```{r, aldex2}
+library(ALDEx2)
+norm_ALDEx2 <- function(ps, group_var) {
+    raw <- as.data.frame(otu_table(ps))
+    groups <- get_variable(ps, group_var)
+    # Run ALDEx2 function
+    aldex.clr.res <-
+        aldex.clr(
+            reads = raw,
+            conds = groups,
+            mc.samples = 128
+        )
+    # Extract each clr MC draw
+    mc_draws <- getMonteCarloInstances(aldex.clr.res)
+
+    # Average each draw for the 'normalized' clr read table
+    dat.normed <-
+        matrix(0,
+               nrow = nrow(mc_draws[[1]]) ,
+               ncol = length(mc_draws))
+    for (col in 1:ncol(dat.normed)) {
+        dat.normed[, col] <- apply(mc_draws[[col]], 1, mean)
+    }
+    rownames(dat.normed) <- rownames(mc_draws[[1]])
+    colnames(dat.normed) <- names(mc_draws)
+    
+    otu <- otu_table(dat.normed, T)
+    sam <- access(ps, "sam_data")
+    tax <- access(ps, "tax_table")
+    phy <- access(ps, "phy_tree")
+    ps_aldex2 <- phyloseq(otu, sam, tax, phy)
+    return(ps_aldex2)
+}
+
+k_aldex2 <- norm_ALDEx2(k_raw, group_var = "DIAGNOSIS")
+```

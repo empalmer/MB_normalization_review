@@ -4,7 +4,7 @@ A recent extension of the RLE DESeq method is the Geometric mean of Pairwise rat
 
 ## GMPR Implementation
 
-```{r}
+```{r, gmpr-implementation}
 norm_GMPR <- function(ps, scale = 1e6){
   require(GMPR, quietly = T)
     # Calculate GMPR size factor
@@ -29,21 +29,25 @@ norm_GMPR <- function(ps, scale = 1e6){
 
 ```
 
-## Global Patterns GMPR
+<!-- ## Global Patterns GMPR -->
 
-```{r}
-# Normalize
-gp_gmpr <- norm_GMPR(gp_raw)
+<!-- ```{r} -->
+<!-- # Normalize -->
+<!-- gp_gmpr <- norm_GMPR(gp_raw) -->
 
 
-# Compare to other methods like before
-plot_norm_changes(gp_gmpr, gp_raw, 
-                  x_lab = "GMPR", y_lab = "Raw Counts",
-                  title = "GMPR normalization vs Raw Counts")
-plot_norm_changes(gp_gmpr, gp_tss,
-                  x_lab = "TSS", y_lab = "GMPR", 
-                  title = "TSS vs GMPR")
-plot_norm_changes(gp_gmpr, gp_css,
-                  x_lab = "CSS", y_lab = "GMPR", 
-                  title = "CSS vs GMPR" )
-```
+<!-- # Compare to other methods like before -->
+<!-- plot_norm_changes(gp_gmpr, gp_raw,  -->
+<!--                   x_lab = "GMPR", y_lab = "Raw Counts", -->
+<!--                   title = "GMPR normalization vs Raw Counts") -->
+<!-- plot_norm_changes(gp_gmpr, gp_tss, -->
+<!--                   x_lab = "TSS", y_lab = "GMPR",  -->
+<!--                   title = "TSS vs GMPR") -->
+<!-- plot_norm_changes(gp_gmpr, gp_css, -->
+<!--                   x_lab = "CSS", y_lab = "GMPR",  -->
+<!--                   title = "CSS vs GMPR" ) -->
+<!-- ``` -->
+
+
+
+
