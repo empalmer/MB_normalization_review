@@ -1,8 +1,10 @@
-# DESeq
+# Log-Ratio Based Scaling Methods
 
-## About DESeq
+## DESeq
 
-DESeq2 includes a normalization method for adjusting for differing library sizes across samples [@anders2010]. This method also can account for differences in library composition. This method has also been called MED, RLE, or DESeq in the literature.
+### About DESeq
+
+The DESeq2 package includes a normalization method for adjusting for differing library sizes across samples [@anders2010]. This method also can account for differences in library composition. A scaling factor to normalize each sample takes into account both library size and library composition. This method has also been called MED, RLE, or DESeq in the literature.
 
 DESeq2 first takes the natural logarithm of every entry in the count matrix. Due to this, all entries with zero will be set to negative infinity. Next, the row average is calculated (geometric average), so we have a vector of average counts for each taxon. Taking the log first should avoid undue influence by extreme outliers. All taxa with an average of infinity are removed. This step will remove all taxa with zero read count in one or more samples. This can be a problem in microbiome data. Next, we subtract the average log value from the log(counts), this gives a log ratio. This is equivalent to the ratio of the reads in each sample to the average across all samples. Next, we calculate the median of the log-ratios for each sample. These medians are converted to scaling factors for each sample by exponentiation. An extension of this method, denoted 'poscounts', has been suggested, which instead of taking the geometric mean of the logged counts for each taxon, we take the n-th root of the product of the non-zero counts.
 
@@ -12,9 +14,123 @@ An additional option can be used to perform a variance stabilizing transformatio
 
 If differential abundance is of interest to calculate, DESeq uses a negative binomial distribution to model differential abundances. It is possible to provide the size factors calculated by another method to DESeq to perform differential analysis.
 
-## DESeq Implementation
+### DESeq Implementation
 
-Here we provide two normalization functions using DESeq methods. The first calculates the RLE normalization using the `poscounts` option for microbiome data. The second calculates the variance stabalizing transformation. 
+
+Consider again this example dataset. 
+
+
+```{r}
+sample1 <- c(132, 7, 0, 23, 71)
+sample2 <- c(103, 48, 2, 15, 80)
+sample3 <- c(11, 3, 1, 2, 5)
+taxa <- paste("Taxon", 1:5)
+
+sampling_depth <- c(sum(sample1), sum(sample2), sum(sample3))
+
+tibble(taxa, sample1, sample2, sample3) %>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
+        caption =  "Example dataset - Raw Counts", 
+        format = "html"
+    ) 
+```
+
+The first step in DESeq normalization is to take the natural log of each entry in the count matrix. 
+
+```{r, deseq_step_1}
+
+ds1_df <- tibble(taxa, log(sample1), log(sample2), log(sample3))
+ds1_df  %>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
+        caption =  "Step 1: Logged Raw Counts", 
+        format = "html"
+    ) 
+```
+
+Notice the one entry with zero counts is marked as negative infinity. 
+
+Next, the average of the logged values is taken across the samples. This results in an average log value for each taxa. This averaged log value is helpful for normalizing because it is not overwhelmed by outliers. 
+
+```{r deseq_step2}
+
+ds2_df <- tibble(taxa, rowMeans(data.frame(log(sample1), log(sample2), log(sample3))))
+
+ds2_df %>%
+    knitr::kable(
+        col.names = c("Taxa", "Average Log Counts"),
+        caption =  "Step 2: Average Logged Counts"
+    ) 
+```
+
+The row for the taxa that contained a zero on one of the samples is negative infinity. This taxon is now excluded from the following steps. This step results in removing any taxa that have zero counts from being considered to contribute to calculating the scaling factors. 
+
+
+<!-- The idea here is to keep housekeeping genes  -->
+
+
+The next step is to subtract the average log values (step 2) from the log of the raw counts (step 1), only including rows that were not filtered. This step shows which samples have counts in a sample higher or lower than the average. 
+
+
+```{r, deseq_step3}
+s1v <- c(0.91, -.36, .96, .84)
+s2v <- c(.66, 1.66, .53, .96)
+s3v <- c(-1.57, -1.31, -1.49, -1.81)
+s1_diff <-c("4.88 - 3.97 = 0.91",
+            "1.95 - 2.31 = -0.36",
+            "3.14 - 2.18 = 0.96",
+            "4.26 - 3.42 = 0.84")
+s2_diff <- c("4.63 - 3.97 = 0.66", 
+             "3.97 - 2.31 = 1.66", 
+             "2.71 - 2.18 = 0.53",
+             "4.38 - 3.42 = 0.96")
+s3_diff <- c("2.40 - 3.97 = -1.57",
+             "1.10 - 2.31 = -1.31", 
+             "0.69 - 2.18 = -1.49", 
+             "1.61- 3.42 = -1.81")
+taxa_filtered <- taxa[-3]
+
+tibble(taxa_filtered, s1_diff, s2_diff, s3_diff) %>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample 2", "Sample 3"),
+        caption =  "Step 3: Log Ratio of reads in each sample to average across all samples"
+    ) 
+```
+
+
+Next, to calculate the scaling factors for each sample, we take the median of the log ratios calculated in the above step. Like using logs, calculating medians avoids the influence of outlier taxa that put undue influence on the scaling factor.
+
+```{r, deseq_step4}
+tibble(c(taxa_filtered, "Median", "Exponentiated Median"),
+       c(s1v, median(s1v), exp(median(s1v))),
+       c(s2v, median(s2v), exp(median(s2v))),
+       c(s3v, median(s3v), exp(median(s3v))))%>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample 2", "Sample 3"),
+        caption =  "Step 4: Calculating medians per sample"
+    ) 
+```
+
+
+Finally, we normalize the data, by exponentiating the median log ratios for each sample, which are the final scaling factors. We then divide all the raw counts in a sample by the sample's scaling factor.
+
+```{r, deseq }
+tibble(taxa, sample1/exp(median(s1v)), sample2/exp(median(s2v)), sample3/exp(median(s3v)))  %>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
+        caption =  "Step 5: DESeq Normalized Counts", 
+        format = "html"
+    ) 
+```
+
+
+Since Taxon 3 had a zero count in sample 1, it was excluded from the calculation of scale factors. The above example dataset may not be characteristic of microbiome datasets. Microbiome datasets are zero-inflated, meaning that there are numerous zero counts in the raw count matrix. Even up to 80-90% of the counts in a microbiome datset can be zero. Because of this, if the zero-inflation in the datseta is not accounted for, very few, or even perhaps none of the taxa will contribute to calculating the scaling factor. One option so that all of the taxa are included in the calculation is to add a pseudocount so none of the counts are zero. Another option is the `poscounts` option, which is encouraged for microbiome data. Instead of taking the average of the logged counts, it takes the $n$th root of the non-zero counts. This replaces step 2 in this example.  
+
+
+
+
+Here we provide two normalization functions implemented in R using DESeq methods. The first calculates the RLE normalization using the `poscounts` option for microbiome data. The second calculates the variance stabilizing transformation. 
 
 ```{r, deseq-implementation, warning=FALSE,message=FALSE}
 norm_DESeq_RLE_poscounts <- function(ps, group = 1){
@@ -59,7 +175,7 @@ norm_DESeq_vs <- function(ps, group = 1){
 
 ```
 
-## DESeq on Global Patterns
+### DESeq on Global Patterns
 
 Perform DESeq RLE normalization as well as DESeq variance stabilized transformation on Global Patterns:
 
@@ -95,7 +211,7 @@ plot_norm_changes(gp_deseq_vs, gp_raw,
 ```
 
 
-## DESeq on Kostic data 
+### DESeq on Kostic data 
 
 ```{r, warning=FALSE,message=FALSE}
 k_deseq_rle <- norm_DESeq_RLE_poscounts(k_raw)
@@ -120,16 +236,3 @@ plot_norm_changes(k_deseq_vs, k_raw,
   plot_layout(guides = 'collect')
 ```
 
-<!-- Look at differences between scaling factors -->
-
-<!-- do we need to exponentiate?  -->
-
-<!-- ```{r} -->
-
-<!-- data.frame(deseq = sample_data(gp_deseq_rle)$depth/sample_data(gp_deseq_rle)$scaling_factor, -->
-
-<!--            tss = sample_data(gp_tss)$scaling_factor) %>%  -->
-
-<!--   ggplot(aes(x = deseq, y = tss)) + geom_point() -->
-
-<!-- ``` -->

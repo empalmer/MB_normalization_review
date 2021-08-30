@@ -1,6 +1,8 @@
-# Total Sum scaling (TSS)
+# Count Scaling Normalization methods
 
-## About TSS
+## Total Sum scaling (TSS)
+
+### About TSS
 
 The first method described is Total Sum Scaling (TSS). This method is also referred to as Total Count (TC), converting into proportions, or relative abundance. This is a scaling method to normalize the different library sizes across samples. For every entry in the count matrix, we scale by the total read depth of that sample. This converts the counts into the proportion of abundance present in each given sample. 
 
@@ -23,7 +25,7 @@ tibble(sample, ASV1, ASV2, ASV3, ASV4, scaling_factor, sf_wo_asv1) %>%
 Because this method does not account for the preferential sequencing over-abundance of `ASV1` it is possible to see an increase in false positives. However, this is a widely used method, and one of the few normalization methods that completely accounts for differing library sizes, which can be an important consideration depending on the analysis goal. Community level-analysis, for example, can be library-size dependent (ordination, some dissimiliarity measures).   
 
 
-## TSS Implementation 
+### TSS Implementation 
 Here, we provide a wrapper function that will normalize a `phyloseq` object by Total Sum Scaling. We have the option of keeping the result as proportions (having values 0-1), or transforming to an equal sequencing depth so the results are counts per million.
 
 ```{r, norm_tss_func}
@@ -45,7 +47,7 @@ s
 
 
 
-## TSS on Global Patterns
+### TSS on Global Patterns
 
 Using the above function, we apply this normalization to the Global Patterns data. 
 
@@ -105,7 +107,7 @@ plot_norm_changes(gp_tss, gp_raw,
 
 Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are 'more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, un-normalized data, and became marked as more similar after TSS normalization. 
 
-## TSS on Kostic data
+### TSS on Kostic data
 
 
 ```{r}
@@ -164,3 +166,75 @@ plot_norm_changes(k_tss, k_raw,
 <!-- ``` -->
 
 <!-- (Harder to see here and takes longer since we have so much more samples. ) -->
+
+## Cumulative sum scaling (CSS)
+
+Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner [@paulson2013]. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. This method is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods [@costea2014].
+
+
+### CSS implementation 
+
+```{r}
+norm_CSS <- function(ps){
+  require(metagenomeSeq)
+  # Convert to metagenomeSeq data type
+  ps.metaG<-phyloseq_to_metagenomeSeq(ps)
+  p_stat = cumNormStatFast(ps.metaG)
+  ps.metaG = cumNorm(ps.metaG, p = p_stat)
+  ps.metaG.norm <- MRcounts(ps.metaG, norm = T)
+  # Convert back to phyloseq with normalized counts
+  otu <- otu_table(ps.metaG.norm, taxa_are_rows = T)
+  sam <- access(ps, "sam_data")
+  sam$scaling_factor <- normFactors(ps.metaG)/1e6
+  tax <- access(ps, "tax_table")
+  phy <- access(ps, "phy_tree")
+  ps_CSS <- phyloseq(otu,sam,tax,phy)
+  return(ps_CSS)
+}
+```
+
+### CSS on Global Patterns 
+
+Perform CSS normalization: 
+```{r}
+gp_css <- norm_CSS(gp_raw)
+```
+
+View how TMM normalization changes distance metrics differently than raw counts. 
+```{r}
+plot_norm_changes(gp_css, gp_raw, 
+                  x_lab = "Raw", y_lab = "CSS",
+                  title = "Distance metric comparision between CSS normalization and Raw counts")
+
+plot_norm_changes(gp_css, gp_tss, 
+                  x_lab = "TSS", y_lab = "CSS",
+                  title = "Distance metric comparision between CSS normalization and TSS normalization")
+
+```
+
+CSS normalization appears to consider pairs as more different than TSS normalization, and pairs with high sequencing depth differences even more so. 
+
+### CSS on Kostic data
+
+```{r}
+k_css <- norm_CSS(k_raw)
+plot_ordination(
+    k_css,
+    phyloseq::ordinate(k_css, "PCoA", "bray") ,
+    color = "DIAGNOSIS",
+    title = "PCoA on Raw data"
+) /
+    plot_ordination(
+        k_css,
+        phyloseq::ordinate(k_css, "PCoA", "bray") ,
+        color = "depth",
+        title = "PCoA on Raw data"
+    )
+plot_norm_changes(k_css, k_raw, 
+                  x_lab = "Raw", y_lab = "CSS",
+                  title = "Distance metric comparision between CSS normalization and Raw counts")
+
+
+```
+
+

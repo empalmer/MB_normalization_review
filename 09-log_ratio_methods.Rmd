@@ -1,4 +1,4 @@
-# Log Ratio Methods
+# Log Ratio Transformation Methods
 
 ## ANCOM II
 

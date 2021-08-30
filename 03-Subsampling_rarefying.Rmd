@@ -1,6 +1,8 @@
-# Rarefying
+# Subsampling Methods 
 
-## About Rarefying
+## Rarefying
+
+### About Rarefying
 
 Rarefying is another common normalization technique that standardizes the library size across samples that was originally used in ecology. This method standardizes the read depth across all samples. To perform this method we first choose a minimum library size. Looking at rarefaction/collectors curves, or using a certain percentile can guide choosing this cutoff. Then all samples that have a read depth below this cutoff are discarded. Thus this method has a built-in filtering step. Next, we sample without replacement of the size of the chosen cutoff. It can be a standalone method or combined with other methods and transformations.
 
@@ -8,7 +10,7 @@ Rarefying is another common normalization technique that standardizes the librar
 
 This is a very commonly used method, but it has also been criticized [@mcmurdie2014]. First of all, it throws away valid data, and this results in a loss of power and an increase in false positives. Rare taxa can be removed in this approach too. It is however encouraged when we have widely different library sizes as it can lower the false discovery rate [@weiss2017], and has also been shown to perform well in community-level analysis [@mcknight2019], as it completely standardizes the read count depth, and some methods are sensitive to differences in read count. Rarefying has been shown to separate by biological signal in ordination methods based on presence/absence.
 
-## Rarefying implementation 
+### Rarefying implementation 
 
 Consider the following example dataset. 
 
@@ -75,7 +77,7 @@ norm_rarefy <- function(phyloseq, depth = min(sample_sums(phyloseq))){
     
 ```
 
-## Rarefying on Global Patterns
+### Rarefying on Global Patterns
 
 We use the above function to rarefy the Global Patterns data. The first difficulty is choosing a minimum sampling depth. The Global Patterns dataset already has a very high sampling depth for all samples, so we will chose the lowest as the minimum depth to rarefy to.Since we chose the minimum sampling depth, no samples have been dropped. In data sets where we have low sampling depth there is a balance between how many samples to drop and how low to set the minimum depth to.
 
