@@ -252,15 +252,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<p>One goal for normalization of microbiome data is the standardization of sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as Figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in Taxon 1 between samples appears much smaller. However, now there appears to be a difference in Taxon 2, even though the counts were originally the same. This is because in sample B, Taxon 1 consists of a higher proportion of the total count than in sample A.</p>
+<p>One goal for normalization of microbiome data is the standardization of sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as Figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in Taxon 1 between samples appears much smaller. However, now there appears to be a difference in Taxon 2 between samples, even though the counts were originally the same. This is because in sample B, Taxon 2 consists of a higher proportion of the total count than it does in sample A.</p>
 <p>This demonstrates the importance of normalization, but also the artifacts that can occur depending on the method.</p>
 </div>
 <div id="the-compositional-nature-of-microbiome-data" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> The compositional nature of microbiome data</h2>
-<p>Microbiome data are inherently compositional. The counts of the collection of taxa that make up each sample are constrained by the total sum, or sequencing depth for that sample. This means that the count of each sampled taxon is a portion of a larger whole. Each observed taxon is not independent. As we saw in the above example, before normalization, Taxon 2 was equal between samples. After converting to proportions, Taxon 2 no longer appears equal. If there is a difference between two samples it is unclear if that difference is because of a true difference in that taxon or if that taxon is changing because of differences in another taxon. Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.</p>
+<p>Microbiome data are inherently compositional. The counts of the collection of taxa that make up each sample are constrained by the total sum, or sequencing depth for that sample. This means that the count of each sampled taxon is a portion of a larger whole. Each observed taxon is not independent. As we saw in the above example, before normalization, Taxon 2 was equal between samples. After converting to proportions, the values for Taxon 2 no longer appear equal between samples. If there is a difference between two samples it is unclear if that difference is because of a true difference in that taxon or if that taxon is changing because of differences in another taxon. Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.</p>
 <p>With library size as the sum constraint for each sample, if we know in a biological system that after an event occurs (treatment), the red taxon decreases, this will change the composition of the sampled blue taxon regardless of its change or lack thereof in the underlying population.</p>
 <p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>Consider again two samples consisting of red and blue points. We can think of the samples as before and after treatment. In the second plot, the number of red dots in the population and in the observed sample has decreased, but the blue remains the same.</p>
+<p>Consider again two samples consisting of red and blue points shown above. The points encompassed by triangles represent the sampled points from the population. We can think of the samples as before and after treatment. In the second plot, the number of red dots in the population and in the observed sample has decreased, but the blue remains the same.</p>
 <table>
 <caption>
 <span id="tab:unnamed-chunk-4">Table 1.2: </span>Counts of sampled red and blue taxa before and after
@@ -347,12 +347,6 @@ After
 </table>
 <!-- In the after sample, the blue counts have decreased, as we would expect from our knowledge of the population. However, the red counts have increased, even though there is no change in the red population.  -->
 <p>This observed increase in the proportion of blue is due to the compositional nature of the sampled points, and not any true difference in the blue population.</p>
-<!-- INCLUDE EXAMPLE?  -->
-<!-- ## Zero-inflation of microbiome data -->
-<!-- Include section on considerations that are necessary to account for zero-inflation. -->
-<!-- ## Intro to the phyloseq package -->
-<!-- ## Phyloseq wrapper function -->
-<!-- Many normalization methods, especially those developed for other disciplines, take the raw matrix as an argument, along with a vector of the grouping variable. For convenience, we have included a wrapper function for phyloseq that ... -->
 <!-- ## Conventions for this bookdown -->
 <!-- #### Objects -->
 <!-- Object names are the abbreviation of the dataset source (ie hmp), followed by the normalization method used, the filtered raw counts have the normalization method "raw". -->
