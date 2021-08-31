@@ -107,7 +107,8 @@ tibble(c(taxa_filtered, "Median", "Exponentiated Median"),
        c(s3v, median(s3v), exp(median(s3v))))%>%
     knitr::kable(
         col.names = c("Taxa", "Sample 1", "Sample 2", "Sample 3"),
-        caption =  "Step 4: Calculating medians per sample"
+        caption =  "Step 4: Calculating medians per sample", 
+        digits = 3
     ) 
 ```
 
@@ -119,7 +120,8 @@ tibble(taxa, sample1/exp(median(s1v)), sample2/exp(median(s2v)), sample3/exp(med
     knitr::kable(
         col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
         caption =  "Step 5: DESeq Normalized Counts", 
-        format = "html"
+        format = "html", 
+        digits = 3
     ) 
 ```
 
@@ -338,10 +340,15 @@ plot_norm_changes(gp_gmpr, gp_deseq_rle,
                   title = "DESeq vs GMPR" )
 ```
 
+#### GMPR implementation on Global Patterns
 
+```{r}
+k_gmpr <- norm_GMPR(k_raw)
 
-
-
+plot_norm_changes(k_gmpr, k_raw,
+                  x_lab = "GMPR", y_lab = "Raw Counts",
+                  title = "GMPR normalization vs Raw Counts")
+```
 
 
 ## TMM (edgeR)

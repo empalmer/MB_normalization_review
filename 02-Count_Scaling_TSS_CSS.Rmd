@@ -88,8 +88,8 @@ We can also compare the values of the distance matrices before and after normali
 plot_norm_changes <- function(data_norm, data_raw, dist_method = "bray", x_lab = "raw", y_lab = "norm", title = "Plot title"){
     # calculate the Bray-Cutris distance matrix for the raw data, the normalized data, 
     # and calculate the pairwise difference between the original library sizes between samples
-    plot <- data.frame(raw = as.numeric(phyloseq::distance(data_raw, dist_method)), 
-                       norm = as.numeric(phyloseq::distance(data_norm, dist_method)), 
+    plot <- data.frame(raw = as.numeric(phyloseq::distance(data_raw, dist_method, na.rm = T)), 
+                       norm = as.numeric(phyloseq::distance(data_norm, dist_method, na.rm = T)), 
                        diff = as.numeric(dist(get_variable(data_raw, "depth")))) %>% 
     ggplot(aes(x = raw, y = norm, color = diff)) + 
         geom_point() + 
@@ -173,7 +173,7 @@ plot_norm_changes(k_tss, k_raw,
 
 ### About CSS
 
-Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner [@paulson2013]. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. This method is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods [@costea2014].
+Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner [@paulson2013]. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. If there is high count variability the assumption may not be met. This method is an extension to UQ scaling normalization where one quantile is specified for all samples. In contrast to Total Sum scaling where the total sum is used as the scaling factor, the scaling factor for CSS is the sum of the counts up to the chosen quantile.  This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods [@costea2014].
 
 
 ### CSS R code

@@ -586,13 +586,13 @@ Sample 3
 Taxon 1
 </td>
 <td style="text-align:right;">
-0.910000
+0.910
 </td>
 <td style="text-align:right;">
-0.660000
+0.660
 </td>
 <td style="text-align:right;">
--1.5700000
+-1.570
 </td>
 </tr>
 <tr>
@@ -600,13 +600,13 @@ Taxon 1
 Taxon 2
 </td>
 <td style="text-align:right;">
--0.360000
+-0.360
 </td>
 <td style="text-align:right;">
-1.660000
+1.660
 </td>
 <td style="text-align:right;">
--1.3100000
+-1.310
 </td>
 </tr>
 <tr>
@@ -614,13 +614,13 @@ Taxon 2
 Taxon 4
 </td>
 <td style="text-align:right;">
-0.960000
+0.960
 </td>
 <td style="text-align:right;">
-0.530000
+0.530
 </td>
 <td style="text-align:right;">
--1.4900000
+-1.490
 </td>
 </tr>
 <tr>
@@ -628,13 +628,13 @@ Taxon 4
 Taxon 5
 </td>
 <td style="text-align:right;">
-0.840000
+0.840
 </td>
 <td style="text-align:right;">
-0.960000
+0.960
 </td>
 <td style="text-align:right;">
--1.8100000
+-1.810
 </td>
 </tr>
 <tr>
@@ -642,13 +642,13 @@ Taxon 5
 Median
 </td>
 <td style="text-align:right;">
-0.875000
+0.875
 </td>
 <td style="text-align:right;">
-0.810000
+0.810
 </td>
 <td style="text-align:right;">
--1.5300000
+-1.530
 </td>
 </tr>
 <tr>
@@ -656,13 +656,13 @@ Median
 Exponentiated Median
 </td>
 <td style="text-align:right;">
-2.398875
+2.399
 </td>
 <td style="text-align:right;">
-2.247908
+2.248
 </td>
 <td style="text-align:right;">
-0.2165357
+0.217
 </td>
 </tr>
 </tbody>
@@ -694,13 +694,13 @@ Sample 3
 Taxon 1
 </td>
 <td style="text-align:right;">
-55.025787
+55.026
 </td>
 <td style="text-align:right;">
-45.8203808
+45.820
 </td>
 <td style="text-align:right;">
-50.799945
+50.800
 </td>
 </tr>
 <tr>
@@ -708,13 +708,13 @@ Taxon 1
 Taxon 2
 </td>
 <td style="text-align:right;">
-2.918034
+2.918
 </td>
 <td style="text-align:right;">
-21.3531872
+21.353
 </td>
 <td style="text-align:right;">
-13.854530
+13.855
 </td>
 </tr>
 <tr>
@@ -722,13 +722,13 @@ Taxon 2
 Taxon 3
 </td>
 <td style="text-align:right;">
-0.000000
+0.000
 </td>
 <td style="text-align:right;">
-0.8897161
+0.890
 </td>
 <td style="text-align:right;">
-4.618177
+4.618
 </td>
 </tr>
 <tr>
@@ -736,13 +736,13 @@ Taxon 3
 Taxon 4
 </td>
 <td style="text-align:right;">
-9.587827
+9.588
 </td>
 <td style="text-align:right;">
-6.6728710
+6.673
 </td>
 <td style="text-align:right;">
-9.236354
+9.236
 </td>
 </tr>
 <tr>
@@ -750,13 +750,13 @@ Taxon 4
 Taxon 5
 </td>
 <td style="text-align:right;">
-29.597203
+29.597
 </td>
 <td style="text-align:right;">
-35.5886453
+35.589
 </td>
 <td style="text-align:right;">
-23.090884
+23.091
 </td>
 </tr>
 </tbody>
@@ -1170,6 +1170,21 @@ We now repeat this process to find the scaling factor for sample 1 and sample 3.
 <span id="cb59-3"><a href="library-size-and-composition-scaling-methods.html#cb59-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;DESeq vs GMPR&quot;</span> )</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-31-3.png" width="672" /></p>
 </div>
+<div id="gmpr-implementation-on-global-patterns-1" class="section level4" number="5.2.3.3">
+<h4><span class="header-section-number">5.2.3.3</span> GMPR implementation on Global Patterns</h4>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="library-size-and-composition-scaling-methods.html#cb60-1"></a>k_gmpr &lt;-<span class="st"> </span><span class="kw">norm_GMPR</span>(k_raw)</span>
+<span id="cb60-2"><a href="library-size-and-composition-scaling-methods.html#cb60-2"></a></span>
+<span id="cb60-3"><a href="library-size-and-composition-scaling-methods.html#cb60-3"></a><span class="kw">plot_norm_changes</span>(k_gmpr, k_raw,</span>
+<span id="cb60-4"><a href="library-size-and-composition-scaling-methods.html#cb60-4"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;GMPR&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Raw Counts&quot;</span>,</span>
+<span id="cb60-5"><a href="library-size-and-composition-scaling-methods.html#cb60-5"></a>                  <span class="dt">title =</span> <span class="st">&quot;GMPR normalization vs Raw Counts&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : you have empty rows: their dissimilarities may be
+## meaningless in method &quot;bray&quot;</code></pre>
+<pre><code>## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : missing values in results</code></pre>
+<pre><code>## Warning: Removed 367 rows containing missing values (geom_point).</code></pre>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+</div>
 </div>
 </div>
 <div id="tmm-edger" class="section level2" number="5.3">
@@ -1182,79 +1197,79 @@ We now repeat this process to find the scaling factor for sample 1 and sample 3.
 <h3><span class="header-section-number">5.3.2</span> EdgeR TMM T code</h3>
 <div id="function-4" class="section level4" number="5.3.2.1">
 <h4><span class="header-section-number">5.3.2.1</span> Function</h4>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="library-size-and-composition-scaling-methods.html#cb60-1"></a>norm_TMM &lt;-<span class="st"> </span><span class="cf">function</span>(physeq, <span class="dt">group =</span> <span class="dv">1</span>, <span class="dt">method=</span><span class="st">&quot;TMM&quot;</span>, <span class="dt">pseudocount =</span> <span class="dv">1</span>, ...){</span>
-<span id="cb60-2"><a href="library-size-and-composition-scaling-methods.html#cb60-2"></a>    <span class="kw">require</span>(<span class="st">&quot;edgeR&quot;</span>, <span class="dt">quietly =</span> T)</span>
-<span id="cb60-3"><a href="library-size-and-composition-scaling-methods.html#cb60-3"></a>    <span class="kw">require</span>(<span class="st">&quot;phyloseq&quot;</span>, <span class="dt">quietly =</span> T)</span>
-<span id="cb60-4"><a href="library-size-and-composition-scaling-methods.html#cb60-4"></a>    <span class="co"># Enforce orientation.</span></span>
-<span id="cb60-5"><a href="library-size-and-composition-scaling-methods.html#cb60-5"></a>    <span class="cf">if</span>( <span class="op">!</span><span class="kw">taxa_are_rows</span>(physeq) ){ physeq &lt;-<span class="st"> </span><span class="kw">t</span>(physeq) }</span>
-<span id="cb60-6"><a href="library-size-and-composition-scaling-methods.html#cb60-6"></a>    x =<span class="st"> </span><span class="kw">as</span>(<span class="kw">otu_table</span>(physeq), <span class="st">&quot;matrix&quot;</span>)</span>
-<span id="cb60-7"><a href="library-size-and-composition-scaling-methods.html#cb60-7"></a>    <span class="co"># Add one to protect against overflow, log(0) issues.</span></span>
-<span id="cb60-8"><a href="library-size-and-composition-scaling-methods.html#cb60-8"></a>    x =<span class="st"> </span>x <span class="op">+</span><span class="st"> </span>pseudocount</span>
-<span id="cb60-9"><a href="library-size-and-composition-scaling-methods.html#cb60-9"></a>    <span class="co"># Check `group` argument</span></span>
-<span id="cb60-10"><a href="library-size-and-composition-scaling-methods.html#cb60-10"></a>    <span class="cf">if</span>( <span class="kw">identical</span>(<span class="kw">all.equal</span>(<span class="kw">length</span>(group), <span class="dv">1</span>), <span class="ot">TRUE</span>) <span class="op">&amp;</span><span class="st"> </span><span class="kw">nsamples</span>(physeq) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span> ){</span>
-<span id="cb60-11"><a href="library-size-and-composition-scaling-methods.html#cb60-11"></a>        <span class="co"># Assume that group was a sample variable name (must be categorical)</span></span>
-<span id="cb60-12"><a href="library-size-and-composition-scaling-methods.html#cb60-12"></a>        group =<span class="st"> </span><span class="kw">get_variable</span>(physeq, group)</span>
-<span id="cb60-13"><a href="library-size-and-composition-scaling-methods.html#cb60-13"></a>    }</span>
-<span id="cb60-14"><a href="library-size-and-composition-scaling-methods.html#cb60-14"></a>    <span class="co"># Define gene annotations (`genes`) as tax_table</span></span>
-<span id="cb60-15"><a href="library-size-and-composition-scaling-methods.html#cb60-15"></a>    taxonomy =<span class="st"> </span><span class="kw">tax_table</span>(physeq, <span class="dt">errorIfNULL=</span><span class="ot">FALSE</span>)</span>
-<span id="cb60-16"><a href="library-size-and-composition-scaling-methods.html#cb60-16"></a>    <span class="cf">if</span>( <span class="op">!</span><span class="kw">is.null</span>(taxonomy) ){</span>
-<span id="cb60-17"><a href="library-size-and-composition-scaling-methods.html#cb60-17"></a>        taxonomy =<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as</span>(taxonomy, <span class="st">&quot;matrix&quot;</span>))</span>
-<span id="cb60-18"><a href="library-size-and-composition-scaling-methods.html#cb60-18"></a>    } </span>
-<span id="cb60-19"><a href="library-size-and-composition-scaling-methods.html#cb60-19"></a>    <span class="co"># Now turn into a DGEList</span></span>
-<span id="cb60-20"><a href="library-size-and-composition-scaling-methods.html#cb60-20"></a>    y =<span class="st"> </span><span class="kw">DGEList</span>(<span class="dt">counts=</span>x, <span class="dt">group=</span>group, <span class="dt">genes=</span>taxonomy, <span class="dt">remove.zeros =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb60-21"><a href="library-size-and-composition-scaling-methods.html#cb60-21"></a>    <span class="co"># Calculate the normalization factors</span></span>
-<span id="cb60-22"><a href="library-size-and-composition-scaling-methods.html#cb60-22"></a>    d =<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">calcNormFactors</span>(y, <span class="dt">method=</span>method)</span>
-<span id="cb60-23"><a href="library-size-and-composition-scaling-methods.html#cb60-23"></a>    <span class="co"># Check for division by zero inside `calcNormFactors`</span></span>
-<span id="cb60-24"><a href="library-size-and-composition-scaling-methods.html#cb60-24"></a>    <span class="cf">if</span>( <span class="op">!</span><span class="kw">all</span>(<span class="kw">is.finite</span>(d<span class="op">$</span>samples<span class="op">$</span>norm.factors)) ){</span>
-<span id="cb60-25"><a href="library-size-and-composition-scaling-methods.html#cb60-25"></a>        <span class="kw">stop</span>(<span class="st">&quot;Something wrong with edgeR::calcNormFactors on this data,</span></span>
-<span id="cb60-26"><a href="library-size-and-composition-scaling-methods.html#cb60-26"></a><span class="st">         non-finite $norm.factors, consider changing `method` argument&quot;</span>)</span>
-<span id="cb60-27"><a href="library-size-and-composition-scaling-methods.html#cb60-27"></a>    }</span>
-<span id="cb60-28"><a href="library-size-and-composition-scaling-methods.html#cb60-28"></a>    scalingFactor &lt;-<span class="st"> </span>d<span class="op">$</span>samples<span class="op">$</span>norm.factors <span class="op">*</span><span class="st"> </span>d<span class="op">$</span>samples<span class="op">$</span>lib.size <span class="op">/</span><span class="st"> </span><span class="fl">1e6</span></span>
-<span id="cb60-29"><a href="library-size-and-composition-scaling-methods.html#cb60-29"></a>    dataNormalized &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(<span class="kw">otu_table</span>(physeq)) <span class="op">/</span><span class="st"> </span>scalingFactor)</span>
-<span id="cb60-30"><a href="library-size-and-composition-scaling-methods.html#cb60-30"></a>    <span class="co">#dataNormalized &lt;- cpm(d)</span></span>
-<span id="cb60-31"><a href="library-size-and-composition-scaling-methods.html#cb60-31"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(dataNormalized, <span class="dt">taxa_are_rows =</span> T)</span>
-<span id="cb60-32"><a href="library-size-and-composition-scaling-methods.html#cb60-32"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(physeq, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb60-33"><a href="library-size-and-composition-scaling-methods.html#cb60-33"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>scalingFactor</span>
-<span id="cb60-34"><a href="library-size-and-composition-scaling-methods.html#cb60-34"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(physeq, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb60-35"><a href="library-size-and-composition-scaling-methods.html#cb60-35"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(physeq, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb60-36"><a href="library-size-and-composition-scaling-methods.html#cb60-36"></a>    ps_edgeR &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
-<span id="cb60-37"><a href="library-size-and-composition-scaling-methods.html#cb60-37"></a>    </span>
-<span id="cb60-38"><a href="library-size-and-composition-scaling-methods.html#cb60-38"></a>    <span class="kw">return</span>(ps_edgeR)</span>
-<span id="cb60-39"><a href="library-size-and-composition-scaling-methods.html#cb60-39"></a>    </span>
-<span id="cb60-40"><a href="library-size-and-composition-scaling-methods.html#cb60-40"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="library-size-and-composition-scaling-methods.html#cb64-1"></a>norm_TMM &lt;-<span class="st"> </span><span class="cf">function</span>(physeq, <span class="dt">group =</span> <span class="dv">1</span>, <span class="dt">method=</span><span class="st">&quot;TMM&quot;</span>, <span class="dt">pseudocount =</span> <span class="dv">1</span>, ...){</span>
+<span id="cb64-2"><a href="library-size-and-composition-scaling-methods.html#cb64-2"></a>    <span class="kw">require</span>(<span class="st">&quot;edgeR&quot;</span>, <span class="dt">quietly =</span> T)</span>
+<span id="cb64-3"><a href="library-size-and-composition-scaling-methods.html#cb64-3"></a>    <span class="kw">require</span>(<span class="st">&quot;phyloseq&quot;</span>, <span class="dt">quietly =</span> T)</span>
+<span id="cb64-4"><a href="library-size-and-composition-scaling-methods.html#cb64-4"></a>    <span class="co"># Enforce orientation.</span></span>
+<span id="cb64-5"><a href="library-size-and-composition-scaling-methods.html#cb64-5"></a>    <span class="cf">if</span>( <span class="op">!</span><span class="kw">taxa_are_rows</span>(physeq) ){ physeq &lt;-<span class="st"> </span><span class="kw">t</span>(physeq) }</span>
+<span id="cb64-6"><a href="library-size-and-composition-scaling-methods.html#cb64-6"></a>    x =<span class="st"> </span><span class="kw">as</span>(<span class="kw">otu_table</span>(physeq), <span class="st">&quot;matrix&quot;</span>)</span>
+<span id="cb64-7"><a href="library-size-and-composition-scaling-methods.html#cb64-7"></a>    <span class="co"># Add one to protect against overflow, log(0) issues.</span></span>
+<span id="cb64-8"><a href="library-size-and-composition-scaling-methods.html#cb64-8"></a>    x =<span class="st"> </span>x <span class="op">+</span><span class="st"> </span>pseudocount</span>
+<span id="cb64-9"><a href="library-size-and-composition-scaling-methods.html#cb64-9"></a>    <span class="co"># Check `group` argument</span></span>
+<span id="cb64-10"><a href="library-size-and-composition-scaling-methods.html#cb64-10"></a>    <span class="cf">if</span>( <span class="kw">identical</span>(<span class="kw">all.equal</span>(<span class="kw">length</span>(group), <span class="dv">1</span>), <span class="ot">TRUE</span>) <span class="op">&amp;</span><span class="st"> </span><span class="kw">nsamples</span>(physeq) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span> ){</span>
+<span id="cb64-11"><a href="library-size-and-composition-scaling-methods.html#cb64-11"></a>        <span class="co"># Assume that group was a sample variable name (must be categorical)</span></span>
+<span id="cb64-12"><a href="library-size-and-composition-scaling-methods.html#cb64-12"></a>        group =<span class="st"> </span><span class="kw">get_variable</span>(physeq, group)</span>
+<span id="cb64-13"><a href="library-size-and-composition-scaling-methods.html#cb64-13"></a>    }</span>
+<span id="cb64-14"><a href="library-size-and-composition-scaling-methods.html#cb64-14"></a>    <span class="co"># Define gene annotations (`genes`) as tax_table</span></span>
+<span id="cb64-15"><a href="library-size-and-composition-scaling-methods.html#cb64-15"></a>    taxonomy =<span class="st"> </span><span class="kw">tax_table</span>(physeq, <span class="dt">errorIfNULL=</span><span class="ot">FALSE</span>)</span>
+<span id="cb64-16"><a href="library-size-and-composition-scaling-methods.html#cb64-16"></a>    <span class="cf">if</span>( <span class="op">!</span><span class="kw">is.null</span>(taxonomy) ){</span>
+<span id="cb64-17"><a href="library-size-and-composition-scaling-methods.html#cb64-17"></a>        taxonomy =<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as</span>(taxonomy, <span class="st">&quot;matrix&quot;</span>))</span>
+<span id="cb64-18"><a href="library-size-and-composition-scaling-methods.html#cb64-18"></a>    } </span>
+<span id="cb64-19"><a href="library-size-and-composition-scaling-methods.html#cb64-19"></a>    <span class="co"># Now turn into a DGEList</span></span>
+<span id="cb64-20"><a href="library-size-and-composition-scaling-methods.html#cb64-20"></a>    y =<span class="st"> </span><span class="kw">DGEList</span>(<span class="dt">counts=</span>x, <span class="dt">group=</span>group, <span class="dt">genes=</span>taxonomy, <span class="dt">remove.zeros =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb64-21"><a href="library-size-and-composition-scaling-methods.html#cb64-21"></a>    <span class="co"># Calculate the normalization factors</span></span>
+<span id="cb64-22"><a href="library-size-and-composition-scaling-methods.html#cb64-22"></a>    d =<span class="st"> </span>edgeR<span class="op">::</span><span class="kw">calcNormFactors</span>(y, <span class="dt">method=</span>method)</span>
+<span id="cb64-23"><a href="library-size-and-composition-scaling-methods.html#cb64-23"></a>    <span class="co"># Check for division by zero inside `calcNormFactors`</span></span>
+<span id="cb64-24"><a href="library-size-and-composition-scaling-methods.html#cb64-24"></a>    <span class="cf">if</span>( <span class="op">!</span><span class="kw">all</span>(<span class="kw">is.finite</span>(d<span class="op">$</span>samples<span class="op">$</span>norm.factors)) ){</span>
+<span id="cb64-25"><a href="library-size-and-composition-scaling-methods.html#cb64-25"></a>        <span class="kw">stop</span>(<span class="st">&quot;Something wrong with edgeR::calcNormFactors on this data,</span></span>
+<span id="cb64-26"><a href="library-size-and-composition-scaling-methods.html#cb64-26"></a><span class="st">         non-finite $norm.factors, consider changing `method` argument&quot;</span>)</span>
+<span id="cb64-27"><a href="library-size-and-composition-scaling-methods.html#cb64-27"></a>    }</span>
+<span id="cb64-28"><a href="library-size-and-composition-scaling-methods.html#cb64-28"></a>    scalingFactor &lt;-<span class="st"> </span>d<span class="op">$</span>samples<span class="op">$</span>norm.factors <span class="op">*</span><span class="st"> </span>d<span class="op">$</span>samples<span class="op">$</span>lib.size <span class="op">/</span><span class="st"> </span><span class="fl">1e6</span></span>
+<span id="cb64-29"><a href="library-size-and-composition-scaling-methods.html#cb64-29"></a>    dataNormalized &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(<span class="kw">otu_table</span>(physeq)) <span class="op">/</span><span class="st"> </span>scalingFactor)</span>
+<span id="cb64-30"><a href="library-size-and-composition-scaling-methods.html#cb64-30"></a>    <span class="co">#dataNormalized &lt;- cpm(d)</span></span>
+<span id="cb64-31"><a href="library-size-and-composition-scaling-methods.html#cb64-31"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(dataNormalized, <span class="dt">taxa_are_rows =</span> T)</span>
+<span id="cb64-32"><a href="library-size-and-composition-scaling-methods.html#cb64-32"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(physeq, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb64-33"><a href="library-size-and-composition-scaling-methods.html#cb64-33"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>scalingFactor</span>
+<span id="cb64-34"><a href="library-size-and-composition-scaling-methods.html#cb64-34"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(physeq, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb64-35"><a href="library-size-and-composition-scaling-methods.html#cb64-35"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(physeq, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb64-36"><a href="library-size-and-composition-scaling-methods.html#cb64-36"></a>    ps_edgeR &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
+<span id="cb64-37"><a href="library-size-and-composition-scaling-methods.html#cb64-37"></a>    </span>
+<span id="cb64-38"><a href="library-size-and-composition-scaling-methods.html#cb64-38"></a>    <span class="kw">return</span>(ps_edgeR)</span>
+<span id="cb64-39"><a href="library-size-and-composition-scaling-methods.html#cb64-39"></a>    </span>
+<span id="cb64-40"><a href="library-size-and-composition-scaling-methods.html#cb64-40"></a>}</span></code></pre></div>
 </div>
 <div id="tmm-implementation-on-global-patterns" class="section level4" number="5.3.2.2">
 <h4><span class="header-section-number">5.3.2.2</span> TMM implementation on Global Patterns</h4>
 <p>Perform normalization:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="library-size-and-composition-scaling-methods.html#cb61-1"></a>gp_tmm &lt;-<span class="st"> </span><span class="kw">norm_TMM</span>(gp_raw)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="library-size-and-composition-scaling-methods.html#cb65-1"></a>gp_tmm &lt;-<span class="st"> </span><span class="kw">norm_TMM</span>(gp_raw)</span></code></pre></div>
 <p>View PCoA plots</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="library-size-and-composition-scaling-methods.html#cb62-1"></a><span class="kw">plot_ordination</span>(gp_tmm, phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_tmm, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) , <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw data&quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
-<p>View how TMM normalization changes distance metrics differently than raw counts.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="library-size-and-composition-scaling-methods.html#cb63-1"></a><span class="kw">plot_norm_changes</span>(gp_tmm, gp_raw,</span>
-<span id="cb63-2"><a href="library-size-and-composition-scaling-methods.html#cb63-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;TMM&quot;</span>,</span>
-<span id="cb63-3"><a href="library-size-and-composition-scaling-methods.html#cb63-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TMM normalization and Raw counts &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="library-size-and-composition-scaling-methods.html#cb66-1"></a><span class="kw">plot_ordination</span>(gp_tmm, phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_tmm, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) , <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw data&quot;</span>)</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>View how TMM normalization changes distance metrics differently than raw counts.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="library-size-and-composition-scaling-methods.html#cb67-1"></a><span class="kw">plot_norm_changes</span>(gp_tmm, gp_raw,</span>
+<span id="cb67-2"><a href="library-size-and-composition-scaling-methods.html#cb67-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;TMM&quot;</span>,</span>
+<span id="cb67-3"><a href="library-size-and-composition-scaling-methods.html#cb67-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TMM normalization and Raw counts &quot;</span>)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 </div>
 <div id="tmm-implementation-on-kostic-data" class="section level4" number="5.3.2.3">
 <h4><span class="header-section-number">5.3.2.3</span> TMM implementation on Kostic data</h4>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="library-size-and-composition-scaling-methods.html#cb64-1"></a>k_tmm &lt;-<span class="st"> </span><span class="kw">norm_TMM</span>(k_raw)</span>
-<span id="cb64-2"><a href="library-size-and-composition-scaling-methods.html#cb64-2"></a><span class="kw">plot_ordination</span>(</span>
-<span id="cb64-3"><a href="library-size-and-composition-scaling-methods.html#cb64-3"></a>    k_tmm,</span>
-<span id="cb64-4"><a href="library-size-and-composition-scaling-methods.html#cb64-4"></a>    phyloseq<span class="op">::</span><span class="kw">ordinate</span>(k_tmm, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) ,</span>
-<span id="cb64-5"><a href="library-size-and-composition-scaling-methods.html#cb64-5"></a>    <span class="dt">color =</span> <span class="st">&quot;DIAGNOSIS&quot;</span>,</span>
-<span id="cb64-6"><a href="library-size-and-composition-scaling-methods.html#cb64-6"></a>    <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw data&quot;</span></span>
-<span id="cb64-7"><a href="library-size-and-composition-scaling-methods.html#cb64-7"></a>) <span class="op">/</span></span>
-<span id="cb64-8"><a href="library-size-and-composition-scaling-methods.html#cb64-8"></a><span class="st">    </span><span class="kw">plot_ordination</span>(</span>
-<span id="cb64-9"><a href="library-size-and-composition-scaling-methods.html#cb64-9"></a>        k_tmm,</span>
-<span id="cb64-10"><a href="library-size-and-composition-scaling-methods.html#cb64-10"></a>        phyloseq<span class="op">::</span><span class="kw">ordinate</span>(k_tmm, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) ,</span>
-<span id="cb64-11"><a href="library-size-and-composition-scaling-methods.html#cb64-11"></a>        <span class="dt">color =</span> <span class="st">&quot;depth&quot;</span>,</span>
-<span id="cb64-12"><a href="library-size-and-composition-scaling-methods.html#cb64-12"></a>        <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw data&quot;</span></span>
-<span id="cb64-13"><a href="library-size-and-composition-scaling-methods.html#cb64-13"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="library-size-and-composition-scaling-methods.html#cb68-1"></a>k_tmm &lt;-<span class="st"> </span><span class="kw">norm_TMM</span>(k_raw)</span>
+<span id="cb68-2"><a href="library-size-and-composition-scaling-methods.html#cb68-2"></a><span class="kw">plot_ordination</span>(</span>
+<span id="cb68-3"><a href="library-size-and-composition-scaling-methods.html#cb68-3"></a>    k_tmm,</span>
+<span id="cb68-4"><a href="library-size-and-composition-scaling-methods.html#cb68-4"></a>    phyloseq<span class="op">::</span><span class="kw">ordinate</span>(k_tmm, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) ,</span>
+<span id="cb68-5"><a href="library-size-and-composition-scaling-methods.html#cb68-5"></a>    <span class="dt">color =</span> <span class="st">&quot;DIAGNOSIS&quot;</span>,</span>
+<span id="cb68-6"><a href="library-size-and-composition-scaling-methods.html#cb68-6"></a>    <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw data&quot;</span></span>
+<span id="cb68-7"><a href="library-size-and-composition-scaling-methods.html#cb68-7"></a>) <span class="op">/</span></span>
+<span id="cb68-8"><a href="library-size-and-composition-scaling-methods.html#cb68-8"></a><span class="st">    </span><span class="kw">plot_ordination</span>(</span>
+<span id="cb68-9"><a href="library-size-and-composition-scaling-methods.html#cb68-9"></a>        k_tmm,</span>
+<span id="cb68-10"><a href="library-size-and-composition-scaling-methods.html#cb68-10"></a>        phyloseq<span class="op">::</span><span class="kw">ordinate</span>(k_tmm, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>) ,</span>
+<span id="cb68-11"><a href="library-size-and-composition-scaling-methods.html#cb68-11"></a>        <span class="dt">color =</span> <span class="st">&quot;depth&quot;</span>,</span>
+<span id="cb68-12"><a href="library-size-and-composition-scaling-methods.html#cb68-12"></a>        <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw data&quot;</span></span>
+<span id="cb68-13"><a href="library-size-and-composition-scaling-methods.html#cb68-13"></a>    )</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/edgeR-kostic-1.png" width="672" /></p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="library-size-and-composition-scaling-methods.html#cb65-1"></a><span class="kw">plot_norm_changes</span>(k_tmm, k_raw,</span>
-<span id="cb65-2"><a href="library-size-and-composition-scaling-methods.html#cb65-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;TMM&quot;</span>,</span>
-<span id="cb65-3"><a href="library-size-and-composition-scaling-methods.html#cb65-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TMM normalization and Raw counts &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="library-size-and-composition-scaling-methods.html#cb69-1"></a><span class="kw">plot_norm_changes</span>(k_tmm, k_raw,</span>
+<span id="cb69-2"><a href="library-size-and-composition-scaling-methods.html#cb69-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;TMM&quot;</span>,</span>
+<span id="cb69-3"><a href="library-size-and-composition-scaling-methods.html#cb69-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TMM normalization and Raw counts &quot;</span>)</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/edgeR-kostic-2.png" width="672" /></p>
 
 </div>

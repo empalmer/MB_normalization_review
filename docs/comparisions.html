@@ -220,32 +220,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="comparisions" class="section level1" number="8">
 <h1><span class="header-section-number">Chapter 8</span> Comparisions</h1>
 <p>See all distance comparisions for Global patterns data</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="comparisions.html#cb73-1"></a><span class="kw">library</span>(GGally)</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="comparisions.html#cb77-1"></a><span class="kw">library</span>(GGally)</span></code></pre></div>
 <pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
 ##   method from   
 ##   +.gg   ggplot2</code></pre>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="comparisions.html#cb75-1"></a><span class="kw">data.frame</span>(<span class="dt">raw =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_raw, <span class="st">&quot;bray&quot;</span>)), </span>
-<span id="cb75-2"><a href="comparisions.html#cb75-2"></a>           <span class="dt">tss =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tss, <span class="st">&quot;bray&quot;</span>)), </span>
-<span id="cb75-3"><a href="comparisions.html#cb75-3"></a>           <span class="dt">css =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_css, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb75-4"><a href="comparisions.html#cb75-4"></a>           <span class="dt">deseq_rle =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_rle, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb75-5"><a href="comparisions.html#cb75-5"></a>           <span class="dt">deseq_vs =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_vs, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb75-6"><a href="comparisions.html#cb75-6"></a>           <span class="dt">rare =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_rare, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb75-7"><a href="comparisions.html#cb75-7"></a>           <span class="dt">tmm =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tmm, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb75-8"><a href="comparisions.html#cb75-8"></a>           <span class="dt">diff =</span> <span class="kw">as.numeric</span>(<span class="kw">dist</span>(<span class="kw">get_variable</span>(gp_raw, <span class="st">&quot;depth&quot;</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb75-9"><a href="comparisions.html#cb75-9"></a><span class="st">    </span><span class="kw">ggpairs</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">upper =</span> <span class="st">&quot;blank&quot;</span>,</span>
-<span id="cb75-10"><a href="comparisions.html#cb75-10"></a>            <span class="dt">diag =</span> <span class="st">&quot;blank&quot;</span>,ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">colour=</span>diff))</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="comparisions.html#cb79-1"></a><span class="kw">data.frame</span>(<span class="dt">raw =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_raw, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb79-2"><a href="comparisions.html#cb79-2"></a>           <span class="dt">tss =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tss, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb79-3"><a href="comparisions.html#cb79-3"></a>           <span class="dt">css =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_css, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb79-4"><a href="comparisions.html#cb79-4"></a>           <span class="dt">deseq_rle =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_rle, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb79-5"><a href="comparisions.html#cb79-5"></a>           <span class="dt">deseq_vs =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_deseq_vs, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb79-6"><a href="comparisions.html#cb79-6"></a>           <span class="dt">gmpr =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_gmpr, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb79-7"><a href="comparisions.html#cb79-7"></a>           <span class="dt">rare =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_rare, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb79-8"><a href="comparisions.html#cb79-8"></a>           <span class="dt">tmm =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(gp_tmm, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb79-9"><a href="comparisions.html#cb79-9"></a>           <span class="dt">diff =</span> <span class="kw">as.numeric</span>(<span class="kw">dist</span>(<span class="kw">get_variable</span>(gp_raw, <span class="st">&quot;depth&quot;</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb79-10"><a href="comparisions.html#cb79-10"></a><span class="st">    </span><span class="kw">ggpairs</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">upper =</span> <span class="st">&quot;blank&quot;</span>,</span>
+<span id="cb79-11"><a href="comparisions.html#cb79-11"></a>            <span class="dt">diag =</span> <span class="st">&quot;blank&quot;</span>,ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">colour=</span>diff))</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/comparisons-gp-1.png" width="672" /></p>
 <p>See all distance comparisons for Kostic data</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="comparisions.html#cb76-1"></a><span class="kw">data.frame</span>(<span class="dt">raw =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_raw, <span class="st">&quot;bray&quot;</span>)), </span>
-<span id="cb76-2"><a href="comparisions.html#cb76-2"></a>           <span class="dt">tss =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_tss, <span class="st">&quot;bray&quot;</span>)), </span>
-<span id="cb76-3"><a href="comparisions.html#cb76-3"></a>           <span class="dt">css =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_css, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb76-4"><a href="comparisions.html#cb76-4"></a>           <span class="dt">deseq_rle =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_deseq_rle, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb76-5"><a href="comparisions.html#cb76-5"></a>           <span class="dt">deseq_vs =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_deseq_vs, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb76-6"><a href="comparisions.html#cb76-6"></a>           <span class="dt">rare =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_rare, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb76-7"><a href="comparisions.html#cb76-7"></a>           <span class="dt">tmm =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_tmm, <span class="st">&quot;bray&quot;</span>)),</span>
-<span id="cb76-8"><a href="comparisions.html#cb76-8"></a>           <span class="dt">diff =</span> <span class="kw">as.numeric</span>(<span class="kw">dist</span>(<span class="kw">get_variable</span>(k_raw, <span class="st">&quot;depth&quot;</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb76-9"><a href="comparisions.html#cb76-9"></a><span class="st">    </span><span class="kw">ggpairs</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">upper =</span> <span class="st">&quot;blank&quot;</span>,</span>
-<span id="cb76-10"><a href="comparisions.html#cb76-10"></a>            <span class="dt">diag =</span> <span class="st">&quot;blank&quot;</span>,ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">colour=</span>diff))</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="comparisions.html#cb80-1"></a><span class="kw">data.frame</span>(<span class="dt">raw =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_raw, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb80-2"><a href="comparisions.html#cb80-2"></a>           <span class="dt">tss =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_tss, <span class="st">&quot;bray&quot;</span>)), </span>
+<span id="cb80-3"><a href="comparisions.html#cb80-3"></a>           <span class="dt">css =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_css, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb80-4"><a href="comparisions.html#cb80-4"></a>           <span class="dt">deseq_rle =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_deseq_rle, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb80-5"><a href="comparisions.html#cb80-5"></a>           <span class="dt">deseq_vs =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_deseq_vs, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb80-6"><a href="comparisions.html#cb80-6"></a>           <span class="dt">gmpr =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_gmpr, <span class="st">&quot;bray&quot;</span>, <span class="dt">na.rm =</span> T)),</span>
+<span id="cb80-7"><a href="comparisions.html#cb80-7"></a>           <span class="dt">rare =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_rare, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb80-8"><a href="comparisions.html#cb80-8"></a>           <span class="dt">tmm =</span> <span class="kw">as.numeric</span>(phyloseq<span class="op">::</span><span class="kw">distance</span>(k_tmm, <span class="st">&quot;bray&quot;</span>)),</span>
+<span id="cb80-9"><a href="comparisions.html#cb80-9"></a>           <span class="dt">diff =</span> <span class="kw">as.numeric</span>(<span class="kw">dist</span>(<span class="kw">get_variable</span>(k_raw, <span class="st">&quot;depth&quot;</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb80-10"><a href="comparisions.html#cb80-10"></a><span class="st">    </span><span class="kw">ggpairs</span>(<span class="dt">columns =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>, <span class="dt">upper =</span> <span class="st">&quot;blank&quot;</span>,</span>
+<span id="cb80-11"><a href="comparisions.html#cb80-11"></a>            <span class="dt">diag =</span> <span class="st">&quot;blank&quot;</span>,ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">colour=</span>diff))</span></code></pre></div>
+<pre><code>## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : you have empty rows: their dissimilarities may be
+## meaningless in method &quot;bray&quot;</code></pre>
+<pre><code>## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : missing values in results</code></pre>
+<pre><code>## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).</code></pre>
 <p><img src="MB_normalization_review_files/figure-html/comparisons-k-1.png" width="672" /></p>
 
 </div>

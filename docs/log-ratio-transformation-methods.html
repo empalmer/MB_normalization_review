@@ -230,112 +230,112 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- This method is shown to be conservative,  -->
 <!-- Sensitive, good control of FDR -->
 <p>It is possible that no outlier or structural zeros are detected, so as a normalization/transformation technique, this method can be equivalent to alr or clr transoformation on raw data with a pseudocount.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="log-ratio-transformation-methods.html#cb67-1"></a><span class="co">## Load the Ancom function (it&#39;s not a package)</span></span>
-<span id="cb67-2"><a href="log-ratio-transformation-methods.html#cb67-2"></a>devtools<span class="op">::</span><span class="kw">source_url</span>(<span class="st">&quot;https://raw.githubusercontent.com/FrederickHuangLin/ANCOM/master/scripts/ancom_v2.1.R&quot;</span>)</span>
-<span id="cb67-3"><a href="log-ratio-transformation-methods.html#cb67-3"></a></span>
-<span id="cb67-4"><a href="log-ratio-transformation-methods.html#cb67-4"></a>norm_ANCOM2 &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_var, <span class="dt">outlier.replace =</span> <span class="ot">TRUE</span>) {</span>
-<span id="cb67-5"><a href="log-ratio-transformation-methods.html#cb67-5"></a>    feature_table &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">otu_table</span>(ps))</span>
-<span id="cb67-6"><a href="log-ratio-transformation-methods.html#cb67-6"></a>    groups &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">get_variable</span>(ps, group_var))</span>
-<span id="cb67-7"><a href="log-ratio-transformation-methods.html#cb67-7"></a>    meta_data &lt;-</span>
-<span id="cb67-8"><a href="log-ratio-transformation-methods.html#cb67-8"></a><span class="st">        </span><span class="kw">data.frame</span>(<span class="dt">sample_id =</span> <span class="kw">paste0</span>(<span class="st">&quot;sample&quot;</span>, <span class="kw">seq</span>(<span class="kw">dim</span>(raw)[<span class="dv">2</span>])), <span class="dt">groups =</span> groups)</span>
-<span id="cb67-9"><a href="log-ratio-transformation-methods.html#cb67-9"></a>    <span class="co">#rownames(meta_data) &lt;- meta_data$sample_id</span></span>
-<span id="cb67-10"><a href="log-ratio-transformation-methods.html#cb67-10"></a>    <span class="kw">colnames</span>(feature_table) &lt;-<span class="st"> </span>meta_data<span class="op">$</span>sample_id</span>
-<span id="cb67-11"><a href="log-ratio-transformation-methods.html#cb67-11"></a>    </span>
-<span id="cb67-12"><a href="log-ratio-transformation-methods.html#cb67-12"></a>    <span class="co"># The main ANCOM2 zero-classification function </span></span>
-<span id="cb67-13"><a href="log-ratio-transformation-methods.html#cb67-13"></a>    prepro &lt;-</span>
-<span id="cb67-14"><a href="log-ratio-transformation-methods.html#cb67-14"></a><span class="st">        </span><span class="kw">feature_table_pre_process</span>(</span>
-<span id="cb67-15"><a href="log-ratio-transformation-methods.html#cb67-15"></a>            feature_table,</span>
-<span id="cb67-16"><a href="log-ratio-transformation-methods.html#cb67-16"></a>            meta_data,</span>
-<span id="cb67-17"><a href="log-ratio-transformation-methods.html#cb67-17"></a>            <span class="dt">sample_var =</span> <span class="st">&quot;sample_id&quot;</span>,</span>
-<span id="cb67-18"><a href="log-ratio-transformation-methods.html#cb67-18"></a>            <span class="dt">group_var =</span> <span class="st">&quot;groups&quot;</span>,</span>
-<span id="cb67-19"><a href="log-ratio-transformation-methods.html#cb67-19"></a>            <span class="dt">out_cut =</span> <span class="fl">0.05</span>,</span>
-<span id="cb67-20"><a href="log-ratio-transformation-methods.html#cb67-20"></a>            <span class="dt">zero_cut =</span> <span class="fl">0.9</span>,</span>
-<span id="cb67-21"><a href="log-ratio-transformation-methods.html#cb67-21"></a>            <span class="dt">lib_cut =</span> <span class="dv">0</span>,</span>
-<span id="cb67-22"><a href="log-ratio-transformation-methods.html#cb67-22"></a>            <span class="dt">neg_lb =</span> <span class="ot">FALSE</span></span>
-<span id="cb67-23"><a href="log-ratio-transformation-methods.html#cb67-23"></a>        )</span>
-<span id="cb67-24"><a href="log-ratio-transformation-methods.html#cb67-24"></a>    feature_table &lt;-<span class="st"> </span>prepro<span class="op">$</span>feature_table</span>
-<span id="cb67-25"><a href="log-ratio-transformation-methods.html#cb67-25"></a>    meta_data &lt;-<span class="st"> </span>prepro<span class="op">$</span>meta_data</span>
-<span id="cb67-26"><a href="log-ratio-transformation-methods.html#cb67-26"></a>    struc_zero &lt;-<span class="st"> </span>prepro<span class="op">$</span>structure_zeros</span>
-<span id="cb67-27"><a href="log-ratio-transformation-methods.html#cb67-27"></a>    </span>
-<span id="cb67-28"><a href="log-ratio-transformation-methods.html#cb67-28"></a>    <span class="co"># OTU table transformation:</span></span>
-<span id="cb67-29"><a href="log-ratio-transformation-methods.html#cb67-29"></a>    <span class="co"># (1) Discard taxa with structural zeros (if any); (2) Add pseudocount (1) and take logarithm.</span></span>
-<span id="cb67-30"><a href="log-ratio-transformation-methods.html#cb67-30"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(struc_zero)) {</span>
-<span id="cb67-31"><a href="log-ratio-transformation-methods.html#cb67-31"></a>        num_struc_zero =<span class="st"> </span><span class="kw">apply</span>(struc_zero, <span class="dv">1</span>, sum)</span>
-<span id="cb67-32"><a href="log-ratio-transformation-methods.html#cb67-32"></a>        comp_table =<span class="st"> </span>feature_table[num_struc_zero <span class="op">==</span><span class="st"> </span><span class="dv">0</span>,]</span>
-<span id="cb67-33"><a href="log-ratio-transformation-methods.html#cb67-33"></a>    } <span class="cf">else</span>{</span>
-<span id="cb67-34"><a href="log-ratio-transformation-methods.html#cb67-34"></a>        comp_table =<span class="st"> </span>feature_table</span>
-<span id="cb67-35"><a href="log-ratio-transformation-methods.html#cb67-35"></a>    }</span>
-<span id="cb67-36"><a href="log-ratio-transformation-methods.html#cb67-36"></a>    comp_table &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">as.matrix</span>(comp_table) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb67-37"><a href="log-ratio-transformation-methods.html#cb67-37"></a>    </span>
-<span id="cb67-38"><a href="log-ratio-transformation-methods.html#cb67-38"></a>    <span class="co"># Replace outlier zeros with the mean of the rest genes in each</span></span>
-<span id="cb67-39"><a href="log-ratio-transformation-methods.html#cb67-39"></a>    <span class="cf">if</span> (outlier.replace) {</span>
-<span id="cb67-40"><a href="log-ratio-transformation-methods.html#cb67-40"></a>        <span class="cf">for</span> (col <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(comp_table)) {</span>
-<span id="cb67-41"><a href="log-ratio-transformation-methods.html#cb67-41"></a>            comp_table[<span class="kw">is.na</span>(comp_table[, col]), col] &lt;-</span>
-<span id="cb67-42"><a href="log-ratio-transformation-methods.html#cb67-42"></a><span class="st">                </span><span class="kw">mean</span>(comp_table[, col], <span class="dt">na.rm =</span> T)</span>
-<span id="cb67-43"><a href="log-ratio-transformation-methods.html#cb67-43"></a>        }</span>
-<span id="cb67-44"><a href="log-ratio-transformation-methods.html#cb67-44"></a>    }</span>
-<span id="cb67-45"><a href="log-ratio-transformation-methods.html#cb67-45"></a>    <span class="co"># Calculate ratio</span></span>
-<span id="cb67-46"><a href="log-ratio-transformation-methods.html#cb67-46"></a>    n_taxa &lt;-<span class="st"> </span><span class="kw">dim</span>(comp_table)[<span class="dv">1</span>]</span>
-<span id="cb67-47"><a href="log-ratio-transformation-methods.html#cb67-47"></a>    taxa_id &lt;-<span class="st"> </span><span class="kw">rownames</span>(comp_table)</span>
-<span id="cb67-48"><a href="log-ratio-transformation-methods.html#cb67-48"></a>    n_samp &lt;-<span class="st"> </span><span class="kw">dim</span>(comp_table)[<span class="dv">2</span>]</span>
-<span id="cb67-49"><a href="log-ratio-transformation-methods.html#cb67-49"></a>    log_geo_mean &lt;-</span>
-<span id="cb67-50"><a href="log-ratio-transformation-methods.html#cb67-50"></a><span class="st">        </span><span class="kw">apply</span>(comp_table, <span class="dv">2</span>, <span class="cf">function</span>(x) {</span>
-<span id="cb67-51"><a href="log-ratio-transformation-methods.html#cb67-51"></a>            <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> T)</span>
-<span id="cb67-52"><a href="log-ratio-transformation-methods.html#cb67-52"></a>        })</span>
-<span id="cb67-53"><a href="log-ratio-transformation-methods.html#cb67-53"></a>    mu_group_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">mean</span>(log_geo_mean[groups <span class="op">==</span><span class="st"> </span><span class="kw">levels</span>(groups)[<span class="dv">1</span>]])</span>
-<span id="cb67-54"><a href="log-ratio-transformation-methods.html#cb67-54"></a>    mu_group_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">mean</span>(log_geo_mean[groups <span class="op">==</span><span class="st"> </span><span class="kw">levels</span>(groups)[<span class="dv">2</span>]])</span>
-<span id="cb67-55"><a href="log-ratio-transformation-methods.html#cb67-55"></a>    mu &lt;-<span class="st"> </span><span class="kw">rep</span>(mu_group_<span class="dv">1</span>, n_samp)</span>
-<span id="cb67-56"><a href="log-ratio-transformation-methods.html#cb67-56"></a>    mu[groups <span class="op">==</span><span class="st"> </span><span class="kw">levels</span>(groups)[<span class="dv">2</span>]] &lt;-<span class="st"> </span>mu_group_<span class="dv">2</span></span>
-<span id="cb67-57"><a href="log-ratio-transformation-methods.html#cb67-57"></a>    bias &lt;-<span class="st"> </span>log_geo_mean <span class="op">-</span><span class="st"> </span>mu</span>
-<span id="cb67-58"><a href="log-ratio-transformation-methods.html#cb67-58"></a>    dat.normed &lt;-</span>
-<span id="cb67-59"><a href="log-ratio-transformation-methods.html#cb67-59"></a><span class="st">        </span>comp_table <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rep</span>(bias, n_taxa), <span class="dt">nrow =</span> n_taxa, <span class="dt">byrow =</span> T)</span>
-<span id="cb67-60"><a href="log-ratio-transformation-methods.html#cb67-60"></a>    <span class="kw">colnames</span>(dat.normed) &lt;-<span class="st"> </span><span class="kw">colnames</span>(raw)</span>
-<span id="cb67-61"><a href="log-ratio-transformation-methods.html#cb67-61"></a>    </span>
-<span id="cb67-62"><a href="log-ratio-transformation-methods.html#cb67-62"></a>    </span>
-<span id="cb67-63"><a href="log-ratio-transformation-methods.html#cb67-63"></a>    <span class="co"># Convert to phyloseq</span></span>
-<span id="cb67-64"><a href="log-ratio-transformation-methods.html#cb67-64"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(dat.normed, <span class="dt">taxa_are_rows =</span> T)</span>
-<span id="cb67-65"><a href="log-ratio-transformation-methods.html#cb67-65"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb67-66"><a href="log-ratio-transformation-methods.html#cb67-66"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span><span class="kw">exp</span>(bias)</span>
-<span id="cb67-67"><a href="log-ratio-transformation-methods.html#cb67-67"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb67-68"><a href="log-ratio-transformation-methods.html#cb67-68"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb67-69"><a href="log-ratio-transformation-methods.html#cb67-69"></a>    ps_ancom2 &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu, sam, tax, phy)</span>
-<span id="cb67-70"><a href="log-ratio-transformation-methods.html#cb67-70"></a>    <span class="kw">return</span>(ps_ancom2)</span>
-<span id="cb67-71"><a href="log-ratio-transformation-methods.html#cb67-71"></a>}</span>
-<span id="cb67-72"><a href="log-ratio-transformation-methods.html#cb67-72"></a></span>
-<span id="cb67-73"><a href="log-ratio-transformation-methods.html#cb67-73"></a></span>
-<span id="cb67-74"><a href="log-ratio-transformation-methods.html#cb67-74"></a>k_ancom2 &lt;-<span class="st"> </span><span class="kw">norm_ANCOM2</span>(k_raw, <span class="st">&quot;DIAGNOSIS&quot;</span>)</span>
-<span id="cb67-75"><a href="log-ratio-transformation-methods.html#cb67-75"></a>k_ancom2</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="log-ratio-transformation-methods.html#cb71-1"></a><span class="co">## Load the Ancom function (it&#39;s not a package)</span></span>
+<span id="cb71-2"><a href="log-ratio-transformation-methods.html#cb71-2"></a>devtools<span class="op">::</span><span class="kw">source_url</span>(<span class="st">&quot;https://raw.githubusercontent.com/FrederickHuangLin/ANCOM/master/scripts/ancom_v2.1.R&quot;</span>)</span>
+<span id="cb71-3"><a href="log-ratio-transformation-methods.html#cb71-3"></a></span>
+<span id="cb71-4"><a href="log-ratio-transformation-methods.html#cb71-4"></a>norm_ANCOM2 &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_var, <span class="dt">outlier.replace =</span> <span class="ot">TRUE</span>) {</span>
+<span id="cb71-5"><a href="log-ratio-transformation-methods.html#cb71-5"></a>    feature_table &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">otu_table</span>(ps))</span>
+<span id="cb71-6"><a href="log-ratio-transformation-methods.html#cb71-6"></a>    groups &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">get_variable</span>(ps, group_var))</span>
+<span id="cb71-7"><a href="log-ratio-transformation-methods.html#cb71-7"></a>    meta_data &lt;-</span>
+<span id="cb71-8"><a href="log-ratio-transformation-methods.html#cb71-8"></a><span class="st">        </span><span class="kw">data.frame</span>(<span class="dt">sample_id =</span> <span class="kw">paste0</span>(<span class="st">&quot;sample&quot;</span>, <span class="kw">seq</span>(<span class="kw">dim</span>(raw)[<span class="dv">2</span>])), <span class="dt">groups =</span> groups)</span>
+<span id="cb71-9"><a href="log-ratio-transformation-methods.html#cb71-9"></a>    <span class="co">#rownames(meta_data) &lt;- meta_data$sample_id</span></span>
+<span id="cb71-10"><a href="log-ratio-transformation-methods.html#cb71-10"></a>    <span class="kw">colnames</span>(feature_table) &lt;-<span class="st"> </span>meta_data<span class="op">$</span>sample_id</span>
+<span id="cb71-11"><a href="log-ratio-transformation-methods.html#cb71-11"></a>    </span>
+<span id="cb71-12"><a href="log-ratio-transformation-methods.html#cb71-12"></a>    <span class="co"># The main ANCOM2 zero-classification function </span></span>
+<span id="cb71-13"><a href="log-ratio-transformation-methods.html#cb71-13"></a>    prepro &lt;-</span>
+<span id="cb71-14"><a href="log-ratio-transformation-methods.html#cb71-14"></a><span class="st">        </span><span class="kw">feature_table_pre_process</span>(</span>
+<span id="cb71-15"><a href="log-ratio-transformation-methods.html#cb71-15"></a>            feature_table,</span>
+<span id="cb71-16"><a href="log-ratio-transformation-methods.html#cb71-16"></a>            meta_data,</span>
+<span id="cb71-17"><a href="log-ratio-transformation-methods.html#cb71-17"></a>            <span class="dt">sample_var =</span> <span class="st">&quot;sample_id&quot;</span>,</span>
+<span id="cb71-18"><a href="log-ratio-transformation-methods.html#cb71-18"></a>            <span class="dt">group_var =</span> <span class="st">&quot;groups&quot;</span>,</span>
+<span id="cb71-19"><a href="log-ratio-transformation-methods.html#cb71-19"></a>            <span class="dt">out_cut =</span> <span class="fl">0.05</span>,</span>
+<span id="cb71-20"><a href="log-ratio-transformation-methods.html#cb71-20"></a>            <span class="dt">zero_cut =</span> <span class="fl">0.9</span>,</span>
+<span id="cb71-21"><a href="log-ratio-transformation-methods.html#cb71-21"></a>            <span class="dt">lib_cut =</span> <span class="dv">0</span>,</span>
+<span id="cb71-22"><a href="log-ratio-transformation-methods.html#cb71-22"></a>            <span class="dt">neg_lb =</span> <span class="ot">FALSE</span></span>
+<span id="cb71-23"><a href="log-ratio-transformation-methods.html#cb71-23"></a>        )</span>
+<span id="cb71-24"><a href="log-ratio-transformation-methods.html#cb71-24"></a>    feature_table &lt;-<span class="st"> </span>prepro<span class="op">$</span>feature_table</span>
+<span id="cb71-25"><a href="log-ratio-transformation-methods.html#cb71-25"></a>    meta_data &lt;-<span class="st"> </span>prepro<span class="op">$</span>meta_data</span>
+<span id="cb71-26"><a href="log-ratio-transformation-methods.html#cb71-26"></a>    struc_zero &lt;-<span class="st"> </span>prepro<span class="op">$</span>structure_zeros</span>
+<span id="cb71-27"><a href="log-ratio-transformation-methods.html#cb71-27"></a>    </span>
+<span id="cb71-28"><a href="log-ratio-transformation-methods.html#cb71-28"></a>    <span class="co"># OTU table transformation:</span></span>
+<span id="cb71-29"><a href="log-ratio-transformation-methods.html#cb71-29"></a>    <span class="co"># (1) Discard taxa with structural zeros (if any); (2) Add pseudocount (1) and take logarithm.</span></span>
+<span id="cb71-30"><a href="log-ratio-transformation-methods.html#cb71-30"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(struc_zero)) {</span>
+<span id="cb71-31"><a href="log-ratio-transformation-methods.html#cb71-31"></a>        num_struc_zero =<span class="st"> </span><span class="kw">apply</span>(struc_zero, <span class="dv">1</span>, sum)</span>
+<span id="cb71-32"><a href="log-ratio-transformation-methods.html#cb71-32"></a>        comp_table =<span class="st"> </span>feature_table[num_struc_zero <span class="op">==</span><span class="st"> </span><span class="dv">0</span>,]</span>
+<span id="cb71-33"><a href="log-ratio-transformation-methods.html#cb71-33"></a>    } <span class="cf">else</span>{</span>
+<span id="cb71-34"><a href="log-ratio-transformation-methods.html#cb71-34"></a>        comp_table =<span class="st"> </span>feature_table</span>
+<span id="cb71-35"><a href="log-ratio-transformation-methods.html#cb71-35"></a>    }</span>
+<span id="cb71-36"><a href="log-ratio-transformation-methods.html#cb71-36"></a>    comp_table &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="kw">as.matrix</span>(comp_table) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb71-37"><a href="log-ratio-transformation-methods.html#cb71-37"></a>    </span>
+<span id="cb71-38"><a href="log-ratio-transformation-methods.html#cb71-38"></a>    <span class="co"># Replace outlier zeros with the mean of the rest genes in each</span></span>
+<span id="cb71-39"><a href="log-ratio-transformation-methods.html#cb71-39"></a>    <span class="cf">if</span> (outlier.replace) {</span>
+<span id="cb71-40"><a href="log-ratio-transformation-methods.html#cb71-40"></a>        <span class="cf">for</span> (col <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(comp_table)) {</span>
+<span id="cb71-41"><a href="log-ratio-transformation-methods.html#cb71-41"></a>            comp_table[<span class="kw">is.na</span>(comp_table[, col]), col] &lt;-</span>
+<span id="cb71-42"><a href="log-ratio-transformation-methods.html#cb71-42"></a><span class="st">                </span><span class="kw">mean</span>(comp_table[, col], <span class="dt">na.rm =</span> T)</span>
+<span id="cb71-43"><a href="log-ratio-transformation-methods.html#cb71-43"></a>        }</span>
+<span id="cb71-44"><a href="log-ratio-transformation-methods.html#cb71-44"></a>    }</span>
+<span id="cb71-45"><a href="log-ratio-transformation-methods.html#cb71-45"></a>    <span class="co"># Calculate ratio</span></span>
+<span id="cb71-46"><a href="log-ratio-transformation-methods.html#cb71-46"></a>    n_taxa &lt;-<span class="st"> </span><span class="kw">dim</span>(comp_table)[<span class="dv">1</span>]</span>
+<span id="cb71-47"><a href="log-ratio-transformation-methods.html#cb71-47"></a>    taxa_id &lt;-<span class="st"> </span><span class="kw">rownames</span>(comp_table)</span>
+<span id="cb71-48"><a href="log-ratio-transformation-methods.html#cb71-48"></a>    n_samp &lt;-<span class="st"> </span><span class="kw">dim</span>(comp_table)[<span class="dv">2</span>]</span>
+<span id="cb71-49"><a href="log-ratio-transformation-methods.html#cb71-49"></a>    log_geo_mean &lt;-</span>
+<span id="cb71-50"><a href="log-ratio-transformation-methods.html#cb71-50"></a><span class="st">        </span><span class="kw">apply</span>(comp_table, <span class="dv">2</span>, <span class="cf">function</span>(x) {</span>
+<span id="cb71-51"><a href="log-ratio-transformation-methods.html#cb71-51"></a>            <span class="kw">mean</span>(x, <span class="dt">na.rm =</span> T)</span>
+<span id="cb71-52"><a href="log-ratio-transformation-methods.html#cb71-52"></a>        })</span>
+<span id="cb71-53"><a href="log-ratio-transformation-methods.html#cb71-53"></a>    mu_group_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">mean</span>(log_geo_mean[groups <span class="op">==</span><span class="st"> </span><span class="kw">levels</span>(groups)[<span class="dv">1</span>]])</span>
+<span id="cb71-54"><a href="log-ratio-transformation-methods.html#cb71-54"></a>    mu_group_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">mean</span>(log_geo_mean[groups <span class="op">==</span><span class="st"> </span><span class="kw">levels</span>(groups)[<span class="dv">2</span>]])</span>
+<span id="cb71-55"><a href="log-ratio-transformation-methods.html#cb71-55"></a>    mu &lt;-<span class="st"> </span><span class="kw">rep</span>(mu_group_<span class="dv">1</span>, n_samp)</span>
+<span id="cb71-56"><a href="log-ratio-transformation-methods.html#cb71-56"></a>    mu[groups <span class="op">==</span><span class="st"> </span><span class="kw">levels</span>(groups)[<span class="dv">2</span>]] &lt;-<span class="st"> </span>mu_group_<span class="dv">2</span></span>
+<span id="cb71-57"><a href="log-ratio-transformation-methods.html#cb71-57"></a>    bias &lt;-<span class="st"> </span>log_geo_mean <span class="op">-</span><span class="st"> </span>mu</span>
+<span id="cb71-58"><a href="log-ratio-transformation-methods.html#cb71-58"></a>    dat.normed &lt;-</span>
+<span id="cb71-59"><a href="log-ratio-transformation-methods.html#cb71-59"></a><span class="st">        </span>comp_table <span class="op">-</span><span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rep</span>(bias, n_taxa), <span class="dt">nrow =</span> n_taxa, <span class="dt">byrow =</span> T)</span>
+<span id="cb71-60"><a href="log-ratio-transformation-methods.html#cb71-60"></a>    <span class="kw">colnames</span>(dat.normed) &lt;-<span class="st"> </span><span class="kw">colnames</span>(raw)</span>
+<span id="cb71-61"><a href="log-ratio-transformation-methods.html#cb71-61"></a>    </span>
+<span id="cb71-62"><a href="log-ratio-transformation-methods.html#cb71-62"></a>    </span>
+<span id="cb71-63"><a href="log-ratio-transformation-methods.html#cb71-63"></a>    <span class="co"># Convert to phyloseq</span></span>
+<span id="cb71-64"><a href="log-ratio-transformation-methods.html#cb71-64"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(dat.normed, <span class="dt">taxa_are_rows =</span> T)</span>
+<span id="cb71-65"><a href="log-ratio-transformation-methods.html#cb71-65"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb71-66"><a href="log-ratio-transformation-methods.html#cb71-66"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span><span class="kw">exp</span>(bias)</span>
+<span id="cb71-67"><a href="log-ratio-transformation-methods.html#cb71-67"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb71-68"><a href="log-ratio-transformation-methods.html#cb71-68"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb71-69"><a href="log-ratio-transformation-methods.html#cb71-69"></a>    ps_ancom2 &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu, sam, tax, phy)</span>
+<span id="cb71-70"><a href="log-ratio-transformation-methods.html#cb71-70"></a>    <span class="kw">return</span>(ps_ancom2)</span>
+<span id="cb71-71"><a href="log-ratio-transformation-methods.html#cb71-71"></a>}</span>
+<span id="cb71-72"><a href="log-ratio-transformation-methods.html#cb71-72"></a></span>
+<span id="cb71-73"><a href="log-ratio-transformation-methods.html#cb71-73"></a></span>
+<span id="cb71-74"><a href="log-ratio-transformation-methods.html#cb71-74"></a>k_ancom2 &lt;-<span class="st"> </span><span class="kw">norm_ANCOM2</span>(k_raw, <span class="st">&quot;DIAGNOSIS&quot;</span>)</span>
+<span id="cb71-75"><a href="log-ratio-transformation-methods.html#cb71-75"></a>k_ancom2</span></code></pre></div>
 </div>
 <div id="ancom-bc" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> ANCOM BC</h2>
 <p>ANCOM BC <span class="citation">(Lin and Peddada <a href="#ref-lin2020" role="doc-biblioref">2020</a>)</span> includes a normalization method that accounts for zero inflation and compositionality.</p>
 <p>This method corrects bias by estimating a sampling fraction, which is…. It accounts for sampling fraction by introducing a sample-specific offset in a linear regression framework, estimated form observed data. The offset term is the bias correction, and the linear regression in log scale is analogous to the log ratio transformation to deal with compositionality.</p>
 <p>This method also identifies and accounts for outlier zeros, structural zeros, and sampling zeros, using the same methodology as ANCOM2.</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="log-ratio-transformation-methods.html#cb68-1"></a><span class="kw">library</span>(ANCOMBC)</span>
-<span id="cb68-2"><a href="log-ratio-transformation-methods.html#cb68-2"></a>norm_ANCOMBC &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_var) {</span>
-<span id="cb68-3"><a href="log-ratio-transformation-methods.html#cb68-3"></a>    out =<span class="st"> </span><span class="kw">ancombc</span>(ps,</span>
-<span id="cb68-4"><a href="log-ratio-transformation-methods.html#cb68-4"></a>                  <span class="dt">formula =</span> group_var,</span>
-<span id="cb68-5"><a href="log-ratio-transformation-methods.html#cb68-5"></a>                  <span class="dt">group =</span> group_var,</span>
-<span id="cb68-6"><a href="log-ratio-transformation-methods.html#cb68-6"></a>                  <span class="dt">struc_zero =</span> T, </span>
-<span id="cb68-7"><a href="log-ratio-transformation-methods.html#cb68-7"></a>                  <span class="dt">neg_lb =</span> T, </span>
-<span id="cb68-8"><a href="log-ratio-transformation-methods.html#cb68-8"></a>                  <span class="dt">zero_cut =</span> <span class="fl">.9</span>)</span>
-<span id="cb68-9"><a href="log-ratio-transformation-methods.html#cb68-9"></a>    <span class="co">#it is recommended to set neg_lb = TRUE when the sample size per group is relatively large (e.g. &gt; 30)</span></span>
-<span id="cb68-10"><a href="log-ratio-transformation-methods.html#cb68-10"></a>    sampling.fraction &lt;-<span class="st"> </span><span class="kw">exp</span>(out<span class="op">$</span>samp_frac)</span>
-<span id="cb68-11"><a href="log-ratio-transformation-methods.html#cb68-11"></a>    <span class="co"># Normalize counts</span></span>
-<span id="cb68-12"><a href="log-ratio-transformation-methods.html#cb68-12"></a>    <span class="co"># feature_table &lt;- otu_table(ps, taxa_are_rows = T)</span></span>
-<span id="cb68-13"><a href="log-ratio-transformation-methods.html#cb68-13"></a>    feature_table &lt;-<span class="st"> </span>out<span class="op">$</span>feature_table</span>
-<span id="cb68-14"><a href="log-ratio-transformation-methods.html#cb68-14"></a>    <span class="co"># otu_norm &lt;- t(t(otu) / sampling.fraction)</span></span>
-<span id="cb68-15"><a href="log-ratio-transformation-methods.html#cb68-15"></a>    otu_norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(feature_table) <span class="op">/</span><span class="st"> </span>sampling.fraction)</span>
-<span id="cb68-16"><a href="log-ratio-transformation-methods.html#cb68-16"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(otu_norm, T)</span>
-<span id="cb68-17"><a href="log-ratio-transformation-methods.html#cb68-17"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb68-18"><a href="log-ratio-transformation-methods.html#cb68-18"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>sampling.fraction</span>
-<span id="cb68-19"><a href="log-ratio-transformation-methods.html#cb68-19"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb68-20"><a href="log-ratio-transformation-methods.html#cb68-20"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb68-21"><a href="log-ratio-transformation-methods.html#cb68-21"></a>    ps_ancombc &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu, sam, tax, phy)</span>
-<span id="cb68-22"><a href="log-ratio-transformation-methods.html#cb68-22"></a>    <span class="kw">return</span>(ps_ancombc)</span>
-<span id="cb68-23"><a href="log-ratio-transformation-methods.html#cb68-23"></a>}</span>
-<span id="cb68-24"><a href="log-ratio-transformation-methods.html#cb68-24"></a></span>
-<span id="cb68-25"><a href="log-ratio-transformation-methods.html#cb68-25"></a>k_ancombc &lt;-<span class="st"> </span><span class="kw">norm_ANCOMBC</span>(k_raw, <span class="dt">group_var =</span> <span class="st">&quot;DIAGNOSIS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="log-ratio-transformation-methods.html#cb72-1"></a><span class="kw">library</span>(ANCOMBC)</span>
+<span id="cb72-2"><a href="log-ratio-transformation-methods.html#cb72-2"></a>norm_ANCOMBC &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_var) {</span>
+<span id="cb72-3"><a href="log-ratio-transformation-methods.html#cb72-3"></a>    out =<span class="st"> </span><span class="kw">ancombc</span>(ps,</span>
+<span id="cb72-4"><a href="log-ratio-transformation-methods.html#cb72-4"></a>                  <span class="dt">formula =</span> group_var,</span>
+<span id="cb72-5"><a href="log-ratio-transformation-methods.html#cb72-5"></a>                  <span class="dt">group =</span> group_var,</span>
+<span id="cb72-6"><a href="log-ratio-transformation-methods.html#cb72-6"></a>                  <span class="dt">struc_zero =</span> T, </span>
+<span id="cb72-7"><a href="log-ratio-transformation-methods.html#cb72-7"></a>                  <span class="dt">neg_lb =</span> T, </span>
+<span id="cb72-8"><a href="log-ratio-transformation-methods.html#cb72-8"></a>                  <span class="dt">zero_cut =</span> <span class="fl">.9</span>)</span>
+<span id="cb72-9"><a href="log-ratio-transformation-methods.html#cb72-9"></a>    <span class="co">#it is recommended to set neg_lb = TRUE when the sample size per group is relatively large (e.g. &gt; 30)</span></span>
+<span id="cb72-10"><a href="log-ratio-transformation-methods.html#cb72-10"></a>    sampling.fraction &lt;-<span class="st"> </span><span class="kw">exp</span>(out<span class="op">$</span>samp_frac)</span>
+<span id="cb72-11"><a href="log-ratio-transformation-methods.html#cb72-11"></a>    <span class="co"># Normalize counts</span></span>
+<span id="cb72-12"><a href="log-ratio-transformation-methods.html#cb72-12"></a>    <span class="co"># feature_table &lt;- otu_table(ps, taxa_are_rows = T)</span></span>
+<span id="cb72-13"><a href="log-ratio-transformation-methods.html#cb72-13"></a>    feature_table &lt;-<span class="st"> </span>out<span class="op">$</span>feature_table</span>
+<span id="cb72-14"><a href="log-ratio-transformation-methods.html#cb72-14"></a>    <span class="co"># otu_norm &lt;- t(t(otu) / sampling.fraction)</span></span>
+<span id="cb72-15"><a href="log-ratio-transformation-methods.html#cb72-15"></a>    otu_norm &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(feature_table) <span class="op">/</span><span class="st"> </span>sampling.fraction)</span>
+<span id="cb72-16"><a href="log-ratio-transformation-methods.html#cb72-16"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(otu_norm, T)</span>
+<span id="cb72-17"><a href="log-ratio-transformation-methods.html#cb72-17"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb72-18"><a href="log-ratio-transformation-methods.html#cb72-18"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>sampling.fraction</span>
+<span id="cb72-19"><a href="log-ratio-transformation-methods.html#cb72-19"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb72-20"><a href="log-ratio-transformation-methods.html#cb72-20"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb72-21"><a href="log-ratio-transformation-methods.html#cb72-21"></a>    ps_ancombc &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu, sam, tax, phy)</span>
+<span id="cb72-22"><a href="log-ratio-transformation-methods.html#cb72-22"></a>    <span class="kw">return</span>(ps_ancombc)</span>
+<span id="cb72-23"><a href="log-ratio-transformation-methods.html#cb72-23"></a>}</span>
+<span id="cb72-24"><a href="log-ratio-transformation-methods.html#cb72-24"></a></span>
+<span id="cb72-25"><a href="log-ratio-transformation-methods.html#cb72-25"></a>k_ancombc &lt;-<span class="st"> </span><span class="kw">norm_ANCOMBC</span>(k_raw, <span class="dt">group_var =</span> <span class="st">&quot;DIAGNOSIS&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in data_prep(phyloseq, group, zero_cut, lib_cut, global = global):
 ## The multi-group comparison will be deactivated as the group variable has &lt; 3
 ## categories.</code></pre>
@@ -345,40 +345,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- https://www.bioconductor.org/packages/devel/bioc/vignettes/ALDEx2/inst/doc/ALDEx2_vignette.html -->
 <p>ALDEx2 <span class="citation">(Fernandes et al. <a href="#ref-fernandes2014" role="doc-biblioref">2014</a>)</span> is a method for differential abundance analysis developed for use with microbiome or any other sequencing setting. It uses a clr log-ratio transformation instead of library size normalization. To deal with sparsity, it creates randomized instances via Monte Carlo draws based on Dirichlet-Multinomial distribution with probabilities from the raw count data, These are zero-free, so log-ratio transformations are possible.</p>
 <p>The idea is to estimate biological and sampling variation to calculate expected false discovery rate given variation. The method estimates technical variation within each sample using MC draws from Dirichlet distribution. For differential abundance, statistical tests are performed on each instance, p-values averaged, then corrected for multiple comparisons This method has been shown to be conservative compared to many of the library size normalization methods.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="log-ratio-transformation-methods.html#cb70-1"></a><span class="kw">library</span>(ALDEx2)</span>
-<span id="cb70-2"><a href="log-ratio-transformation-methods.html#cb70-2"></a>norm_ALDEx2 &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_var) {</span>
-<span id="cb70-3"><a href="log-ratio-transformation-methods.html#cb70-3"></a>    raw &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">otu_table</span>(ps))</span>
-<span id="cb70-4"><a href="log-ratio-transformation-methods.html#cb70-4"></a>    groups &lt;-<span class="st"> </span><span class="kw">get_variable</span>(ps, group_var)</span>
-<span id="cb70-5"><a href="log-ratio-transformation-methods.html#cb70-5"></a>    <span class="co"># Run ALDEx2 function</span></span>
-<span id="cb70-6"><a href="log-ratio-transformation-methods.html#cb70-6"></a>    aldex.clr.res &lt;-</span>
-<span id="cb70-7"><a href="log-ratio-transformation-methods.html#cb70-7"></a><span class="st">        </span><span class="kw">aldex.clr</span>(</span>
-<span id="cb70-8"><a href="log-ratio-transformation-methods.html#cb70-8"></a>            <span class="dt">reads =</span> raw,</span>
-<span id="cb70-9"><a href="log-ratio-transformation-methods.html#cb70-9"></a>            <span class="dt">conds =</span> groups,</span>
-<span id="cb70-10"><a href="log-ratio-transformation-methods.html#cb70-10"></a>            <span class="dt">mc.samples =</span> <span class="dv">128</span></span>
-<span id="cb70-11"><a href="log-ratio-transformation-methods.html#cb70-11"></a>        )</span>
-<span id="cb70-12"><a href="log-ratio-transformation-methods.html#cb70-12"></a>    <span class="co"># Extract each clr MC draw</span></span>
-<span id="cb70-13"><a href="log-ratio-transformation-methods.html#cb70-13"></a>    mc_draws &lt;-<span class="st"> </span><span class="kw">getMonteCarloInstances</span>(aldex.clr.res)</span>
-<span id="cb70-14"><a href="log-ratio-transformation-methods.html#cb70-14"></a></span>
-<span id="cb70-15"><a href="log-ratio-transformation-methods.html#cb70-15"></a>    <span class="co"># Average each draw for the &#39;normalized&#39; clr read table</span></span>
-<span id="cb70-16"><a href="log-ratio-transformation-methods.html#cb70-16"></a>    dat.normed &lt;-</span>
-<span id="cb70-17"><a href="log-ratio-transformation-methods.html#cb70-17"></a><span class="st">        </span><span class="kw">matrix</span>(<span class="dv">0</span>,</span>
-<span id="cb70-18"><a href="log-ratio-transformation-methods.html#cb70-18"></a>               <span class="dt">nrow =</span> <span class="kw">nrow</span>(mc_draws[[<span class="dv">1</span>]]) ,</span>
-<span id="cb70-19"><a href="log-ratio-transformation-methods.html#cb70-19"></a>               <span class="dt">ncol =</span> <span class="kw">length</span>(mc_draws))</span>
-<span id="cb70-20"><a href="log-ratio-transformation-methods.html#cb70-20"></a>    <span class="cf">for</span> (col <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(dat.normed)) {</span>
-<span id="cb70-21"><a href="log-ratio-transformation-methods.html#cb70-21"></a>        dat.normed[, col] &lt;-<span class="st"> </span><span class="kw">apply</span>(mc_draws[[col]], <span class="dv">1</span>, mean)</span>
-<span id="cb70-22"><a href="log-ratio-transformation-methods.html#cb70-22"></a>    }</span>
-<span id="cb70-23"><a href="log-ratio-transformation-methods.html#cb70-23"></a>    <span class="kw">rownames</span>(dat.normed) &lt;-<span class="st"> </span><span class="kw">rownames</span>(mc_draws[[<span class="dv">1</span>]])</span>
-<span id="cb70-24"><a href="log-ratio-transformation-methods.html#cb70-24"></a>    <span class="kw">colnames</span>(dat.normed) &lt;-<span class="st"> </span><span class="kw">names</span>(mc_draws)</span>
-<span id="cb70-25"><a href="log-ratio-transformation-methods.html#cb70-25"></a>    </span>
-<span id="cb70-26"><a href="log-ratio-transformation-methods.html#cb70-26"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(dat.normed, T)</span>
-<span id="cb70-27"><a href="log-ratio-transformation-methods.html#cb70-27"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb70-28"><a href="log-ratio-transformation-methods.html#cb70-28"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb70-29"><a href="log-ratio-transformation-methods.html#cb70-29"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb70-30"><a href="log-ratio-transformation-methods.html#cb70-30"></a>    ps_aldex2 &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu, sam, tax, phy)</span>
-<span id="cb70-31"><a href="log-ratio-transformation-methods.html#cb70-31"></a>    <span class="kw">return</span>(ps_aldex2)</span>
-<span id="cb70-32"><a href="log-ratio-transformation-methods.html#cb70-32"></a>}</span>
-<span id="cb70-33"><a href="log-ratio-transformation-methods.html#cb70-33"></a></span>
-<span id="cb70-34"><a href="log-ratio-transformation-methods.html#cb70-34"></a>k_aldex2 &lt;-<span class="st"> </span><span class="kw">norm_ALDEx2</span>(k_raw, <span class="dt">group_var =</span> <span class="st">&quot;DIAGNOSIS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="log-ratio-transformation-methods.html#cb74-1"></a><span class="kw">library</span>(ALDEx2)</span>
+<span id="cb74-2"><a href="log-ratio-transformation-methods.html#cb74-2"></a>norm_ALDEx2 &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_var) {</span>
+<span id="cb74-3"><a href="log-ratio-transformation-methods.html#cb74-3"></a>    raw &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">otu_table</span>(ps))</span>
+<span id="cb74-4"><a href="log-ratio-transformation-methods.html#cb74-4"></a>    groups &lt;-<span class="st"> </span><span class="kw">get_variable</span>(ps, group_var)</span>
+<span id="cb74-5"><a href="log-ratio-transformation-methods.html#cb74-5"></a>    <span class="co"># Run ALDEx2 function</span></span>
+<span id="cb74-6"><a href="log-ratio-transformation-methods.html#cb74-6"></a>    aldex.clr.res &lt;-</span>
+<span id="cb74-7"><a href="log-ratio-transformation-methods.html#cb74-7"></a><span class="st">        </span><span class="kw">aldex.clr</span>(</span>
+<span id="cb74-8"><a href="log-ratio-transformation-methods.html#cb74-8"></a>            <span class="dt">reads =</span> raw,</span>
+<span id="cb74-9"><a href="log-ratio-transformation-methods.html#cb74-9"></a>            <span class="dt">conds =</span> groups,</span>
+<span id="cb74-10"><a href="log-ratio-transformation-methods.html#cb74-10"></a>            <span class="dt">mc.samples =</span> <span class="dv">128</span></span>
+<span id="cb74-11"><a href="log-ratio-transformation-methods.html#cb74-11"></a>        )</span>
+<span id="cb74-12"><a href="log-ratio-transformation-methods.html#cb74-12"></a>    <span class="co"># Extract each clr MC draw</span></span>
+<span id="cb74-13"><a href="log-ratio-transformation-methods.html#cb74-13"></a>    mc_draws &lt;-<span class="st"> </span><span class="kw">getMonteCarloInstances</span>(aldex.clr.res)</span>
+<span id="cb74-14"><a href="log-ratio-transformation-methods.html#cb74-14"></a></span>
+<span id="cb74-15"><a href="log-ratio-transformation-methods.html#cb74-15"></a>    <span class="co"># Average each draw for the &#39;normalized&#39; clr read table</span></span>
+<span id="cb74-16"><a href="log-ratio-transformation-methods.html#cb74-16"></a>    dat.normed &lt;-</span>
+<span id="cb74-17"><a href="log-ratio-transformation-methods.html#cb74-17"></a><span class="st">        </span><span class="kw">matrix</span>(<span class="dv">0</span>,</span>
+<span id="cb74-18"><a href="log-ratio-transformation-methods.html#cb74-18"></a>               <span class="dt">nrow =</span> <span class="kw">nrow</span>(mc_draws[[<span class="dv">1</span>]]) ,</span>
+<span id="cb74-19"><a href="log-ratio-transformation-methods.html#cb74-19"></a>               <span class="dt">ncol =</span> <span class="kw">length</span>(mc_draws))</span>
+<span id="cb74-20"><a href="log-ratio-transformation-methods.html#cb74-20"></a>    <span class="cf">for</span> (col <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(dat.normed)) {</span>
+<span id="cb74-21"><a href="log-ratio-transformation-methods.html#cb74-21"></a>        dat.normed[, col] &lt;-<span class="st"> </span><span class="kw">apply</span>(mc_draws[[col]], <span class="dv">1</span>, mean)</span>
+<span id="cb74-22"><a href="log-ratio-transformation-methods.html#cb74-22"></a>    }</span>
+<span id="cb74-23"><a href="log-ratio-transformation-methods.html#cb74-23"></a>    <span class="kw">rownames</span>(dat.normed) &lt;-<span class="st"> </span><span class="kw">rownames</span>(mc_draws[[<span class="dv">1</span>]])</span>
+<span id="cb74-24"><a href="log-ratio-transformation-methods.html#cb74-24"></a>    <span class="kw">colnames</span>(dat.normed) &lt;-<span class="st"> </span><span class="kw">names</span>(mc_draws)</span>
+<span id="cb74-25"><a href="log-ratio-transformation-methods.html#cb74-25"></a>    </span>
+<span id="cb74-26"><a href="log-ratio-transformation-methods.html#cb74-26"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(dat.normed, T)</span>
+<span id="cb74-27"><a href="log-ratio-transformation-methods.html#cb74-27"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb74-28"><a href="log-ratio-transformation-methods.html#cb74-28"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb74-29"><a href="log-ratio-transformation-methods.html#cb74-29"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb74-30"><a href="log-ratio-transformation-methods.html#cb74-30"></a>    ps_aldex2 &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu, sam, tax, phy)</span>
+<span id="cb74-31"><a href="log-ratio-transformation-methods.html#cb74-31"></a>    <span class="kw">return</span>(ps_aldex2)</span>
+<span id="cb74-32"><a href="log-ratio-transformation-methods.html#cb74-32"></a>}</span>
+<span id="cb74-33"><a href="log-ratio-transformation-methods.html#cb74-33"></a></span>
+<span id="cb74-34"><a href="log-ratio-transformation-methods.html#cb74-34"></a>k_aldex2 &lt;-<span class="st"> </span><span class="kw">norm_ALDEx2</span>(k_raw, <span class="dt">group_var =</span> <span class="st">&quot;DIAGNOSIS&quot;</span>)</span></code></pre></div>
 <pre><code>## operating in serial mode</code></pre>
 <pre><code>## computing center with all features</code></pre>
 

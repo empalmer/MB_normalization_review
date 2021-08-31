@@ -475,8 +475,8 @@ We can also compare the values of the distance matrices before and after normali
 \NormalTok{plot\_norm\_changes \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data\_norm, data\_raw, }\DataTypeTok{dist\_method =} \StringTok{"bray"}\NormalTok{, }\DataTypeTok{x\_lab =} \StringTok{"raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"norm"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Plot title"}\NormalTok{)\{}
     \CommentTok{\# calculate the Bray{-}Cutris distance matrix for the raw data, the normalized data, }
     \CommentTok{\# and calculate the pairwise difference between the original library sizes between samples}
-\NormalTok{    plot \textless{}{-}}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{raw =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(data\_raw, dist\_method)), }
-                       \DataTypeTok{norm =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(data\_norm, dist\_method)), }
+\NormalTok{    plot \textless{}{-}}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{raw =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(data\_raw, dist\_method, }\DataTypeTok{na.rm =}\NormalTok{ T)), }
+                       \DataTypeTok{norm =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(data\_norm, dist\_method, }\DataTypeTok{na.rm =}\NormalTok{ T)), }
                        \DataTypeTok{diff =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{dist}\NormalTok{(}\KeywordTok{get\_variable}\NormalTok{(data\_raw, }\StringTok{"depth"}\NormalTok{)))) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
 \StringTok{    }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ raw, }\DataTypeTok{y =}\NormalTok{ norm, }\DataTypeTok{color =}\NormalTok{ diff)) }\OperatorTok{+}\StringTok{ }
 \StringTok{        }\KeywordTok{geom\_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
@@ -547,7 +547,7 @@ Points below the line are pairs of samples that are marked as more similar after
 \hypertarget{about-css}{%
 \subsection{About CSS}\label{about-css}}
 
-Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner \citep{paulson2013}. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. This method is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods \citep{costea2014}.
+Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner \citep{paulson2013}. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. If there is high count variability the assumption may not be met. This method is an extension to UQ scaling normalization where one quantile is specified for all samples. In contrast to Total Sum scaling where the total sum is used as the scaling factor, the scaling factor for CSS is the sum of the counts up to the chosen quantile. This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods \citep{costea2014}.
 
 \hypertarget{css-r-code}{%
 \subsection{CSS R code}\label{css-r-code}}
@@ -1098,17 +1098,17 @@ Next, to calculate the scaling factors for each sample, we take the median of th
 \hline
 Taxa & Sample 1 & Sample 2 & Sample 3\\
 \hline
-Taxon 1 & 0.910000 & 0.660000 & -1.5700000\\
+Taxon 1 & 0.910 & 0.660 & -1.570\\
 \hline
-Taxon 2 & -0.360000 & 1.660000 & -1.3100000\\
+Taxon 2 & -0.360 & 1.660 & -1.310\\
 \hline
-Taxon 4 & 0.960000 & 0.530000 & -1.4900000\\
+Taxon 4 & 0.960 & 0.530 & -1.490\\
 \hline
-Taxon 5 & 0.840000 & 0.960000 & -1.8100000\\
+Taxon 5 & 0.840 & 0.960 & -1.810\\
 \hline
-Median & 0.875000 & 0.810000 & -1.5300000\\
+Median & 0.875 & 0.810 & -1.530\\
 \hline
-Exponentiated Median & 2.398875 & 2.247908 & 0.2165357\\
+Exponentiated Median & 2.399 & 2.248 & 0.217\\
 \hline
 \end{tabular}
 \end{table}
@@ -1127,43 +1127,43 @@ Sample 3
 
 Taxon 1
 
-55.025787
+55.026
 
-45.8203808
+45.820
 
-50.799945
+50.800
 
 Taxon 2
 
-2.918034
+2.918
 
-21.3531872
+21.353
 
-13.854530
+13.855
 
 Taxon 3
 
-0.000000
+0.000
 
-0.8897161
+0.890
 
-4.618177
+4.618
 
 Taxon 4
 
-9.587827
+9.588
 
-6.6728710
+6.673
 
-9.236354
+9.236
 
 Taxon 5
 
-29.597203
+29.597
 
-35.5886453
+35.589
 
-23.090884
+23.091
 
 Since Taxon 3 had a zero count in sample 1, it was excluded from the calculation of scale factors. The above example dataset may not be characteristic of microbiome datasets. Microbiome datasets are zero-inflated, meaning that there are numerous zero counts in the raw count matrix. Even up to 80-90\% of the counts in a microbiome datset can be zero. Because of this, if the zero-inflation in the datseta is not accounted for, very few, or even perhaps none of the taxa will contribute to calculating the scaling factor. One option so that all of the taxa are included in the calculation is to add a pseudocount so none of the counts are zero. Another option is the \texttt{poscounts} option, which is encouraged for microbiome data. Instead of taking the average of the logged counts, it takes the \(n\)th root of the non-zero counts. This replaces step 2 in this example.
 
@@ -1520,6 +1520,36 @@ The following provides the R code to implement GMPR normalization in R. We can a
 
 \includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-3.pdf}
 
+\hypertarget{gmpr-implementation-on-global-patterns-1}{%
+\subsubsection{GMPR implementation on Global Patterns}\label{gmpr-implementation-on-global-patterns-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k\_gmpr \textless{}{-}}\StringTok{ }\KeywordTok{norm\_GMPR}\NormalTok{(k\_raw)}
+
+\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_gmpr, k\_raw,}
+                  \DataTypeTok{x\_lab =} \StringTok{"GMPR"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"Raw Counts"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"GMPR normalization vs Raw Counts"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : you have empty rows: their dissimilarities may be
+## meaningless in method "bray"
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : missing values in results
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 367 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-32-1.pdf}
+
 \hypertarget{tmm-edger}{%
 \section{TMM (edgeR)}\label{tmm-edger}}
 
@@ -1598,7 +1628,7 @@ View PCoA plots
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-34-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-35-1.pdf}
 
 View how TMM normalization changes distance metrics differently than raw counts.
 
@@ -1610,7 +1640,7 @@ View how TMM normalization changes distance metrics differently than raw counts.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-35-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-36-1.pdf}
 
 \hypertarget{tmm-implementation-on-kostic-data}{%
 \subsubsection{TMM implementation on Kostic data}\label{tmm-implementation-on-kostic-data}}
@@ -1900,6 +1930,7 @@ See all distance comparisions for Global patterns data
            \DataTypeTok{css =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_css, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{deseq\_rle =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_deseq\_rle, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{deseq\_vs =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_deseq\_vs, }\StringTok{"bray"}\NormalTok{)),}
+           \DataTypeTok{gmpr =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_gmpr, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{rare =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_rare, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{tmm =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_tmm, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{diff =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{dist}\NormalTok{(}\KeywordTok{get\_variable}\NormalTok{(gp\_raw, }\StringTok{"depth"}\NormalTok{)))) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
@@ -1919,6 +1950,7 @@ See all distance comparisons for Kostic data
            \DataTypeTok{css =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_css, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{deseq\_rle =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_deseq\_rle, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{deseq\_vs =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_deseq\_vs, }\StringTok{"bray"}\NormalTok{)),}
+           \DataTypeTok{gmpr =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_gmpr, }\StringTok{"bray"}\NormalTok{, }\DataTypeTok{na.rm =}\NormalTok{ T)),}
            \DataTypeTok{rare =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_rare, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{tmm =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_tmm, }\StringTok{"bray"}\NormalTok{)),}
            \DataTypeTok{diff =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{dist}\NormalTok{(}\KeywordTok{get\_variable}\NormalTok{(k\_raw, }\StringTok{"depth"}\NormalTok{)))) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
@@ -1926,6 +1958,31 @@ See all distance comparisons for Kostic data
             \DataTypeTok{diag =} \StringTok{"blank"}\NormalTok{,ggplot2}\OperatorTok{::}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour=}\NormalTok{diff))}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : you have empty rows: their dissimilarities may be
+## meaningless in method "bray"
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : missing values in results
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+
+## Warning: Removed 367 rows containing missing values (geom_point).
+\end{verbatim}
 
 \includegraphics{MB_normalization_review_files/figure-latex/comparisons-k-1.pdf}
 
