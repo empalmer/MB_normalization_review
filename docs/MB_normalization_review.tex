@@ -141,9 +141,9 @@
 \hypertarget{the-importance-of-normalization}{%
 \section{The importance of normalization}\label{the-importance-of-normalization}}
 
-Microbiome data must be normalized before any statistical analysis can be performed. Following the process of sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, the data are in the form of a matrix of read counts, referred to as a feature table of raw counts. Normalization is the process of transforming raw read count data into data that can be compared between samples. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.
+Microbiome data must be normalized before any statistical analysis can be performed. Following the process of sequencing and assigning raw reads into counts per observed and classified identified taxa classes/OTUs/ASVs, microbiome data consist of a matrix of read counts, referred to as a feature table of raw counts. Normalization is the process of transforming raw read count data into data that can be compared between samples. Statistical analysis on this count matrix is then performed depending on the goal of the experiment. Common analysis goals include community-level analysis (alpha/beta diversity), differential abundance testing (the parallel of differential expression testing in gene expression studies), and network analysis.
 
-Analysis of composition, differences, connections, etc. should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal sequencing depths \citep{salter2014}. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals such as sequencing depth. Currently, there is no known `best' normalization method that removes all technical artifacts leaving only biological signals.
+Analysis of composition, differences, connections, etc., should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal sequencing depths \citep{salter2014}. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals such as sequencing depth. Currently, there is no known `best' normalization method that removes all technical artifacts leaving only biological signals.
 
 Due to the sequencing technology, samples will have different sequencing depths, or the sum of all the counts in a sample. Directly comparing raw counts between samples is not possible. To illustrate this, consider the counts of Taxon 1, across two samples shown below. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples? As we see below, the way we normalize the data can change how we would answer this question.
 
@@ -164,7 +164,7 @@ Taxon 2 & 5 & 5\tabularnewline
 
 \includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-2-1.pdf}
 
-Normalization for microbiome data often refers to standardizing sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as Figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in Taxon 1 between samples appears much smaller. However, now there appears to be a difference in Taxon 2, even though the counts were originally the same. This is because in sample B, Taxon 1 consists of a higher proportion of the total count than in sample A.
+One goal for normalization of microbiome data is the standardization of sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as Figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in Taxon 1 between samples appears much smaller. However, now there appears to be a difference in Taxon 2, even though the counts were originally the same. This is because in sample B, Taxon 1 consists of a higher proportion of the total count than in sample A.
 
 This demonstrates the importance of normalization, but also the artifacts that can occur depending on the method.
 
@@ -210,17 +210,6 @@ After & 0.7142857 & 0.3333333\\
 \end{table}
 
 This observed increase in the proportion of blue is due to the compositional nature of the sampled points, and not any true difference in the blue population.
-
-\hypertarget{log-ratio-transformation-methods}{%
-\subsection{Log ratio transformation methods}\label{log-ratio-transformation-methods}}
-
-The log-ratio based methodology developed by Aitchison in the 1980s is useful for analyzing compositional data \citep{aitchison1982}. Taking the logarithm of ratios can be an appropriate transformation for compositional data, so standard statistical tests can be appropriate again. This transformation removes the issue of standardizing/normalizing different sampling depths. The sampling depth for a given sample will not distort the biological covariance or correlation structure.
-
-This log-ratio method has a drawback, which is the decision of how to define the denominator. One approach to this problem is to use one sample as the reference. This sample should be `representative'. The log-ratio transformation is then the ratio of every other taxon to that representative sample. Of course, knowledge of what makes a sample representative is hard to come by and often unknown, and subsequent results can be affected by this choice. This method is frequently called the additive log-ratio approach (alr). The alternative approach is to use the data to create a pseudo-reference sample. This pseudo-reference sample is the geometric mean of the counts of all taxa. This is called the centered log-ratio method.
-
-While promising, these log-ratio methods have drawbacks in practice. Microbiome data are often incredibly sparse, with up to 80-90\% of count matrices containing zero counts. For ratio transformations, if we have sparse data, the geometric mean can be zero. Then the ratio is undefined, and further, so is the logarithm of zero count taxa.
-
-One solution to this is adding a small pseudo count to every element in the data. This removes problems occurring from having zero counts in the data, but there is not a clear best choice of what pseudo count to use, and it the choice can impact downstream results.
 
 \hypertarget{importing-data}{%
 \chapter{Importing Data}\label{importing-data}}
@@ -1688,8 +1677,16 @@ Wrench is a recent normalization method developed for microbiome data \citep{kum
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{log-ratio-transformation-methods-1}{%
-\chapter{Log Ratio Transformation Methods}\label{log-ratio-transformation-methods-1}}
+\hypertarget{log-ratio-transformation-methods}{%
+\chapter{Log Ratio Transformation Methods}\label{log-ratio-transformation-methods}}
+
+The log-ratio based methodology developed by Aitchison in the 1980s is useful for analyzing compositional data \citep{aitchison1982}. Taking the logarithm of ratios can be an appropriate transformation for compositional data, so standard statistical tests can be appropriate again. This transformation removes the issue of standardizing/normalizing different sampling depths. The sampling depth for a given sample will not distort the biological covariance or correlation structure.
+
+This log-ratio method has a drawback, which is the decision of how to define the denominator. One approach to this problem is to use one sample as the reference. This sample should be `representative'. The log-ratio transformation is then the ratio of every other taxon to that representative sample. Of course, knowledge of what makes a sample representative is hard to come by and often unknown, and subsequent results can be affected by this choice. This method is frequently called the additive log-ratio approach (alr). The alternative approach is to use the data to create a pseudo-reference sample. This pseudo-reference sample is the geometric mean of the counts of all taxa. This is called the centered log-ratio method.
+
+While promising, these log-ratio methods have drawbacks in practice. Microbiome data are often incredibly sparse, with up to 80-90\% of count matrices containing zero counts. For ratio transformations, if we have sparse data, the geometric mean can be zero. Then the ratio is undefined, and further, so is the logarithm of zero count taxa.
+
+One solution to this is adding a small pseudo count to every element in the data. This removes problems occurring from having zero counts in the data, but there is not a clear best choice of what pseudo count to use, and it the choice can impact downstream results.
 
 \hypertarget{ancom-ii}{%
 \section{ANCOM II}\label{ancom-ii}}

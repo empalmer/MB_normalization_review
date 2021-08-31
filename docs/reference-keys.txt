@@ -13,7 +13,6 @@ tab:unnamed-chunk-30
 intro
 the-importance-of-normalization
 the-compositional-nature-of-microbiome-data
-log-ratio-transformation-methods
 importing-data
 global-patterns
 colorectal-cancer
@@ -59,7 +58,7 @@ function-4
 tmm-implementation-on-global-patterns
 tmm-implementation-on-kostic-data
 wrench
-log-ratio-transformation-methods-1
+log-ratio-transformation-methods
 ancom-ii
 ancom-bc
 aldex2
