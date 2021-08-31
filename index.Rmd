@@ -168,7 +168,6 @@ tibble(sample, blue_a, red_a) %>%
                  digits = 2)
 ```
 
-<!-- In the after sample, the blue counts have decreased, as we would expect from our knowledge of the population. However, the red counts have increased, even though there is no change in the red population.  -->
 
 This observed increase in the proportion of blue is due to the compositional nature of the sampled points, and not any true difference in the blue population. 
 

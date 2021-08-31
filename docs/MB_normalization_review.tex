@@ -657,6 +657,767 @@ CSS normalization appears to consider pairs as more different than TSS normaliza
 
 \includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-14-2.pdf}
 
+\hypertarget{compositionality-aware-scaling-methods}{%
+\chapter{Compositionality Aware Scaling Methods}\label{compositionality-aware-scaling-methods}}
+
+\hypertarget{deseq}{%
+\section{DESeq}\label{deseq}}
+
+\hypertarget{about-deseq}{%
+\subsection{About DESeq}\label{about-deseq}}
+
+The DESeq2 package includes a normalization method for adjusting for differing library sizes across samples \citep{anders2010}. This method also can account for differences in library composition. A scaling factor to normalize each sample takes into account both library size and library composition. This method has also been called MED, RLE, or DESeq in the literature.
+
+DESeq2 first takes the natural logarithm of every entry in the count matrix. Due to this, all entries with zero will be set to negative infinity. Next, the row average is calculated (geometric average), so we have a vector of average counts for each taxon. Taking the log first should avoid undue influence by extreme outliers. All taxa with an average of infinity are removed. This step will remove all taxa with zero read count in one or more samples. This can be a problem in microbiome data. Next, we subtract the average log value from the log(counts), this gives a log ratio. This is equivalent to the ratio of the reads in each sample to the average across all samples. Next, we calculate the median of the log-ratios for each sample. These medians are converted to scaling factors for each sample by exponentiation. An extension of this method, denoted `poscounts', has been suggested, which instead of taking the geometric mean of the logged counts for each taxon, we take the n-th root of the product of the non-zero counts.
+
+This method assumes that the taxon of median absolute abundance is not differentially abundant, which is more likely true for the RNA-Seq it was developed for, but may not be true for microbiome studies, especially when there are more study groups, or we are analyzing higher taxonomic levels.
+
+An additional option can be used to perform a variance stabilizing transformation on the count matrix before normalizing with the above size factors. This method calculates a dispersion-mean relationship and then transforms the data. The result ideally is an abundance matrix that is approximately homoskedastic or constant variance across the range of mean values. The package also includes an option for a `rlog' transform, which they recommend over the variance stabilizing method in the case when there is a large difference in library sizes.
+
+If differential abundance is of interest to calculate, DESeq uses a negative binomial distribution to model differential abundances. It is possible to provide the size factors calculated by another method to DESeq to perform differential analysis.
+
+\hypertarget{deseq-walkthrough}{%
+\subsubsection{DESeq walkthrough}\label{deseq-walkthrough}}
+
+Consider again this example dataset.
+
+\label{tab:unnamed-chunk-15}Example dataset - Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+132
+
+103
+
+11
+
+Taxon 2
+
+7
+
+48
+
+3
+
+Taxon 3
+
+0
+
+2
+
+1
+
+Taxon 4
+
+23
+
+15
+
+2
+
+Taxon 5
+
+71
+
+80
+
+5
+
+The first step in DESeq normalization is to take the natural log of each entry in the count matrix.
+
+\label{tab:unnamed-chunk-16}Step 1: Logged Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+4.88
+
+4.63
+
+2.40
+
+Taxon 2
+
+1.95
+
+3.87
+
+1.10
+
+Taxon 3
+
+-Inf
+
+0.69
+
+0.00
+
+Taxon 4
+
+3.14
+
+2.71
+
+0.69
+
+Taxon 5
+
+4.26
+
+4.38
+
+1.61
+
+Notice the one entry with zero counts is marked as negative infinity.
+
+Next, the average of the logged values is taken across the samples. This results in an average log value for each taxa. This averaged log value is helpful for normalizing because it is not overwhelmed by outliers.
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-17}Step 2: Average Logged Counts}
+\centering
+\begin{tabular}[t]{l|r}
+\hline
+Taxa & Average Log Counts\\
+\hline
+Taxon 1 & 3.971809\\
+\hline
+Taxon 2 & 2.305241\\
+\hline
+Taxon 3 & -Inf\\
+\hline
+Taxon 4 & 2.178897\\
+\hline
+Taxon 5 & 3.418048\\
+\hline
+\end{tabular}
+\end{table}
+
+The row for the taxa that contained a zero on one of the samples is negative infinity. This taxon is now excluded from the following steps. This step results in removing any taxa that have zero counts from being considered to contribute to calculating the scaling factors.
+
+The next step is to subtract the average log values (step 2) from the log of the raw counts (step 1), only including rows that were not filtered. This step shows which samples have counts in a sample higher or lower than the average.
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-18}Step 3: Log Ratio of reads in each sample to average across all samples}
+\centering
+\begin{tabular}[t]{l|l|l|l}
+\hline
+Taxa & Sample 1 & Sample 2 & Sample 3\\
+\hline
+Taxon 1 & 4.88 - 3.97 = 0.91 & 4.63 - 3.97 = 0.66 & 2.40 - 3.97 = -1.57\\
+\hline
+Taxon 2 & 1.95 - 2.31 = -0.36 & 3.97 - 2.31 = 1.66 & 1.10 - 2.31 = -1.31\\
+\hline
+Taxon 4 & 3.14 - 2.18 = 0.96 & 2.71 - 2.18 = 0.53 & 0.69 - 2.18 = -1.49\\
+\hline
+Taxon 5 & 4.26 - 3.42 = 0.84 & 4.38 - 3.42 = 0.96 & 1.61- 3.42 = -1.81\\
+\hline
+\end{tabular}
+\end{table}
+
+Next, to calculate the scaling factors for each sample, we take the median of the log ratios calculated in the above step. Like using logs, calculating medians avoids the influence of outlier taxa that put undue influence on the scaling factor.
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-19}Step 4: Calculating medians per sample}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Taxa & Sample 1 & Sample 2 & Sample 3\\
+\hline
+Taxon 1 & 0.91 & 0.66 & -1.57\\
+\hline
+Taxon 2 & -0.36 & 1.66 & -1.31\\
+\hline
+Taxon 4 & 0.96 & 0.53 & -1.49\\
+\hline
+Taxon 5 & 0.84 & 0.96 & -1.81\\
+\hline
+Median & 0.88 & 0.81 & -1.53\\
+\hline
+Exponentiated Median & 2.40 & 2.25 & 0.22\\
+\hline
+\end{tabular}
+\end{table}
+
+Finally, we normalize the data, by exponentiating the median log ratios for each sample, which are the final scaling factors. We then divide all the raw counts in a sample by the sample's scaling factor.
+
+\label{tab:unnamed-chunk-20}Step 5: DESeq Normalized Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+55.03
+
+45.82
+
+50.80
+
+Taxon 2
+
+2.92
+
+21.35
+
+13.85
+
+Taxon 3
+
+0.00
+
+0.89
+
+4.62
+
+Taxon 4
+
+9.59
+
+6.67
+
+9.24
+
+Taxon 5
+
+29.60
+
+35.59
+
+23.09
+
+Since Taxon 3 had a zero count in sample 1, it was excluded from the calculation of scale factors. The above example dataset may not be characteristic of microbiome datasets. Microbiome datasets are zero-inflated, meaning that there are numerous zero counts in the raw count matrix. Even up to 80-90\% of the counts in a microbiome datset can be zero. Because of this, if the zero-inflation in the datseta is not accounted for, very few, or even perhaps none of the taxa will contribute to calculating the scaling factor. One option so that all of the taxa are included in the calculation is to add a pseudocount so none of the counts are zero. Another option is the \texttt{poscounts} option, which is encouraged for microbiome data. Instead of taking the average of the logged counts, it takes the \(n\)th root of the non-zero counts. This replaces step 2 in this example.
+
+\hypertarget{deseq-r-code}{%
+\subsection{DESeq R Code}\label{deseq-r-code}}
+
+\hypertarget{function-2}{%
+\subsubsection{Function}\label{function-2}}
+
+Here we provide two normalization functions implemented in R using DESeq methods. The first calculates the RLE normalization using the \texttt{poscounts} option for microbiome data. The second calculates the variance stabilizing transformation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{norm\_DESeq\_RLE\_poscounts \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)\{}
+  \KeywordTok{require}\NormalTok{(DESeq2, }\DataTypeTok{quietly =}\NormalTok{ T)}
+    \CommentTok{\# keep arbitrary design for normalization }
+    \CommentTok{\# Convert to DESeq object}
+\NormalTok{    ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq\_to\_deseq2}\NormalTok{(ps, }\OperatorTok{\textasciitilde{}}\DecValTok{1}\NormalTok{)}
+    \CommentTok{\# Calculate the size factors (scaling)}
+\NormalTok{    ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{estimateSizeFactors}\NormalTok{(ps\_dds, }\DataTypeTok{type =} \StringTok{"poscounts"}\NormalTok{)}
+    \CommentTok{\# Extract counts}
+\NormalTok{    counts \textless{}{-}}\StringTok{ }\NormalTok{DESeq2}\OperatorTok{::}\KeywordTok{counts}\NormalTok{(ps\_dds, }\DataTypeTok{normalized =}\NormalTok{ T)}
+    \CommentTok{\# Convert back to phyloseq}
+\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(counts, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
+\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
+\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\KeywordTok{sizeFactors}\NormalTok{(ps\_dds)}
+\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
+\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
+\NormalTok{    ps\_DESeq \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
+    \KeywordTok{return}\NormalTok{(ps\_DESeq)}
+\NormalTok{\}}
+
+
+
+\NormalTok{norm\_DESeq\_vs \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)\{}
+  \KeywordTok{require}\NormalTok{(DESeq2, }\DataTypeTok{quietly =}\NormalTok{ T)}
+\NormalTok{  ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq\_to\_deseq2}\NormalTok{(ps, }\OperatorTok{\textasciitilde{}}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{  ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{estimateSizeFactors}\NormalTok{(ps\_dds, }\DataTypeTok{type =} \StringTok{"poscounts"}\NormalTok{)}
+  \CommentTok{\# Variance transformation}
+\NormalTok{  ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{estimateDispersions}\NormalTok{(ps\_dds)}
+\NormalTok{  abund \textless{}{-}}\StringTok{ }\KeywordTok{getVarianceStabilizedData}\NormalTok{(ps\_dds)}
+  \CommentTok{\# don’t allow deseq to return negative counts}
+  \CommentTok{\# add the minimum count to all values}
+  \CommentTok{\# another option is to replace negative counts with 0}
+\NormalTok{  abund \textless{}{-}}\StringTok{ }\NormalTok{abund }\OperatorTok{+}\StringTok{ }\KeywordTok{abs}\NormalTok{(}\KeywordTok{min}\NormalTok{(abund)) }
+\NormalTok{  otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(abund, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
+\NormalTok{  sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
+\NormalTok{  tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
+\NormalTok{  phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
+\NormalTok{  ps\_DESeq \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
+  \KeywordTok{return}\NormalTok{(ps\_DESeq)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{deseq-implemented-on-global-patterns}{%
+\subsubsection{DESeq implemented on Global Patterns}\label{deseq-implemented-on-global-patterns}}
+
+Perform DESeq RLE normalization as well as DESeq variance stabilized transformation on Global Patterns:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gp\_deseq\_rle \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_RLE\_poscounts}\NormalTok{(gp\_raw)}
+\NormalTok{gp\_deseq\_vs \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_vs}\NormalTok{(gp\_raw)}
+\end{Highlighting}
+\end{Shaded}
+
+Examine principal coordinate plots between raw data and both DESeq normalized data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# First calculate distance matrices }
+\NormalTok{gp\_rle\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(gp\_deseq\_rle, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
+\NormalTok{gp\_vs\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(gp\_deseq\_vs, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
+
+\CommentTok{\# Plot ordinations}
+\KeywordTok{plot\_ordination}\NormalTok{(gp\_raw, gp\_raw\_dist, }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on Raw data"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\KeywordTok{plot\_ordination}\NormalTok{(gp\_deseq\_rle, gp\_rle\_dist, }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on RLE"}\NormalTok{) }\OperatorTok{+}
+\KeywordTok{plot\_ordination}\NormalTok{(gp\_deseq\_vs, gp\_vs\_dist, }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on VST"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/deseq-ordination-1.pdf}
+
+See how dissimilarity matrices differ from raw counts and each DESeq transformation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_deseq\_rle, gp\_raw, }
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"RLE"}\NormalTok{, }
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between RLE normalization and Raw counts "}\NormalTok{) }\OperatorTok{/}\StringTok{ }
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_deseq\_vs, gp\_raw, }
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"VST"}\NormalTok{, }
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between VST normalization and Raw counts "}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+\hypertarget{deseq-implemented-on-kostic-dataset}{%
+\subsubsection{DESeq implemented on Kostic dataset}\label{deseq-implemented-on-kostic-dataset}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k\_deseq\_rle \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_RLE\_poscounts}\NormalTok{(k\_raw)}
+\NormalTok{k\_deseq\_vs \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_vs}\NormalTok{(k\_raw)}
+
+\CommentTok{\# First calculate distance matrices }
+\NormalTok{k\_rle\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_deseq\_rle, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
+\NormalTok{k\_vs\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_deseq\_vs, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
+
+\CommentTok{\# Plot ordinations}
+\KeywordTok{plot\_ordination}\NormalTok{(k\_raw, k\_raw\_dist, }\DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on Raw data"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\KeywordTok{plot\_ordination}\NormalTok{(k\_deseq\_rle, k\_rle\_dist, }\DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on RLE"}\NormalTok{) }\OperatorTok{+}
+\KeywordTok{plot\_ordination}\NormalTok{(k\_deseq\_vs, k\_vs\_dist, }\DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on VST"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_deseq\_rle, k\_raw, }
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"RLE"}\NormalTok{, }
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between RLE normalization and Raw counts "}\NormalTok{) }\OperatorTok{/}\StringTok{ }
+\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_deseq\_vs, k\_raw, }
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"VST"}\NormalTok{, }
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between VST normalization and Raw counts "}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-23-2.pdf}
+
+\hypertarget{gmpr}{%
+\section{GMPR}\label{gmpr}}
+
+\hypertarget{about-gmpr}{%
+\subsection{About GMPR}\label{about-gmpr}}
+
+A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach \citep{chen2018}. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are many shared taxa between pairs. It then uses the pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxa. The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.
+
+\hypertarget{gmpr-walkthough}{%
+\subsection{GMPR Walkthough}\label{gmpr-walkthough}}
+
+Consider the following zero-inflated dataset. Notice that there are no taxa that are present in every sample.
+
+\label{tab:unnamed-chunk-24}Example dataset - Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+132
+
+103
+
+0
+
+Taxon 2
+
+0
+
+48
+
+74
+
+Taxon 3
+
+0
+
+2
+
+0
+
+Taxon 4
+
+23
+
+0
+
+35
+
+Taxon 5
+
+71
+
+80
+
+0
+
+Taxon 6
+
+0
+
+96
+
+82
+
+The first step in GMPR normalization is to calculate the pairwise median count ratio between samples. We first calculate the scaling factor for sample 1. The pairwise comparisons we need to make are between sample 1 and sample 2 as well as sample 1 and sample 3. For both pairs, we calculate the ratio of the counts of taxa that the pair shares. Between sample 1 and sample 2, the shared taxa are 1 and 5. Between sample 1 and sample 3, taxon 4 is the only one shared.
+
+\label{tab:unnamed-chunk-25}Example dataset - Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Count ratio between 1 and 2
+
+Count ratio between 1 and 3
+
+Taxon 1
+
+132
+
+103
+
+0
+
+132/103
+
+Taxon 2
+
+0
+
+48
+
+74
+
+Taxon 3
+
+0
+
+2
+
+0
+
+Taxon 4
+
+23
+
+0
+
+35
+
+23/35
+
+Taxon 5
+
+71
+
+80
+
+0
+
+71/80
+
+Taxon 6
+
+0
+
+96
+
+82
+
+Then we calculate the median of the ratios between each pair. Between sample 1 and 2, the two ratios between shared taxa are (132/103, 71/80). Then the median of those is 1.085. Between sample 1 and 3, there is only one shared taxa, so the median is 0.657.
+
+Finally to find the scaling factor for sample 1, we calculate the geometric mean of the two medians of the pairwise shared taxa ratios. In this case it is the geometric mean of 1.085 and 0.657, which equals 0.844. This is the scaling factor for sample 1.
+We now repeat this process to find the scaling factor for sample 1 and sample 3.
+
+\hypertarget{gmpr-r-code}{%
+\subsection{GMPR R Code}\label{gmpr-r-code}}
+
+\hypertarget{function-3}{%
+\subsubsection{Function}\label{function-3}}
+
+The following provides the R code to implement GMPR normalization in R. We can additionally specify the number of taxa that should be shared between paired samples as well as the minimum count labeled as nonzero. The default values are 4 and 2 respectively.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{norm\_GMPR \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{intersect\_no =} \DecValTok{4}\NormalTok{, }\DataTypeTok{min\_ct =} \DecValTok{2}\NormalTok{)\{}
+  \KeywordTok{require}\NormalTok{(GMPR, }\DataTypeTok{quietly =}\NormalTok{ T)}
+    \CommentTok{\# Convert data to correct format for GMPR function }
+\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{as}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(ps), }\StringTok{"matrix"}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{taxa\_are\_rows}\NormalTok{(ps))\{otu \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(otu)\}}
+\NormalTok{    otu\_df =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(otu)}
+\NormalTok{    otu.tab \textless{}{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(otu, }\DataTypeTok{ncol =} \KeywordTok{ncol}\NormalTok{(otu))}
+    \CommentTok{\# calculate scaling factor}
+    \CommentTok{\# OTU matrix must be a data frame where OTUs are arranged in columns and samples as rows}
+\NormalTok{    gmpr.size.factor \textless{}{-}}\StringTok{ }\NormalTok{GMPR}\OperatorTok{::}\KeywordTok{GMPR}\NormalTok{(}\DataTypeTok{OTUmatrix =}\NormalTok{ otu\_df,}
+                                   \DataTypeTok{intersect\_no =}\NormalTok{ intersect\_no,}
+                                   \DataTypeTok{min\_ct =}\NormalTok{ min\_ct)}
+    \CommentTok{\# normalize}
+\NormalTok{    otu.tab.norm \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(otu }\OperatorTok{/}\StringTok{ }\NormalTok{(gmpr.size.factor))}
+    \CommentTok{\# convert back to PS}
+\NormalTok{    otu\_ps \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(otu.tab.norm, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
+\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
+\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\NormalTok{gmpr.size.factor}
+\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
+\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
+\NormalTok{    ps\_GMPR \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu\_ps,sam,tax,phy)}
+    \KeywordTok{return}\NormalTok{(ps\_GMPR)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{gmpr-implementation-on-global-patterns}{%
+\subsubsection{GMPR implementation on Global Patterns}\label{gmpr-implementation-on-global-patterns}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Normalize}
+\NormalTok{gp\_gmpr \textless{}{-}}\StringTok{ }\KeywordTok{norm\_GMPR}\NormalTok{(gp\_raw)}
+
+\CommentTok{\# Compare to other methods like before}
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_raw,}
+                  \DataTypeTok{x\_lab =} \StringTok{"GMPR"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"Raw Counts"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"GMPR normalization vs Raw Counts"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-26-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_tss,}
+                  \DataTypeTok{x\_lab =} \StringTok{"TSS"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"GMPR"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"TSS vs GMPR"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-26-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_deseq\_rle,}
+                  \DataTypeTok{x\_lab =} \StringTok{"DESeq"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"GMPR"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"DESeq vs GMPR"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-26-3.pdf}
+
+\hypertarget{gmpr-implementation-on-global-patterns-1}{%
+\subsubsection{GMPR implementation on Global Patterns}\label{gmpr-implementation-on-global-patterns-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k\_gmpr \textless{}{-}}\StringTok{ }\KeywordTok{norm\_GMPR}\NormalTok{(k\_raw)}
+
+\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_gmpr, k\_raw,}
+                  \DataTypeTok{x\_lab =} \StringTok{"GMPR"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"Raw Counts"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"GMPR normalization vs Raw Counts"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : you have empty rows: their dissimilarities may be
+## meaningless in method "bray"
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
+## 0.281000656690941, : missing values in results
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 367 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+\hypertarget{tmm-edger}{%
+\section{TMM (edgeR)}\label{tmm-edger}}
+
+\hypertarget{about-tmm}{%
+\subsection{About TMM}\label{about-tmm}}
+
+TMM (Trimmed median of m-values) is another method borrowed from RNA-Seq analysis, and implemented in \texttt{edgeR} \citep{robinson2010}. This method uses, or calculates a reference sample, and compares all other samples to the reference sample. The size factor is the mean of the log-ratios after excluding the highest count taxa and taxa with the largest fold change. As taxa with zero counts are excluded, a pseudo count is needed. Additionally, there is the \texttt{TMMwsp} option which is encouraged as it is more robust to zero counts. Positive counts are reused to increase the number of features when we compared. The singleton positive counts are paired up in decreasing order of size and then a modified TMM method is applied to the re-ordered libraries.
+
+\hypertarget{edger-tmm-t-code}{%
+\subsection{EdgeR TMM T code}\label{edger-tmm-t-code}}
+
+\hypertarget{function-4}{%
+\subsubsection{Function}\label{function-4}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{norm\_TMM \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(physeq, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{, }\DataTypeTok{method=}\StringTok{"TMM"}\NormalTok{, }\DataTypeTok{pseudocount =} \DecValTok{1}\NormalTok{, ...)\{}
+    \KeywordTok{require}\NormalTok{(}\StringTok{"edgeR"}\NormalTok{, }\DataTypeTok{quietly =}\NormalTok{ T)}
+    \KeywordTok{require}\NormalTok{(}\StringTok{"phyloseq"}\NormalTok{, }\DataTypeTok{quietly =}\NormalTok{ T)}
+    \CommentTok{\# Enforce orientation.}
+    \ControlFlowTok{if}\NormalTok{( }\OperatorTok{!}\KeywordTok{taxa\_are\_rows}\NormalTok{(physeq) )\{ physeq \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(physeq) \}}
+\NormalTok{    x =}\StringTok{ }\KeywordTok{as}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(physeq), }\StringTok{"matrix"}\NormalTok{)}
+    \CommentTok{\# Add one to protect against overflow, log(0) issues.}
+\NormalTok{    x =}\StringTok{ }\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{pseudocount}
+    \CommentTok{\# Check \textasciigrave{}group\textasciigrave{} argument}
+    \ControlFlowTok{if}\NormalTok{( }\KeywordTok{identical}\NormalTok{(}\KeywordTok{all.equal}\NormalTok{(}\KeywordTok{length}\NormalTok{(group), }\DecValTok{1}\NormalTok{), }\OtherTok{TRUE}\NormalTok{) }\OperatorTok{\&}\StringTok{ }\KeywordTok{nsamples}\NormalTok{(physeq) }\OperatorTok{\textgreater{}}\StringTok{ }\DecValTok{1}\NormalTok{ )\{}
+        \CommentTok{\# Assume that group was a sample variable name (must be categorical)}
+\NormalTok{        group =}\StringTok{ }\KeywordTok{get\_variable}\NormalTok{(physeq, group)}
+\NormalTok{    \}}
+    \CommentTok{\# Define gene annotations (\textasciigrave{}genes\textasciigrave{}) as tax\_table}
+\NormalTok{    taxonomy =}\StringTok{ }\KeywordTok{tax\_table}\NormalTok{(physeq, }\DataTypeTok{errorIfNULL=}\OtherTok{FALSE}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{( }\OperatorTok{!}\KeywordTok{is.null}\NormalTok{(taxonomy) )\{}
+\NormalTok{        taxonomy =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{as}\NormalTok{(taxonomy, }\StringTok{"matrix"}\NormalTok{))}
+\NormalTok{    \} }
+    \CommentTok{\# Now turn into a DGEList}
+\NormalTok{    y =}\StringTok{ }\KeywordTok{DGEList}\NormalTok{(}\DataTypeTok{counts=}\NormalTok{x, }\DataTypeTok{group=}\NormalTok{group, }\DataTypeTok{genes=}\NormalTok{taxonomy, }\DataTypeTok{remove.zeros =} \OtherTok{TRUE}\NormalTok{)}
+    \CommentTok{\# Calculate the normalization factors}
+\NormalTok{    d =}\StringTok{ }\NormalTok{edgeR}\OperatorTok{::}\KeywordTok{calcNormFactors}\NormalTok{(y, }\DataTypeTok{method=}\NormalTok{method)}
+    \CommentTok{\# Check for division by zero inside \textasciigrave{}calcNormFactors\textasciigrave{}}
+    \ControlFlowTok{if}\NormalTok{( }\OperatorTok{!}\KeywordTok{all}\NormalTok{(}\KeywordTok{is.finite}\NormalTok{(d}\OperatorTok{$}\NormalTok{samples}\OperatorTok{$}\NormalTok{norm.factors)) )\{}
+        \KeywordTok{stop}\NormalTok{(}\StringTok{"Something wrong with edgeR::calcNormFactors on this data,}
+\StringTok{         non{-}finite $norm.factors, consider changing \textasciigrave{}method\textasciigrave{} argument"}\NormalTok{)}
+\NormalTok{    \}}
+\NormalTok{    scalingFactor \textless{}{-}}\StringTok{ }\NormalTok{d}\OperatorTok{$}\NormalTok{samples}\OperatorTok{$}\NormalTok{norm.factors }\OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{$}\NormalTok{samples}\OperatorTok{$}\NormalTok{lib.size }\OperatorTok{/}\StringTok{ }\FloatTok{1e6}
+\NormalTok{    dataNormalized \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(}\KeywordTok{t}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(physeq)) }\OperatorTok{/}\StringTok{ }\NormalTok{scalingFactor)}
+    \CommentTok{\#dataNormalized \textless{}{-} cpm(d)}
+\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(dataNormalized, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
+\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(physeq, }\StringTok{"sam\_data"}\NormalTok{)}
+\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\NormalTok{scalingFactor}
+\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(physeq, }\StringTok{"tax\_table"}\NormalTok{)}
+\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(physeq, }\StringTok{"phy\_tree"}\NormalTok{)}
+\NormalTok{    ps\_edgeR \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
+    
+    \KeywordTok{return}\NormalTok{(ps\_edgeR)}
+    
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{tmm-implementation-on-global-patterns}{%
+\subsubsection{TMM implementation on Global Patterns}\label{tmm-implementation-on-global-patterns}}
+
+Perform normalization:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gp\_tmm \textless{}{-}}\StringTok{ }\KeywordTok{norm\_TMM}\NormalTok{(gp\_raw)}
+\end{Highlighting}
+\end{Shaded}
+
+View PCoA plots
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_ordination}\NormalTok{(gp\_tmm, phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(gp\_tmm, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) , }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on Raw data"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-30-1.pdf}
+
+View how TMM normalization changes distance metrics differently than raw counts.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_tmm, gp\_raw,}
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"TMM"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between TMM normalization and Raw counts "}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-1.pdf}
+
+\hypertarget{tmm-implementation-on-kostic-data}{%
+\subsubsection{TMM implementation on Kostic data}\label{tmm-implementation-on-kostic-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k\_tmm \textless{}{-}}\StringTok{ }\KeywordTok{norm\_TMM}\NormalTok{(k\_raw)}
+\KeywordTok{plot\_ordination}\NormalTok{(}
+\NormalTok{    k\_tmm,}
+\NormalTok{    phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_tmm, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
+    \DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{,}
+    \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
+\NormalTok{) }\OperatorTok{/}
+\StringTok{    }\KeywordTok{plot\_ordination}\NormalTok{(}
+\NormalTok{        k\_tmm,}
+\NormalTok{        phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_tmm, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
+        \DataTypeTok{color =} \StringTok{"depth"}\NormalTok{,}
+        \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/edgeR-kostic-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_tmm, k\_raw,}
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"TMM"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between TMM normalization and Raw counts "}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/edgeR-kostic-2.pdf}
+
 \hypertarget{subsampling-methods}{%
 \chapter{Subsampling Methods}\label{subsampling-methods}}
 
@@ -675,7 +1436,7 @@ This is a very commonly used method, but it has also been criticized \citep{mcmu
 
 Consider the following example dataset.
 
-\label{tab:unnamed-chunk-15}Example dataset - Raw Counts
+\label{tab:unnamed-chunk-32}Example dataset - Raw Counts
 
 Taxa
 
@@ -739,7 +1500,7 @@ We then randomly sample taxa from each sample/column in the proportions correspo
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-17}Rarefied counts}
+\caption{\label{tab:unnamed-chunk-34}Rarefied counts}
 \centering
 \begin{tabular}[t]{l|r|r}
 \hline
@@ -902,7 +1663,7 @@ Now examine how the distance matrices change before/after normalization. We see 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-19-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-36-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -912,771 +1673,13 @@ Now examine how the distance matrices change before/after normalization. We see 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-19-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-36-2.pdf}
 
-\hypertarget{library-size-and-composition-scaling-methods}{%
-\chapter{Library Size and Composition Scaling Methods}\label{library-size-and-composition-scaling-methods}}
-
-\hypertarget{deseq}{%
-\section{DESeq}\label{deseq}}
-
-\hypertarget{about-deseq}{%
-\subsection{About DESeq}\label{about-deseq}}
-
-The DESeq2 package includes a normalization method for adjusting for differing library sizes across samples \citep{anders2010}. This method also can account for differences in library composition. A scaling factor to normalize each sample takes into account both library size and library composition. This method has also been called MED, RLE, or DESeq in the literature.
-
-DESeq2 first takes the natural logarithm of every entry in the count matrix. Due to this, all entries with zero will be set to negative infinity. Next, the row average is calculated (geometric average), so we have a vector of average counts for each taxon. Taking the log first should avoid undue influence by extreme outliers. All taxa with an average of infinity are removed. This step will remove all taxa with zero read count in one or more samples. This can be a problem in microbiome data. Next, we subtract the average log value from the log(counts), this gives a log ratio. This is equivalent to the ratio of the reads in each sample to the average across all samples. Next, we calculate the median of the log-ratios for each sample. These medians are converted to scaling factors for each sample by exponentiation. An extension of this method, denoted `poscounts', has been suggested, which instead of taking the geometric mean of the logged counts for each taxon, we take the n-th root of the product of the non-zero counts.
-
-This method assumes that the taxon of median absolute abundance is not differentially abundant, which is more likely true for the RNA-Seq it was developed for, but may not be true for microbiome studies, especially when there are more study groups, or we are analyzing higher taxonomic levels.
-
-An additional option can be used to perform a variance stabilizing transformation on the count matrix before normalizing with the above size factors. This method calculates a dispersion-mean relationship and then transforms the data. The result ideally is an abundance matrix that is approximately homoskedastic or constant variance across the range of mean values. The package also includes an option for a `rlog' transform, which they recommend over the variance stabilizing method in the case when there is a large difference in library sizes.
-
-If differential abundance is of interest to calculate, DESeq uses a negative binomial distribution to model differential abundances. It is possible to provide the size factors calculated by another method to DESeq to perform differential analysis.
-
-\hypertarget{deseq-walkthrough}{%
-\subsubsection{DESeq walkthrough}\label{deseq-walkthrough}}
-
-Consider again this example dataset.
-
-\label{tab:unnamed-chunk-20}Example dataset - Raw Counts
-
-Taxa
-
-Sample 1
-
-Sample2
-
-Sample 3
-
-Taxon 1
-
-132
-
-103
-
-11
-
-Taxon 2
-
-7
-
-48
-
-3
-
-Taxon 3
-
-0
-
-2
-
-1
-
-Taxon 4
-
-23
-
-15
-
-2
-
-Taxon 5
-
-71
-
-80
-
-5
-
-The first step in DESeq normalization is to take the natural log of each entry in the count matrix.
-
-\label{tab:unnamed-chunk-21}Step 1: Logged Raw Counts
-
-Taxa
-
-Sample 1
-
-Sample2
-
-Sample 3
-
-Taxon 1
-
-4.88
-
-4.63
-
-2.40
-
-Taxon 2
-
-1.95
-
-3.87
-
-1.10
-
-Taxon 3
-
--Inf
-
-0.69
-
-0.00
-
-Taxon 4
-
-3.14
-
-2.71
-
-0.69
-
-Taxon 5
-
-4.26
-
-4.38
-
-1.61
-
-Notice the one entry with zero counts is marked as negative infinity.
-
-Next, the average of the logged values is taken across the samples. This results in an average log value for each taxa. This averaged log value is helpful for normalizing because it is not overwhelmed by outliers.
-
-\begin{table}
-
-\caption{\label{tab:unnamed-chunk-22}Step 2: Average Logged Counts}
-\centering
-\begin{tabular}[t]{l|r}
-\hline
-Taxa & Average Log Counts\\
-\hline
-Taxon 1 & 3.971809\\
-\hline
-Taxon 2 & 2.305241\\
-\hline
-Taxon 3 & -Inf\\
-\hline
-Taxon 4 & 2.178897\\
-\hline
-Taxon 5 & 3.418048\\
-\hline
-\end{tabular}
-\end{table}
-
-The row for the taxa that contained a zero on one of the samples is negative infinity. This taxon is now excluded from the following steps. This step results in removing any taxa that have zero counts from being considered to contribute to calculating the scaling factors.
-
-The next step is to subtract the average log values (step 2) from the log of the raw counts (step 1), only including rows that were not filtered. This step shows which samples have counts in a sample higher or lower than the average.
-
-\begin{table}
-
-\caption{\label{tab:unnamed-chunk-23}Step 3: Log Ratio of reads in each sample to average across all samples}
-\centering
-\begin{tabular}[t]{l|l|l|l}
-\hline
-Taxa & Sample 1 & Sample 2 & Sample 3\\
-\hline
-Taxon 1 & 4.88 - 3.97 = 0.91 & 4.63 - 3.97 = 0.66 & 2.40 - 3.97 = -1.57\\
-\hline
-Taxon 2 & 1.95 - 2.31 = -0.36 & 3.97 - 2.31 = 1.66 & 1.10 - 2.31 = -1.31\\
-\hline
-Taxon 4 & 3.14 - 2.18 = 0.96 & 2.71 - 2.18 = 0.53 & 0.69 - 2.18 = -1.49\\
-\hline
-Taxon 5 & 4.26 - 3.42 = 0.84 & 4.38 - 3.42 = 0.96 & 1.61- 3.42 = -1.81\\
-\hline
-\end{tabular}
-\end{table}
-
-Next, to calculate the scaling factors for each sample, we take the median of the log ratios calculated in the above step. Like using logs, calculating medians avoids the influence of outlier taxa that put undue influence on the scaling factor.
-
-\begin{table}
-
-\caption{\label{tab:unnamed-chunk-24}Step 4: Calculating medians per sample}
-\centering
-\begin{tabular}[t]{l|r|r|r}
-\hline
-Taxa & Sample 1 & Sample 2 & Sample 3\\
-\hline
-Taxon 1 & 0.91 & 0.66 & -1.57\\
-\hline
-Taxon 2 & -0.36 & 1.66 & -1.31\\
-\hline
-Taxon 4 & 0.96 & 0.53 & -1.49\\
-\hline
-Taxon 5 & 0.84 & 0.96 & -1.81\\
-\hline
-Median & 0.88 & 0.81 & -1.53\\
-\hline
-Exponentiated Median & 2.40 & 2.25 & 0.22\\
-\hline
-\end{tabular}
-\end{table}
-
-Finally, we normalize the data, by exponentiating the median log ratios for each sample, which are the final scaling factors. We then divide all the raw counts in a sample by the sample's scaling factor.
-
-\label{tab:unnamed-chunk-25}Step 5: DESeq Normalized Counts
-
-Taxa
-
-Sample 1
-
-Sample2
-
-Sample 3
-
-Taxon 1
-
-55.03
-
-45.82
-
-50.80
-
-Taxon 2
-
-2.92
-
-21.35
-
-13.85
-
-Taxon 3
-
-0.00
-
-0.89
-
-4.62
-
-Taxon 4
-
-9.59
-
-6.67
-
-9.24
-
-Taxon 5
-
-29.60
-
-35.59
-
-23.09
-
-Since Taxon 3 had a zero count in sample 1, it was excluded from the calculation of scale factors. The above example dataset may not be characteristic of microbiome datasets. Microbiome datasets are zero-inflated, meaning that there are numerous zero counts in the raw count matrix. Even up to 80-90\% of the counts in a microbiome datset can be zero. Because of this, if the zero-inflation in the datseta is not accounted for, very few, or even perhaps none of the taxa will contribute to calculating the scaling factor. One option so that all of the taxa are included in the calculation is to add a pseudocount so none of the counts are zero. Another option is the \texttt{poscounts} option, which is encouraged for microbiome data. Instead of taking the average of the logged counts, it takes the \(n\)th root of the non-zero counts. This replaces step 2 in this example.
-
-\hypertarget{deseq-r-code}{%
-\subsection{DESeq R Code}\label{deseq-r-code}}
-
-\hypertarget{function-2}{%
-\subsubsection{Function}\label{function-2}}
-
-Here we provide two normalization functions implemented in R using DESeq methods. The first calculates the RLE normalization using the \texttt{poscounts} option for microbiome data. The second calculates the variance stabilizing transformation.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{norm\_DESeq\_RLE\_poscounts \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)\{}
-  \KeywordTok{require}\NormalTok{(DESeq2, }\DataTypeTok{quietly =}\NormalTok{ T)}
-    \CommentTok{\# keep arbitrary design for normalization }
-    \CommentTok{\# Convert to DESeq object}
-\NormalTok{    ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq\_to\_deseq2}\NormalTok{(ps, }\OperatorTok{\textasciitilde{}}\DecValTok{1}\NormalTok{)}
-    \CommentTok{\# Calculate the size factors (scaling)}
-\NormalTok{    ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{estimateSizeFactors}\NormalTok{(ps\_dds, }\DataTypeTok{type =} \StringTok{"poscounts"}\NormalTok{)}
-    \CommentTok{\# Extract counts}
-\NormalTok{    counts \textless{}{-}}\StringTok{ }\NormalTok{DESeq2}\OperatorTok{::}\KeywordTok{counts}\NormalTok{(ps\_dds, }\DataTypeTok{normalized =}\NormalTok{ T)}
-    \CommentTok{\# Convert back to phyloseq}
-\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(counts, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
-\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
-\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\KeywordTok{sizeFactors}\NormalTok{(ps\_dds)}
-\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
-\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
-\NormalTok{    ps\_DESeq \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
-    \KeywordTok{return}\NormalTok{(ps\_DESeq)}
-\NormalTok{\}}
-
-
-
-\NormalTok{norm\_DESeq\_vs \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)\{}
-  \KeywordTok{require}\NormalTok{(DESeq2, }\DataTypeTok{quietly =}\NormalTok{ T)}
-\NormalTok{  ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq\_to\_deseq2}\NormalTok{(ps, }\OperatorTok{\textasciitilde{}}\StringTok{ }\DecValTok{1}\NormalTok{)}
-\NormalTok{  ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{estimateSizeFactors}\NormalTok{(ps\_dds, }\DataTypeTok{type =} \StringTok{"poscounts"}\NormalTok{)}
-  \CommentTok{\# Variance transformation}
-\NormalTok{  ps\_dds \textless{}{-}}\StringTok{ }\KeywordTok{estimateDispersions}\NormalTok{(ps\_dds)}
-\NormalTok{  abund \textless{}{-}}\StringTok{ }\KeywordTok{getVarianceStabilizedData}\NormalTok{(ps\_dds)}
-  \CommentTok{\# don’t allow deseq to return negative counts}
-  \CommentTok{\# add the minimum count to all values}
-  \CommentTok{\# another option is to replace negative counts with 0}
-\NormalTok{  abund \textless{}{-}}\StringTok{ }\NormalTok{abund }\OperatorTok{+}\StringTok{ }\KeywordTok{abs}\NormalTok{(}\KeywordTok{min}\NormalTok{(abund)) }
-\NormalTok{  otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(abund, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
-\NormalTok{  sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
-\NormalTok{  tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
-\NormalTok{  phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
-\NormalTok{  ps\_DESeq \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
-  \KeywordTok{return}\NormalTok{(ps\_DESeq)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{deseq-implemented-on-global-patterns}{%
-\subsubsection{DESeq implemented on Global Patterns}\label{deseq-implemented-on-global-patterns}}
-
-Perform DESeq RLE normalization as well as DESeq variance stabilized transformation on Global Patterns:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{gp\_deseq\_rle \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_RLE\_poscounts}\NormalTok{(gp\_raw)}
-\NormalTok{gp\_deseq\_vs \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_vs}\NormalTok{(gp\_raw)}
-\end{Highlighting}
-\end{Shaded}
-
-Examine principal coordinate plots between raw data and both DESeq normalized data.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# First calculate distance matrices }
-\NormalTok{gp\_rle\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(gp\_deseq\_rle, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
-\NormalTok{gp\_vs\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(gp\_deseq\_vs, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
-
-\CommentTok{\# Plot ordinations}
-\KeywordTok{plot\_ordination}\NormalTok{(gp\_raw, gp\_raw\_dist, }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on Raw data"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\KeywordTok{plot\_ordination}\NormalTok{(gp\_deseq\_rle, gp\_rle\_dist, }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on RLE"}\NormalTok{) }\OperatorTok{+}
-\KeywordTok{plot\_ordination}\NormalTok{(gp\_deseq\_vs, gp\_vs\_dist, }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on VST"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/deseq-ordination-1.pdf}
-
-See how dissimilarity matrices differ from raw counts and each DESeq transformation.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_deseq\_rle, gp\_raw, }
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"RLE"}\NormalTok{, }
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between RLE normalization and Raw counts "}\NormalTok{) }\OperatorTok{/}\StringTok{ }
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_deseq\_vs, gp\_raw, }
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"VST"}\NormalTok{, }
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between VST normalization and Raw counts "}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-27-1.pdf}
-
-\hypertarget{deseq-implemented-on-kostic-dataset}{%
-\subsubsection{DESeq implemented on Kostic dataset}\label{deseq-implemented-on-kostic-dataset}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{k\_deseq\_rle \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_RLE\_poscounts}\NormalTok{(k\_raw)}
-\NormalTok{k\_deseq\_vs \textless{}{-}}\StringTok{ }\KeywordTok{norm\_DESeq\_vs}\NormalTok{(k\_raw)}
-
-\CommentTok{\# First calculate distance matrices }
-\NormalTok{k\_rle\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_deseq\_rle, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
-\NormalTok{k\_vs\_dist \textless{}{-}}\StringTok{ }\NormalTok{phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_deseq\_vs, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) }
-
-\CommentTok{\# Plot ordinations}
-\KeywordTok{plot\_ordination}\NormalTok{(k\_raw, k\_raw\_dist, }\DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on Raw data"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\KeywordTok{plot\_ordination}\NormalTok{(k\_deseq\_rle, k\_rle\_dist, }\DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on RLE"}\NormalTok{) }\OperatorTok{+}
-\KeywordTok{plot\_ordination}\NormalTok{(k\_deseq\_vs, k\_vs\_dist, }\DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on VST"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-28-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_deseq\_rle, k\_raw, }
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"RLE"}\NormalTok{, }
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between RLE normalization and Raw counts "}\NormalTok{) }\OperatorTok{/}\StringTok{ }
-\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_deseq\_vs, k\_raw, }
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"VST"}\NormalTok{, }
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between VST normalization and Raw counts "}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{plot\_layout}\NormalTok{(}\DataTypeTok{guides =} \StringTok{\textquotesingle{}collect\textquotesingle{}}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-28-2.pdf}
-
-\hypertarget{gmpr}{%
-\section{GMPR}\label{gmpr}}
-
-\hypertarget{about-gmpr}{%
-\subsection{About GMPR}\label{about-gmpr}}
-
-A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach \citep{chen2018}. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are many shared taxa between pairs. It then uses the pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxa. The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.
-
-\hypertarget{gmpr-walkthough}{%
-\subsection{GMPR Walkthough}\label{gmpr-walkthough}}
-
-Consider the following zero-inflated dataset. Notice that there are no taxa that are present in every sample.
-
-\label{tab:unnamed-chunk-29}Example dataset - Raw Counts
-
-Taxa
-
-Sample 1
-
-Sample2
-
-Sample 3
-
-Taxon 1
-
-132
-
-103
-
-0
-
-Taxon 2
-
-0
-
-48
-
-74
-
-Taxon 3
-
-0
-
-2
-
-0
-
-Taxon 4
-
-23
-
-0
-
-35
-
-Taxon 5
-
-71
-
-80
-
-0
-
-Taxon 6
-
-0
-
-96
-
-82
-
-The first step in GMPR normalization is to calculate the pairwise median count ratio between samples. We first calculate the scaling factor for sample 1. The pairwise comparisons we need to make are between sample 1 and sample 2 as well as sample 1 and sample 3. For both pairs, we calculate the ratio of the counts of taxa that the pair shares. Between sample 1 and sample 2, the shared taxa are 1 and 5. Between sample 1 and sample 3, taxon 4 is the only one shared.
-
-\label{tab:unnamed-chunk-30}Example dataset - Raw Counts
-
-Taxa
-
-Sample 1
-
-Sample2
-
-Sample 3
-
-Count ratio between 1 and 2
-
-Count ratio between 1 and 3
-
-Taxon 1
-
-132
-
-103
-
-0
-
-132/103
-
-Taxon 2
-
-0
-
-48
-
-74
-
-Taxon 3
-
-0
-
-2
-
-0
-
-Taxon 4
-
-23
-
-0
-
-35
-
-23/35
-
-Taxon 5
-
-71
-
-80
-
-0
-
-71/80
-
-Taxon 6
-
-0
-
-96
-
-82
-
-Then we calculate the median of the ratios between each pair. Between sample 1 and 2, the two ratios between shared taxa are (132/103, 71/80). Then the median of those is 1.085. Between sample 1 and 3, there is only one shared taxa, so the median is 0.657.
-
-Finally to find the scaling factor for sample 1, we calculate the geometric mean of the two medians of the pairwise shared taxa ratios. In this case it is the geometric mean of 1.085 and 0.657, which equals 0.844. This is the scaling factor for sample 1.
-We now repeat this process to find the scaling factor for sample 1 and sample 3.
-
-\hypertarget{gmpr-r-code}{%
-\subsection{GMPR R Code}\label{gmpr-r-code}}
-
-\hypertarget{function-3}{%
-\subsubsection{Function}\label{function-3}}
-
-The following provides the R code to implement GMPR normalization in R. We can additionally specify the number of taxa that should be shared between paired samples as well as the minimum count labeled as nonzero. The default values are 4 and 2 respectively.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{norm\_GMPR \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{intersect\_no =} \DecValTok{4}\NormalTok{, }\DataTypeTok{min\_ct =} \DecValTok{2}\NormalTok{)\{}
-  \KeywordTok{require}\NormalTok{(GMPR, }\DataTypeTok{quietly =}\NormalTok{ T)}
-    \CommentTok{\# Convert data to correct format for GMPR function }
-\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{as}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(ps), }\StringTok{"matrix"}\NormalTok{)}
-    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{taxa\_are\_rows}\NormalTok{(ps))\{otu \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(otu)\}}
-\NormalTok{    otu\_df =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(otu)}
-\NormalTok{    otu.tab \textless{}{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(otu, }\DataTypeTok{ncol =} \KeywordTok{ncol}\NormalTok{(otu))}
-    \CommentTok{\# calculate scaling factor}
-    \CommentTok{\# OTU matrix must be a data frame where OTUs are arranged in columns and samples as rows}
-\NormalTok{    gmpr.size.factor \textless{}{-}}\StringTok{ }\NormalTok{GMPR}\OperatorTok{::}\KeywordTok{GMPR}\NormalTok{(}\DataTypeTok{OTUmatrix =}\NormalTok{ otu\_df,}
-                                   \DataTypeTok{intersect\_no =}\NormalTok{ intersect\_no,}
-                                   \DataTypeTok{min\_ct =}\NormalTok{ min\_ct)}
-    \CommentTok{\# normalize}
-\NormalTok{    otu.tab.norm \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(otu }\OperatorTok{/}\StringTok{ }\NormalTok{(gmpr.size.factor))}
-    \CommentTok{\# convert back to PS}
-\NormalTok{    otu\_ps \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(otu.tab.norm, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
-\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
-\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\NormalTok{gmpr.size.factor}
-\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
-\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
-\NormalTok{    ps\_GMPR \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu\_ps,sam,tax,phy)}
-    \KeywordTok{return}\NormalTok{(ps\_GMPR)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{gmpr-implementation-on-global-patterns}{%
-\subsubsection{GMPR implementation on Global Patterns}\label{gmpr-implementation-on-global-patterns}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Normalize}
-\NormalTok{gp\_gmpr \textless{}{-}}\StringTok{ }\KeywordTok{norm\_GMPR}\NormalTok{(gp\_raw)}
-
-\CommentTok{\# Compare to other methods like before}
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_raw,}
-                  \DataTypeTok{x\_lab =} \StringTok{"GMPR"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"Raw Counts"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"GMPR normalization vs Raw Counts"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_tss,}
-                  \DataTypeTok{x\_lab =} \StringTok{"TSS"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"GMPR"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"TSS vs GMPR"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-2.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_deseq\_rle,}
-                  \DataTypeTok{x\_lab =} \StringTok{"DESeq"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"GMPR"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"DESeq vs GMPR"}\NormalTok{ )}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-3.pdf}
-
-\hypertarget{gmpr-implementation-on-global-patterns-1}{%
-\subsubsection{GMPR implementation on Global Patterns}\label{gmpr-implementation-on-global-patterns-1}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{k\_gmpr \textless{}{-}}\StringTok{ }\KeywordTok{norm\_GMPR}\NormalTok{(k\_raw)}
-
-\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_gmpr, k\_raw,}
-                  \DataTypeTok{x\_lab =} \StringTok{"GMPR"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"Raw Counts"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"GMPR normalization vs Raw Counts"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
-## 0.281000656690941, : you have empty rows: their dissimilarities may be
-## meaningless in method "bray"
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
-## 0.281000656690941, : missing values in results
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Removed 367 rows containing missing values (geom_point).
-\end{verbatim}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-32-1.pdf}
-
-\hypertarget{tmm-edger}{%
-\section{TMM (edgeR)}\label{tmm-edger}}
-
-\hypertarget{about-tmm}{%
-\subsection{About TMM}\label{about-tmm}}
-
-TMM (Trimmed median of m-values) is another method borrowed from RNA-Seq analysis, and implemented in \texttt{edgeR} \citep{robinson2010}. This method uses, or calculates a reference sample, and compares all other samples to the reference sample. The size factor is the mean of the log-ratios after excluding the highest count taxa and taxa with the largest fold change. As taxa with zero counts are excluded, a pseudo count is needed. Additionally, there is the \texttt{TMMwsp} option which is encouraged as it is more robust to zero counts. Positive counts are reused to increase the number of features when we compared. The singleton positive counts are paired up in decreasing order of size and then a modified TMM method is applied to the re-ordered libraries.
-
-\hypertarget{edger-tmm-t-code}{%
-\subsection{EdgeR TMM T code}\label{edger-tmm-t-code}}
-
-\hypertarget{function-4}{%
-\subsubsection{Function}\label{function-4}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{norm\_TMM \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(physeq, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{, }\DataTypeTok{method=}\StringTok{"TMM"}\NormalTok{, }\DataTypeTok{pseudocount =} \DecValTok{1}\NormalTok{, ...)\{}
-    \KeywordTok{require}\NormalTok{(}\StringTok{"edgeR"}\NormalTok{, }\DataTypeTok{quietly =}\NormalTok{ T)}
-    \KeywordTok{require}\NormalTok{(}\StringTok{"phyloseq"}\NormalTok{, }\DataTypeTok{quietly =}\NormalTok{ T)}
-    \CommentTok{\# Enforce orientation.}
-    \ControlFlowTok{if}\NormalTok{( }\OperatorTok{!}\KeywordTok{taxa\_are\_rows}\NormalTok{(physeq) )\{ physeq \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(physeq) \}}
-\NormalTok{    x =}\StringTok{ }\KeywordTok{as}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(physeq), }\StringTok{"matrix"}\NormalTok{)}
-    \CommentTok{\# Add one to protect against overflow, log(0) issues.}
-\NormalTok{    x =}\StringTok{ }\NormalTok{x }\OperatorTok{+}\StringTok{ }\NormalTok{pseudocount}
-    \CommentTok{\# Check \textasciigrave{}group\textasciigrave{} argument}
-    \ControlFlowTok{if}\NormalTok{( }\KeywordTok{identical}\NormalTok{(}\KeywordTok{all.equal}\NormalTok{(}\KeywordTok{length}\NormalTok{(group), }\DecValTok{1}\NormalTok{), }\OtherTok{TRUE}\NormalTok{) }\OperatorTok{\&}\StringTok{ }\KeywordTok{nsamples}\NormalTok{(physeq) }\OperatorTok{\textgreater{}}\StringTok{ }\DecValTok{1}\NormalTok{ )\{}
-        \CommentTok{\# Assume that group was a sample variable name (must be categorical)}
-\NormalTok{        group =}\StringTok{ }\KeywordTok{get\_variable}\NormalTok{(physeq, group)}
-\NormalTok{    \}}
-    \CommentTok{\# Define gene annotations (\textasciigrave{}genes\textasciigrave{}) as tax\_table}
-\NormalTok{    taxonomy =}\StringTok{ }\KeywordTok{tax\_table}\NormalTok{(physeq, }\DataTypeTok{errorIfNULL=}\OtherTok{FALSE}\NormalTok{)}
-    \ControlFlowTok{if}\NormalTok{( }\OperatorTok{!}\KeywordTok{is.null}\NormalTok{(taxonomy) )\{}
-\NormalTok{        taxonomy =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{as}\NormalTok{(taxonomy, }\StringTok{"matrix"}\NormalTok{))}
-\NormalTok{    \} }
-    \CommentTok{\# Now turn into a DGEList}
-\NormalTok{    y =}\StringTok{ }\KeywordTok{DGEList}\NormalTok{(}\DataTypeTok{counts=}\NormalTok{x, }\DataTypeTok{group=}\NormalTok{group, }\DataTypeTok{genes=}\NormalTok{taxonomy, }\DataTypeTok{remove.zeros =} \OtherTok{TRUE}\NormalTok{)}
-    \CommentTok{\# Calculate the normalization factors}
-\NormalTok{    d =}\StringTok{ }\NormalTok{edgeR}\OperatorTok{::}\KeywordTok{calcNormFactors}\NormalTok{(y, }\DataTypeTok{method=}\NormalTok{method)}
-    \CommentTok{\# Check for division by zero inside \textasciigrave{}calcNormFactors\textasciigrave{}}
-    \ControlFlowTok{if}\NormalTok{( }\OperatorTok{!}\KeywordTok{all}\NormalTok{(}\KeywordTok{is.finite}\NormalTok{(d}\OperatorTok{$}\NormalTok{samples}\OperatorTok{$}\NormalTok{norm.factors)) )\{}
-        \KeywordTok{stop}\NormalTok{(}\StringTok{"Something wrong with edgeR::calcNormFactors on this data,}
-\StringTok{         non{-}finite $norm.factors, consider changing \textasciigrave{}method\textasciigrave{} argument"}\NormalTok{)}
-\NormalTok{    \}}
-\NormalTok{    scalingFactor \textless{}{-}}\StringTok{ }\NormalTok{d}\OperatorTok{$}\NormalTok{samples}\OperatorTok{$}\NormalTok{norm.factors }\OperatorTok{*}\StringTok{ }\NormalTok{d}\OperatorTok{$}\NormalTok{samples}\OperatorTok{$}\NormalTok{lib.size }\OperatorTok{/}\StringTok{ }\FloatTok{1e6}
-\NormalTok{    dataNormalized \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(}\KeywordTok{t}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(physeq)) }\OperatorTok{/}\StringTok{ }\NormalTok{scalingFactor)}
-    \CommentTok{\#dataNormalized \textless{}{-} cpm(d)}
-\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(dataNormalized, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
-\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(physeq, }\StringTok{"sam\_data"}\NormalTok{)}
-\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\NormalTok{scalingFactor}
-\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(physeq, }\StringTok{"tax\_table"}\NormalTok{)}
-\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(physeq, }\StringTok{"phy\_tree"}\NormalTok{)}
-\NormalTok{    ps\_edgeR \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
-    
-    \KeywordTok{return}\NormalTok{(ps\_edgeR)}
-    
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{tmm-implementation-on-global-patterns}{%
-\subsubsection{TMM implementation on Global Patterns}\label{tmm-implementation-on-global-patterns}}
-
-Perform normalization:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{gp\_tmm \textless{}{-}}\StringTok{ }\KeywordTok{norm\_TMM}\NormalTok{(gp\_raw)}
-\end{Highlighting}
-\end{Shaded}
-
-View PCoA plots
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_ordination}\NormalTok{(gp\_tmm, phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(gp\_tmm, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) , }\DataTypeTok{color =} \StringTok{"SampleType"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"PCoA on Raw data"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-35-1.pdf}
-
-View how TMM normalization changes distance metrics differently than raw counts.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_tmm, gp\_raw,}
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"TMM"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between TMM normalization and Raw counts "}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-36-1.pdf}
-
-\hypertarget{tmm-implementation-on-kostic-data}{%
-\subsubsection{TMM implementation on Kostic data}\label{tmm-implementation-on-kostic-data}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{k\_tmm \textless{}{-}}\StringTok{ }\KeywordTok{norm\_TMM}\NormalTok{(k\_raw)}
-\KeywordTok{plot\_ordination}\NormalTok{(}
-\NormalTok{    k\_tmm,}
-\NormalTok{    phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_tmm, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
-    \DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{,}
-    \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
-\NormalTok{) }\OperatorTok{/}
-\StringTok{    }\KeywordTok{plot\_ordination}\NormalTok{(}
-\NormalTok{        k\_tmm,}
-\NormalTok{        phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_tmm, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
-        \DataTypeTok{color =} \StringTok{"depth"}\NormalTok{,}
-        \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
-\NormalTok{    )}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/edgeR-kostic-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_tmm, k\_raw,}
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"TMM"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between TMM normalization and Raw counts "}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/edgeR-kostic-2.pdf}
+\hypertarget{other-methods}{%
+\chapter{Other Methods}\label{other-methods}}
 
 \hypertarget{wrench}{%
-\chapter{Wrench}\label{wrench}}
+\section{Wrench}\label{wrench}}
 
 Wrench is a recent normalization method developed for microbiome data \citep{kumar2018} that uses an empirical Bayes Normalization approach. This method includes compositional bias correction for sparse datasets. This method uses a hurdle log-normal distribution to estimate the normalization factors (the location estimate for the group). For this method, we assume abundances are drawn from a hurdle Log-Gaussian distribution, and the scaling factor used is essentially the location estimate for the group.
 
@@ -1905,86 +1908,6 @@ The idea is to estimate biological and sampling variation to calculate expected 
 \begin{verbatim}
 ## computing center with all features
 \end{verbatim}
-
-\hypertarget{comparisions}{%
-\chapter{Comparisions}\label{comparisions}}
-
-See all distance comparisions for Global patterns data
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(GGally)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Registered S3 method overwritten by 'GGally':
-##   method from   
-##   +.gg   ggplot2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{raw =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_raw, }\StringTok{"bray"}\NormalTok{)), }
-           \DataTypeTok{tss =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_tss, }\StringTok{"bray"}\NormalTok{)), }
-           \DataTypeTok{css =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_css, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{deseq\_rle =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_deseq\_rle, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{deseq\_vs =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_deseq\_vs, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{gmpr =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_gmpr, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{rare =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_rare, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{tmm =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(gp\_tmm, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{diff =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{dist}\NormalTok{(}\KeywordTok{get\_variable}\NormalTok{(gp\_raw, }\StringTok{"depth"}\NormalTok{)))) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{    }\KeywordTok{ggpairs}\NormalTok{(}\DataTypeTok{columns =} \DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{, }\DataTypeTok{upper =} \StringTok{"blank"}\NormalTok{,}
-            \DataTypeTok{diag =} \StringTok{"blank"}\NormalTok{,ggplot2}\OperatorTok{::}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour=}\NormalTok{diff))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/comparisons-gp-1.pdf}
-
-See all distance comparisons for Kostic data
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{raw =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_raw, }\StringTok{"bray"}\NormalTok{)), }
-           \DataTypeTok{tss =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_tss, }\StringTok{"bray"}\NormalTok{)), }
-           \DataTypeTok{css =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_css, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{deseq\_rle =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_deseq\_rle, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{deseq\_vs =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_deseq\_vs, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{gmpr =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_gmpr, }\StringTok{"bray"}\NormalTok{, }\DataTypeTok{na.rm =}\NormalTok{ T)),}
-           \DataTypeTok{rare =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_rare, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{tmm =} \KeywordTok{as.numeric}\NormalTok{(phyloseq}\OperatorTok{::}\KeywordTok{distance}\NormalTok{(k\_tmm, }\StringTok{"bray"}\NormalTok{)),}
-           \DataTypeTok{diff =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{dist}\NormalTok{(}\KeywordTok{get\_variable}\NormalTok{(k\_raw, }\StringTok{"depth"}\NormalTok{)))) }\OperatorTok{\%\textgreater{}\%}\StringTok{ }
-\StringTok{    }\KeywordTok{ggpairs}\NormalTok{(}\DataTypeTok{columns =} \DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{, }\DataTypeTok{upper =} \StringTok{"blank"}\NormalTok{,}
-            \DataTypeTok{diag =} \StringTok{"blank"}\NormalTok{,ggplot2}\OperatorTok{::}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour=}\NormalTok{diff))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
-## 0.281000656690941, : you have empty rows: their dissimilarities may be
-## meaningless in method "bray"
-\end{verbatim}
-
-\begin{verbatim}
-## Warning in vegdist(structure(c(14.7364903183976, 5.44797838541712,
-## 0.281000656690941, : missing values in results
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Removed 367 rows containing missing values (geom_point).
-
-## Warning: Removed 367 rows containing missing values (geom_point).
-
-## Warning: Removed 367 rows containing missing values (geom_point).
-
-## Warning: Removed 367 rows containing missing values (geom_point).
-
-## Warning: Removed 367 rows containing missing values (geom_point).
-
-## Warning: Removed 367 rows containing missing values (geom_point).
-\end{verbatim}
-
-\includegraphics{MB_normalization_review_files/figure-latex/comparisons-k-1.pdf}
 
   \bibliography{book.bib,packages.bib}
 

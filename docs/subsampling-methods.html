@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Subsampling Methods | Tutorial on Normalization of Microbiome Data</title>
+  <title>Chapter 5 Subsampling Methods | Tutorial on Normalization of Microbiome Data</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Subsampling Methods | Tutorial on Normalization of Microbiome Data" />
+  <meta property="og:title" content="Chapter 5 Subsampling Methods | Tutorial on Normalization of Microbiome Data" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Subsampling Methods | Tutorial on Normalization of Microbiome Data" />
+  <meta name="twitter:title" content="Chapter 5 Subsampling Methods | Tutorial on Normalization of Microbiome Data" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="count-scaling-normalization-methods.html"/>
-<link rel="next" href="library-size-and-composition-scaling-methods.html"/>
+<link rel="prev" href="compositionality-aware-scaling-methods.html"/>
+<link rel="next" href="other-methods.html"/>
 <script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -159,43 +159,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2.2" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html#css-r-code"><i class="fa fa-check"></i><b>3.2.2</b> CSS R code</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="subsampling-methods.html"><a href="subsampling-methods.html"><i class="fa fa-check"></i><b>4</b> Subsampling Methods</a>
+<li class="chapter" data-level="4" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html"><i class="fa fa-check"></i><b>4</b> Compositionality Aware Scaling Methods</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying"><i class="fa fa-check"></i><b>4.1</b> Rarefying</a>
+<li class="chapter" data-level="4.1" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#deseq"><i class="fa fa-check"></i><b>4.1</b> DESeq</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="subsampling-methods.html"><a href="subsampling-methods.html#about-rarefying"><i class="fa fa-check"></i><b>4.1.1</b> About Rarefying</a></li>
-<li class="chapter" data-level="4.1.2" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-walkthrough"><i class="fa fa-check"></i><b>4.1.2</b> Rarefying walkthrough</a></li>
-<li class="chapter" data-level="4.1.3" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-r-code"><i class="fa fa-check"></i><b>4.1.3</b> Rarefying R code</a></li>
-<li class="chapter" data-level="4.1.4" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-on-kostic-data"><i class="fa fa-check"></i><b>4.1.4</b> Rarefying on Kostic Data</a></li>
+<li class="chapter" data-level="4.1.1" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#about-deseq"><i class="fa fa-check"></i><b>4.1.1</b> About DESeq</a></li>
+<li class="chapter" data-level="4.1.2" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#deseq-r-code"><i class="fa fa-check"></i><b>4.1.2</b> DESeq R Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#gmpr"><i class="fa fa-check"></i><b>4.2</b> GMPR</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#about-gmpr"><i class="fa fa-check"></i><b>4.2.1</b> About GMPR</a></li>
+<li class="chapter" data-level="4.2.2" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#gmpr-walkthough"><i class="fa fa-check"></i><b>4.2.2</b> GMPR Walkthough</a></li>
+<li class="chapter" data-level="4.2.3" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#gmpr-r-code"><i class="fa fa-check"></i><b>4.2.3</b> GMPR R Code</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#tmm-edger"><i class="fa fa-check"></i><b>4.3</b> TMM (edgeR)</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#about-tmm"><i class="fa fa-check"></i><b>4.3.1</b> About TMM</a></li>
+<li class="chapter" data-level="4.3.2" data-path="compositionality-aware-scaling-methods.html"><a href="compositionality-aware-scaling-methods.html#edger-tmm-t-code"><i class="fa fa-check"></i><b>4.3.2</b> EdgeR TMM T code</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html"><i class="fa fa-check"></i><b>5</b> Library Size and Composition Scaling Methods</a>
+<li class="chapter" data-level="5" data-path="subsampling-methods.html"><a href="subsampling-methods.html"><i class="fa fa-check"></i><b>5</b> Subsampling Methods</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#deseq"><i class="fa fa-check"></i><b>5.1</b> DESeq</a>
+<li class="chapter" data-level="5.1" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying"><i class="fa fa-check"></i><b>5.1</b> Rarefying</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#about-deseq"><i class="fa fa-check"></i><b>5.1.1</b> About DESeq</a></li>
-<li class="chapter" data-level="5.1.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#deseq-r-code"><i class="fa fa-check"></i><b>5.1.2</b> DESeq R Code</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#gmpr"><i class="fa fa-check"></i><b>5.2</b> GMPR</a>
-<ul>
-<li class="chapter" data-level="5.2.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#about-gmpr"><i class="fa fa-check"></i><b>5.2.1</b> About GMPR</a></li>
-<li class="chapter" data-level="5.2.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#gmpr-walkthough"><i class="fa fa-check"></i><b>5.2.2</b> GMPR Walkthough</a></li>
-<li class="chapter" data-level="5.2.3" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#gmpr-r-code"><i class="fa fa-check"></i><b>5.2.3</b> GMPR R Code</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#tmm-edger"><i class="fa fa-check"></i><b>5.3</b> TMM (edgeR)</a>
-<ul>
-<li class="chapter" data-level="5.3.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#about-tmm"><i class="fa fa-check"></i><b>5.3.1</b> About TMM</a></li>
-<li class="chapter" data-level="5.3.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#edger-tmm-t-code"><i class="fa fa-check"></i><b>5.3.2</b> EdgeR TMM T code</a></li>
+<li class="chapter" data-level="5.1.1" data-path="subsampling-methods.html"><a href="subsampling-methods.html#about-rarefying"><i class="fa fa-check"></i><b>5.1.1</b> About Rarefying</a></li>
+<li class="chapter" data-level="5.1.2" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-walkthrough"><i class="fa fa-check"></i><b>5.1.2</b> Rarefying walkthrough</a></li>
+<li class="chapter" data-level="5.1.3" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-r-code"><i class="fa fa-check"></i><b>5.1.3</b> Rarefying R code</a></li>
+<li class="chapter" data-level="5.1.4" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-on-kostic-data"><i class="fa fa-check"></i><b>5.1.4</b> Rarefying on Kostic Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>6</b> Wrench</a></li>
+<li class="chapter" data-level="6" data-path="other-methods.html"><a href="other-methods.html"><i class="fa fa-check"></i><b>6</b> Other Methods</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="other-methods.html"><a href="other-methods.html#wrench"><i class="fa fa-check"></i><b>6.1</b> Wrench</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="log-ratio-transformation-methods.html"><a href="log-ratio-transformation-methods.html"><i class="fa fa-check"></i><b>7</b> Log Ratio Transformation Methods</a>
 <ul>
 <li class="chapter" data-level="7.1" data-path="log-ratio-transformation-methods.html"><a href="log-ratio-transformation-methods.html#ancom-ii"><i class="fa fa-check"></i><b>7.1</b> ANCOM II</a></li>
 <li class="chapter" data-level="7.2" data-path="log-ratio-transformation-methods.html"><a href="log-ratio-transformation-methods.html#ancom-bc"><i class="fa fa-check"></i><b>7.2</b> ANCOM BC</a></li>
 <li class="chapter" data-level="7.3" data-path="log-ratio-transformation-methods.html"><a href="log-ratio-transformation-methods.html#aldex2"><i class="fa fa-check"></i><b>7.3</b> ALDEx2</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>8</b> Comparisions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -217,22 +219,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="subsampling-methods" class="section level1" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Subsampling Methods</h1>
-<div id="rarefying" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Rarefying</h2>
-<div id="about-rarefying" class="section level3" number="4.1.1">
-<h3><span class="header-section-number">4.1.1</span> About Rarefying</h3>
+<div id="subsampling-methods" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Subsampling Methods</h1>
+<div id="rarefying" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Rarefying</h2>
+<div id="about-rarefying" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> About Rarefying</h3>
 <p>Rarefying is another common normalization technique that standardizes the library size across samples that was originally used in ecology. This method standardizes the read depth across all samples. To perform this method we first choose a minimum library size. Looking at rarefaction/collectors curves, or using a certain percentile can guide choosing this cutoff. Then all samples that have a read depth below this cutoff are discarded. Thus this method has a built-in filtering step. Next, we sample without replacement of the size of the chosen cutoff. It can be a standalone method or combined with other methods and transformations.</p>
 <!-- Fix second to last sentence - confusing  -->
 <p>This is a very commonly used method, but it has also been criticized <span class="citation">(McMurdie and Holmes <a href="#ref-mcmurdie2014" role="doc-biblioref">2014</a>)</span>. First of all, it throws away valid data, and this results in a loss of power and an increase in false positives. Rare taxa can be removed in this approach too. It is however encouraged when we have widely different library sizes as it can lower the false discovery rate <span class="citation">(Weiss et al. <a href="#ref-weiss2017" role="doc-biblioref">2017</a>)</span>, and has also been shown to perform well in community-level analysis <span class="citation">(McKnight et al. <a href="#ref-mcknight2019" role="doc-biblioref">2019</a>)</span>, as it completely standardizes the read count depth, and some methods are sensitive to differences in read count. Rarefying has been shown to separate by biological signal in ordination methods based on presence/absence.</p>
 </div>
-<div id="rarefying-walkthrough" class="section level3" number="4.1.2">
-<h3><span class="header-section-number">4.1.2</span> Rarefying walkthrough</h3>
+<div id="rarefying-walkthrough" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Rarefying walkthrough</h3>
 <p>Consider the following example dataset.</p>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-15">Table 4.1: </span>Example dataset - Raw Counts
+<span id="tab:unnamed-chunk-32">Table 5.1: </span>Example dataset - Raw Counts
 </caption>
 <thead>
 <tr>
@@ -325,11 +327,11 @@ Taxon 5
 </table>
 <p>To normalize this data by rarefying, we first choose a minimum sampling depth, or in other words, the minimum column sum. After normalizing, the column sum of all samples will be this size. Any samples that are below this minimum will be dropped from analysis. We choose 200 as our minimum here. In practice the counts will normally be much higher. In this example, our sampling depths are 223, 248, and 20. Thus the third sample will be dropped in this procedure.</p>
 <p>Since we are randomly sampling, we need to keep track of the seed so this process is reproducible.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="subsampling-methods.html#cb31-1"></a><span class="kw">set.seed</span>(<span class="dv">525</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="subsampling-methods.html#cb51-1"></a><span class="kw">set.seed</span>(<span class="dv">525</span>)</span></code></pre></div>
 <p>We then randomly sample taxa from each sample/column in the proportions corresponding to the raw counts. The below table shows the table from above after we rarefy. Notice that the rare Taxon 3, which originally was present in Sample 1 and 3 is now completely removed from the analysis.</p>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-17">Table 4.2: </span>Rarefied counts
+<span id="tab:unnamed-chunk-34">Table 5.2: </span>Rarefied counts
 </caption>
 <thead>
 <tr>
@@ -403,24 +405,24 @@ Taxon 5
 </tbody>
 </table>
 </div>
-<div id="rarefying-r-code" class="section level3" number="4.1.3">
-<h3><span class="header-section-number">4.1.3</span> Rarefying R code</h3>
+<div id="rarefying-r-code" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Rarefying R code</h3>
 <p>We now show the process of rarefying a real dataset. The following function returns a rarefied <code>phyloseq</code> object. We can either pass in the minimum sampling depth as a second argument, or use the default minimum depth of the samples.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="subsampling-methods.html#cb32-1"></a>norm_rarefy &lt;-<span class="st"> </span><span class="cf">function</span>(phyloseq, <span class="dt">depth =</span> <span class="kw">min</span>(<span class="kw">sample_sums</span>(phyloseq))){</span>
-<span id="cb32-2"><a href="subsampling-methods.html#cb32-2"></a>    <span class="kw">return</span>(phyloseq<span class="op">::</span><span class="kw">rarefy_even_depth</span>(phyloseq,<span class="dt">sample.size =</span> depth))</span>
-<span id="cb32-3"><a href="subsampling-methods.html#cb32-3"></a>}</span></code></pre></div>
-<div id="rarefying-on-global-patterns" class="section level4" number="4.1.3.1">
-<h4><span class="header-section-number">4.1.3.1</span> Rarefying on Global Patterns</h4>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="subsampling-methods.html#cb52-1"></a>norm_rarefy &lt;-<span class="st"> </span><span class="cf">function</span>(phyloseq, <span class="dt">depth =</span> <span class="kw">min</span>(<span class="kw">sample_sums</span>(phyloseq))){</span>
+<span id="cb52-2"><a href="subsampling-methods.html#cb52-2"></a>    <span class="kw">return</span>(phyloseq<span class="op">::</span><span class="kw">rarefy_even_depth</span>(phyloseq,<span class="dt">sample.size =</span> depth))</span>
+<span id="cb52-3"><a href="subsampling-methods.html#cb52-3"></a>}</span></code></pre></div>
+<div id="rarefying-on-global-patterns" class="section level4" number="5.1.3.1">
+<h4><span class="header-section-number">5.1.3.1</span> Rarefying on Global Patterns</h4>
 <p>We use the above function to rarefy the Global Patterns data. The first difficulty is choosing a minimum sampling depth. The Global Patterns dataset already has a very high sampling depth for all samples, so we will chose the lowest as the minimum depth to rarefy to.Since we chose the minimum sampling depth, no samples have been dropped. In data sets where we have low sampling depth there is a balance between how many samples to drop and how low to set the minimum depth to.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="subsampling-methods.html#cb33-1"></a>gp_rare &lt;-<span class="st"> </span><span class="kw">norm_rarefy</span>(gp_raw)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="subsampling-methods.html#cb53-1"></a>gp_rare &lt;-<span class="st"> </span><span class="kw">norm_rarefy</span>(gp_raw)</span></code></pre></div>
 <pre><code>## You set `rngseed` to FALSE. Make sure you&#39;ve set &amp; recorded
 ##  the random seed of your session for reproducibility.
 ## See `?set.seed`</code></pre>
 <pre><code>## ...</code></pre>
 <p>We can check that indeed all samples now have the same sampling depth, which is 15905. Note that the highest sampling depth in this dataset was almost 2 million, so we have discarded a lot of data to reduce to 15905.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="subsampling-methods.html#cb36-1"></a><span class="kw">max</span>(<span class="kw">sample_sums</span>(gp_raw))</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="subsampling-methods.html#cb56-1"></a><span class="kw">max</span>(<span class="kw">sample_sums</span>(gp_raw))</span></code></pre></div>
 <pre><code>## [1] 1842380</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="subsampling-methods.html#cb38-1"></a><span class="kw">sample_sums</span>(gp_rare)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="subsampling-methods.html#cb58-1"></a><span class="kw">sample_sums</span>(gp_rare)</span></code></pre></div>
 <pre><code>##      CL3      CC1      SV1  M31Fcsw  M11Fcsw  M31Plmr  M11Plmr  F21Plmr 
 ##    15905    15905    15905    15905    15905    15905    15905    15905 
 ##  M31Tong  M11Tong LMEpi24M SLEpi20M   AQC1cm   AQC4cm   AQC7cm      NP2 
@@ -430,35 +432,35 @@ Taxon 5
 ##    Even2    Even3 
 ##    15905    15905</code></pre>
 <p>We can again compare the PCoA plots between rarefied and raw counts, coloring by sample type to view clusters.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="subsampling-methods.html#cb40-1"></a><span class="kw">plot_ordination</span>(gp_raw,</span>
-<span id="cb40-2"><a href="subsampling-methods.html#cb40-2"></a>                phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_raw, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>),</span>
-<span id="cb40-3"><a href="subsampling-methods.html#cb40-3"></a>                <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, </span>
-<span id="cb40-4"><a href="subsampling-methods.html#cb40-4"></a>                <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw counts&quot;</span>) <span class="op">+</span></span>
-<span id="cb40-5"><a href="subsampling-methods.html#cb40-5"></a><span class="kw">plot_ordination</span>(gp_rare,</span>
-<span id="cb40-6"><a href="subsampling-methods.html#cb40-6"></a>                phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_rare, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>),</span>
-<span id="cb40-7"><a href="subsampling-methods.html#cb40-7"></a>                <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, </span>
-<span id="cb40-8"><a href="subsampling-methods.html#cb40-8"></a>                <span class="dt">title =</span> <span class="st">&quot;PCoA on Rarefied counts&quot;</span>) <span class="op">+</span></span>
-<span id="cb40-9"><a href="subsampling-methods.html#cb40-9"></a><span class="st">  </span><span class="kw">plot_layout</span>(<span class="dt">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="subsampling-methods.html#cb60-1"></a><span class="kw">plot_ordination</span>(gp_raw,</span>
+<span id="cb60-2"><a href="subsampling-methods.html#cb60-2"></a>                phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_raw, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>),</span>
+<span id="cb60-3"><a href="subsampling-methods.html#cb60-3"></a>                <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, </span>
+<span id="cb60-4"><a href="subsampling-methods.html#cb60-4"></a>                <span class="dt">title =</span> <span class="st">&quot;PCoA on Raw counts&quot;</span>) <span class="op">+</span></span>
+<span id="cb60-5"><a href="subsampling-methods.html#cb60-5"></a><span class="kw">plot_ordination</span>(gp_rare,</span>
+<span id="cb60-6"><a href="subsampling-methods.html#cb60-6"></a>                phyloseq<span class="op">::</span><span class="kw">ordinate</span>(gp_rare, <span class="st">&quot;PCoA&quot;</span>, <span class="st">&quot;bray&quot;</span>),</span>
+<span id="cb60-7"><a href="subsampling-methods.html#cb60-7"></a>                <span class="dt">color =</span> <span class="st">&quot;SampleType&quot;</span>, </span>
+<span id="cb60-8"><a href="subsampling-methods.html#cb60-8"></a>                <span class="dt">title =</span> <span class="st">&quot;PCoA on Rarefied counts&quot;</span>) <span class="op">+</span></span>
+<span id="cb60-9"><a href="subsampling-methods.html#cb60-9"></a><span class="st">  </span><span class="kw">plot_layout</span>(<span class="dt">guides =</span> <span class="st">&#39;collect&#39;</span>)</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/rare_ordination-1.png" width="672" /></p>
 <p>Now examine how the distance matrices change before/after normalization. We see a similar pattern to TSS when distance matrices calculated from rarefied counts are compared to those from the raw counts.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="subsampling-methods.html#cb41-1"></a><span class="co"># Identify any samples filtered in rarefying process </span></span>
-<span id="cb41-2"><a href="subsampling-methods.html#cb41-2"></a>rare_samples &lt;-<span class="st"> </span><span class="kw">sample_names</span>(gp_rare)</span>
-<span id="cb41-3"><a href="subsampling-methods.html#cb41-3"></a>gp_raw_match &lt;-<span class="st"> </span><span class="kw">prune_samples</span>(rare_samples, gp_raw)</span>
-<span id="cb41-4"><a href="subsampling-methods.html#cb41-4"></a><span class="kw">plot_norm_changes</span>(gp_rare, gp_raw_match,</span>
-<span id="cb41-5"><a href="subsampling-methods.html#cb41-5"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw counts&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied counts&quot;</span>, </span>
-<span id="cb41-6"><a href="subsampling-methods.html#cb41-6"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between Raw counts and Rarefied counts &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="subsampling-methods.html#cb61-1"></a><span class="co"># Identify any samples filtered in rarefying process </span></span>
+<span id="cb61-2"><a href="subsampling-methods.html#cb61-2"></a>rare_samples &lt;-<span class="st"> </span><span class="kw">sample_names</span>(gp_rare)</span>
+<span id="cb61-3"><a href="subsampling-methods.html#cb61-3"></a>gp_raw_match &lt;-<span class="st"> </span><span class="kw">prune_samples</span>(rare_samples, gp_raw)</span>
+<span id="cb61-4"><a href="subsampling-methods.html#cb61-4"></a><span class="kw">plot_norm_changes</span>(gp_rare, gp_raw_match,</span>
+<span id="cb61-5"><a href="subsampling-methods.html#cb61-5"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw counts&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied counts&quot;</span>, </span>
+<span id="cb61-6"><a href="subsampling-methods.html#cb61-6"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between Raw counts and Rarefied counts &quot;</span>)</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/rare_plot_ordination-1.png" width="672" /></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="subsampling-methods.html#cb42-1"></a><span class="co">## Compare to tss</span></span>
-<span id="cb42-2"><a href="subsampling-methods.html#cb42-2"></a>gp_tss_match &lt;-<span class="st"> </span><span class="kw">norm_TSS</span>(gp_raw_match)</span>
-<span id="cb42-3"><a href="subsampling-methods.html#cb42-3"></a><span class="kw">plot_norm_changes</span>(gp_rare, gp_tss,</span>
-<span id="cb42-4"><a href="subsampling-methods.html#cb42-4"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied&quot;</span>, </span>
-<span id="cb42-5"><a href="subsampling-methods.html#cb42-5"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TSS normalization and Rarefied counts &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="subsampling-methods.html#cb62-1"></a><span class="co">## Compare to tss</span></span>
+<span id="cb62-2"><a href="subsampling-methods.html#cb62-2"></a>gp_tss_match &lt;-<span class="st"> </span><span class="kw">norm_TSS</span>(gp_raw_match)</span>
+<span id="cb62-3"><a href="subsampling-methods.html#cb62-3"></a><span class="kw">plot_norm_changes</span>(gp_rare, gp_tss,</span>
+<span id="cb62-4"><a href="subsampling-methods.html#cb62-4"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied&quot;</span>, </span>
+<span id="cb62-5"><a href="subsampling-methods.html#cb62-5"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TSS normalization and Rarefied counts &quot;</span>)</span></code></pre></div>
 <p><img src="MB_normalization_review_files/figure-html/rare_plot_ordination-2.png" width="672" /></p>
 </div>
 </div>
-<div id="rarefying-on-kostic-data" class="section level3" number="4.1.4">
-<h3><span class="header-section-number">4.1.4</span> Rarefying on Kostic Data</h3>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="subsampling-methods.html#cb43-1"></a>k_rare &lt;-<span class="st"> </span><span class="kw">norm_rarefy</span>(k_raw)</span></code></pre></div>
+<div id="rarefying-on-kostic-data" class="section level3" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Rarefying on Kostic Data</h3>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="subsampling-methods.html#cb63-1"></a>k_rare &lt;-<span class="st"> </span><span class="kw">norm_rarefy</span>(k_raw)</span></code></pre></div>
 <pre><code>## You set `rngseed` to FALSE. Make sure you&#39;ve set &amp; recorded
 ##  the random seed of your session for reproducibility.
 ## See `?set.seed`</code></pre>
@@ -466,14 +468,14 @@ Taxon 5
 <pre><code>## 128OTUs were removed because they are no longer 
 ## present in any sample after random subsampling</code></pre>
 <pre><code>## ...</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="subsampling-methods.html#cb48-1"></a><span class="kw">plot_norm_changes</span>(k_rare, k_raw,</span>
-<span id="cb48-2"><a href="subsampling-methods.html#cb48-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw counts&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied counts&quot;</span>, </span>
-<span id="cb48-3"><a href="subsampling-methods.html#cb48-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between Raw counts and Rarefied counts &quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="subsampling-methods.html#cb49-1"></a><span class="kw">plot_norm_changes</span>(k_rare, k_tss,</span>
-<span id="cb49-2"><a href="subsampling-methods.html#cb49-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied&quot;</span>, </span>
-<span id="cb49-3"><a href="subsampling-methods.html#cb49-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TSS normalization and Rarefied counts &quot;</span>)</span></code></pre></div>
-<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="subsampling-methods.html#cb68-1"></a><span class="kw">plot_norm_changes</span>(k_rare, k_raw,</span>
+<span id="cb68-2"><a href="subsampling-methods.html#cb68-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;Raw counts&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied counts&quot;</span>, </span>
+<span id="cb68-3"><a href="subsampling-methods.html#cb68-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between Raw counts and Rarefied counts &quot;</span>)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="subsampling-methods.html#cb69-1"></a><span class="kw">plot_norm_changes</span>(k_rare, k_tss,</span>
+<span id="cb69-2"><a href="subsampling-methods.html#cb69-2"></a>                  <span class="dt">x_lab =</span> <span class="st">&quot;TSS&quot;</span>, <span class="dt">y_lab =</span> <span class="st">&quot;Rarefied&quot;</span>, </span>
+<span id="cb69-3"><a href="subsampling-methods.html#cb69-3"></a>                  <span class="dt">title =</span> <span class="st">&quot;Distance metric comparision between TSS normalization and Rarefied counts &quot;</span>)</span></code></pre></div>
+<p><img src="MB_normalization_review_files/figure-html/unnamed-chunk-36-2.png" width="672" /></p>
 <!-- Doesnt seem to be much difference between rarefied and tss -->
 <!-- ## Rarefying on HMP dataset -->
 <!-- ```{r, eval = F} -->
@@ -517,8 +519,8 @@ Taxon 5
           </div>
         </div>
       </div>
-<a href="count-scaling-normalization-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="library-size-and-composition-scaling-methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="compositionality-aware-scaling-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="other-methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
