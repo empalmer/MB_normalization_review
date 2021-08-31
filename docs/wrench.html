@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Wrench | Tutorial on Normalization of Microbiome Data</title>
+  <title>Chapter 6 Wrench | Tutorial on Normalization of Microbiome Data</title>
   <meta name="description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Wrench | Tutorial on Normalization of Microbiome Data" />
+  <meta property="og:title" content="Chapter 6 Wrench | Tutorial on Normalization of Microbiome Data" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Wrench | Tutorial on Normalization of Microbiome Data" />
+  <meta name="twitter:title" content="Chapter 6 Wrench | Tutorial on Normalization of Microbiome Data" />
   
   <meta name="twitter:description" content="A tutorial on normalization methods for microbiome data and discussion of thier uses and performance" />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="gmpr.html"/>
-<link rel="next" href="log-ratio-methods.html"/>
+<link rel="prev" href="library-size-and-composition-scaling-methods.html"/>
+<link rel="next" href="log-ratio-transformation-methods-1.html"/>
 <script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -149,55 +149,56 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="importing-data.html"><a href="importing-data.html#colorectal-cancer"><i class="fa fa-check"></i><b>2.2</b> Colorectal cancer</a></li>
 <li class="chapter" data-level="2.3" data-path="importing-data.html"><a href="importing-data.html#pre-processing-quality-control-and-filtering"><i class="fa fa-check"></i><b>2.3</b> Pre-processing Quality Control and Filtering</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html"><i class="fa fa-check"></i><b>3</b> Total Sum scaling (TSS)</a>
+<li class="chapter" data-level="3" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html"><i class="fa fa-check"></i><b>3</b> Count Scaling Normalization methods</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#about-tss"><i class="fa fa-check"></i><b>3.1</b> About TSS</a></li>
-<li class="chapter" data-level="3.2" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-implementation"><i class="fa fa-check"></i><b>3.2</b> TSS Implementation</a></li>
-<li class="chapter" data-level="3.3" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-global-patterns"><i class="fa fa-check"></i><b>3.3</b> TSS on Global Patterns</a></li>
-<li class="chapter" data-level="3.4" data-path="total-sum-scaling-tss.html"><a href="total-sum-scaling-tss.html#tss-on-kostic-data"><i class="fa fa-check"></i><b>3.4</b> TSS on Kostic data</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="rarefying.html"><a href="rarefying.html"><i class="fa fa-check"></i><b>4</b> Rarefying</a>
+<li class="chapter" data-level="3.1" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html#total-sum-scaling-tss"><i class="fa fa-check"></i><b>3.1</b> Total Sum scaling (TSS)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="rarefying.html"><a href="rarefying.html#about-rarefying"><i class="fa fa-check"></i><b>4.1</b> About Rarefying</a></li>
-<li class="chapter" data-level="4.2" data-path="rarefying.html"><a href="rarefying.html#rarefying-implementation"><i class="fa fa-check"></i><b>4.2</b> Rarefying implementation</a></li>
-<li class="chapter" data-level="4.3" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-global-patterns"><i class="fa fa-check"></i><b>4.3</b> Rarefying on Global Patterns</a></li>
-<li class="chapter" data-level="4.4" data-path="rarefying.html"><a href="rarefying.html#rarefying-on-kostic-data"><i class="fa fa-check"></i><b>4.4</b> Rarefying on Kostic Data</a></li>
+<li class="chapter" data-level="3.1.1" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html#about-tss"><i class="fa fa-check"></i><b>3.1.1</b> About TSS</a></li>
+<li class="chapter" data-level="3.1.2" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html#tss-r-code"><i class="fa fa-check"></i><b>3.1.2</b> TSS R code</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="deseq.html"><a href="deseq.html"><i class="fa fa-check"></i><b>5</b> DESeq</a>
+<li class="chapter" data-level="3.2" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html#cumulative-sum-scaling-css"><i class="fa fa-check"></i><b>3.2</b> Cumulative sum scaling (CSS)</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="deseq.html"><a href="deseq.html#about-deseq"><i class="fa fa-check"></i><b>5.1</b> About DESeq</a></li>
-<li class="chapter" data-level="5.2" data-path="deseq.html"><a href="deseq.html#deseq-implementation"><i class="fa fa-check"></i><b>5.2</b> DESeq Implementation</a></li>
-<li class="chapter" data-level="5.3" data-path="deseq.html"><a href="deseq.html#deseq-on-global-patterns"><i class="fa fa-check"></i><b>5.3</b> DESeq on Global Patterns</a></li>
-<li class="chapter" data-level="5.4" data-path="deseq.html"><a href="deseq.html#deseq-on-kostic-data"><i class="fa fa-check"></i><b>5.4</b> DESeq on Kostic data</a></li>
+<li class="chapter" data-level="3.2.1" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html#about-css"><i class="fa fa-check"></i><b>3.2.1</b> About CSS</a></li>
+<li class="chapter" data-level="3.2.2" data-path="count-scaling-normalization-methods.html"><a href="count-scaling-normalization-methods.html#css-r-code"><i class="fa fa-check"></i><b>3.2.2</b> CSS R code</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="tmm-edger.html"><a href="tmm-edger.html"><i class="fa fa-check"></i><b>6</b> TMM (edgeR)</a>
+</ul></li>
+<li class="chapter" data-level="4" data-path="subsampling-methods.html"><a href="subsampling-methods.html"><i class="fa fa-check"></i><b>4</b> Subsampling Methods</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="tmm-edger.html"><a href="tmm-edger.html#edger-tmm-implementation"><i class="fa fa-check"></i><b>6.1</b> EdgeR TMM implementation</a></li>
-<li class="chapter" data-level="6.2" data-path="tmm-edger.html"><a href="tmm-edger.html#tmm-on-global-patterns"><i class="fa fa-check"></i><b>6.2</b> TMM on Global Patterns</a></li>
-<li class="chapter" data-level="6.3" data-path="tmm-edger.html"><a href="tmm-edger.html#tmm-on-kostic-data"><i class="fa fa-check"></i><b>6.3</b> TMM on Kostic data</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html"><i class="fa fa-check"></i><b>7</b> Cumulative sum scaling (CSS)</a>
+<li class="chapter" data-level="4.1" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying"><i class="fa fa-check"></i><b>4.1</b> Rarefying</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-implementation"><i class="fa fa-check"></i><b>7.1</b> CSS implementation</a></li>
-<li class="chapter" data-level="7.2" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-global-patterns"><i class="fa fa-check"></i><b>7.2</b> CSS on Global Patterns</a></li>
-<li class="chapter" data-level="7.3" data-path="cumulative-sum-scaling-css.html"><a href="cumulative-sum-scaling-css.html#css-on-kostic-data"><i class="fa fa-check"></i><b>7.3</b> CSS on Kostic data</a></li>
+<li class="chapter" data-level="4.1.1" data-path="subsampling-methods.html"><a href="subsampling-methods.html#about-rarefying"><i class="fa fa-check"></i><b>4.1.1</b> About Rarefying</a></li>
+<li class="chapter" data-level="4.1.2" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-walkthrough"><i class="fa fa-check"></i><b>4.1.2</b> Rarefying walkthrough</a></li>
+<li class="chapter" data-level="4.1.3" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-r-code"><i class="fa fa-check"></i><b>4.1.3</b> Rarefying R code</a></li>
+<li class="chapter" data-level="4.1.4" data-path="subsampling-methods.html"><a href="subsampling-methods.html#rarefying-on-kostic-data"><i class="fa fa-check"></i><b>4.1.4</b> Rarefying on Kostic Data</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="gmpr.html"><a href="gmpr.html"><i class="fa fa-check"></i><b>8</b> GMPR</a>
+</ul></li>
+<li class="chapter" data-level="5" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html"><i class="fa fa-check"></i><b>5</b> Library Size and Composition Scaling Methods</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="gmpr.html"><a href="gmpr.html#gmpr-implementation"><i class="fa fa-check"></i><b>8.1</b> GMPR Implementation</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>9</b> Wrench</a>
+<li class="chapter" data-level="5.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#deseq"><i class="fa fa-check"></i><b>5.1</b> DESeq</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="wrench.html"><a href="wrench.html#wrench-implementation"><i class="fa fa-check"></i><b>9.1</b> Wrench Implementation</a></li>
-<li class="chapter" data-level="9.2" data-path="wrench.html"><a href="wrench.html#wrench-on-global-patterns"><i class="fa fa-check"></i><b>9.2</b> Wrench on Global Patterns</a></li>
+<li class="chapter" data-level="5.1.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#about-deseq"><i class="fa fa-check"></i><b>5.1.1</b> About DESeq</a></li>
+<li class="chapter" data-level="5.1.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#deseq-r-code"><i class="fa fa-check"></i><b>5.1.2</b> DESeq R Code</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html"><i class="fa fa-check"></i><b>10</b> Log Ratio Methods</a>
+<li class="chapter" data-level="5.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#gmpr"><i class="fa fa-check"></i><b>5.2</b> GMPR</a>
 <ul>
-<li class="chapter" data-level="10.1" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html#ancom-ii"><i class="fa fa-check"></i><b>10.1</b> ANCOM II</a></li>
-<li class="chapter" data-level="10.2" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html#ancom-bc"><i class="fa fa-check"></i><b>10.2</b> ANCOM BC</a></li>
-<li class="chapter" data-level="10.3" data-path="log-ratio-methods.html"><a href="log-ratio-methods.html#aldex2"><i class="fa fa-check"></i><b>10.3</b> ALDEx2</a></li>
+<li class="chapter" data-level="5.2.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#about-gmpr"><i class="fa fa-check"></i><b>5.2.1</b> About GMPR</a></li>
+<li class="chapter" data-level="5.2.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#gmpr-walkthough"><i class="fa fa-check"></i><b>5.2.2</b> GMPR Walkthough</a></li>
+<li class="chapter" data-level="5.2.3" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#gmpr-r-code"><i class="fa fa-check"></i><b>5.2.3</b> GMPR R Code</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>11</b> Comparisions</a></li>
+<li class="chapter" data-level="5.3" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#tmm-edger"><i class="fa fa-check"></i><b>5.3</b> TMM (edgeR)</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#about-tmm"><i class="fa fa-check"></i><b>5.3.1</b> About TMM</a></li>
+<li class="chapter" data-level="5.3.2" data-path="library-size-and-composition-scaling-methods.html"><a href="library-size-and-composition-scaling-methods.html#edger-tmm-t-code"><i class="fa fa-check"></i><b>5.3.2</b> EdgeR TMM T code</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="wrench.html"><a href="wrench.html"><i class="fa fa-check"></i><b>6</b> Wrench</a></li>
+<li class="chapter" data-level="7" data-path="log-ratio-transformation-methods-1.html"><a href="log-ratio-transformation-methods-1.html"><i class="fa fa-check"></i><b>7</b> Log Ratio Transformation Methods</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="log-ratio-transformation-methods-1.html"><a href="log-ratio-transformation-methods-1.html#ancom-ii"><i class="fa fa-check"></i><b>7.1</b> ANCOM II</a></li>
+<li class="chapter" data-level="7.2" data-path="log-ratio-transformation-methods-1.html"><a href="log-ratio-transformation-methods-1.html#ancom-bc"><i class="fa fa-check"></i><b>7.2</b> ANCOM BC</a></li>
+<li class="chapter" data-level="7.3" data-path="log-ratio-transformation-methods-1.html"><a href="log-ratio-transformation-methods-1.html#aldex2"><i class="fa fa-check"></i><b>7.3</b> ALDEx2</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="comparisions.html"><a href="comparisions.html"><i class="fa fa-check"></i><b>8</b> Comparisions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -219,39 +220,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="wrench" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> Wrench</h1>
-<p>Wrench is a recent normalization method developed for microbiome data <span class="citation">(Kumar et al. <a href="#ref-kumar2018" role="doc-biblioref">2018</a>)</span>. This method includes compositional bias correction for sparse datasets. This method uses a hurdle log-normal distribution to estimate the normalization factors (the location estimate for the group). For this method, we assume abundances are drawn from a hurdle Log-Gaussian distribution, and the scaling factor used is essentially the location estimate for the group.</p>
+<div id="wrench" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Wrench</h1>
+<p>Wrench is a recent normalization method developed for microbiome data <span class="citation">(Kumar et al. <a href="#ref-kumar2018" role="doc-biblioref">2018</a>)</span> that uses an empirical Bayes Normalization approach. This method includes compositional bias correction for sparse datasets. This method uses a hurdle log-normal distribution to estimate the normalization factors (the location estimate for the group). For this method, we assume abundances are drawn from a hurdle Log-Gaussian distribution, and the scaling factor used is essentially the location estimate for the group.</p>
 <!-- When a differential abundance analysis is performed on this data, fold changes of null features, those not differentially abundant in the absolute scale, are intimately tied to those of features that are perturbed in their absolute abundances, making the former appear differentially abundant.                                           -->
 <!-- "In the absence of such control features, effective correc- tion for compositional bias can still be hoped for, as it can be shown that this correction amounts to resolv- ing a linear technical bias [13]. This fact allows one to exploit several widely used non- spike-in normalization approaches [13, 15–17], which approximate the afore- mentioned spike-in strategy by assuming that most fea- tures do not change on average across samples/conditions. For the same reason, such an interpretation can also be given to approaches like centered logarithmic transforms (CLR) from the theory of compositional data, which many analysts favor when working with relative abundances [18–24]. In this paper, we analyze the behavior of these existing scaling normalization techniques in light of com- positional bias. This method develops a compositional bias correction technique for sparse count data based on an empirical Bayes approach that borrows information across features and samples. The scaling factor is the average of ratios of relative abundances across taxa." -->
-<div id="wrench-implementation" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Wrench Implementation</h2>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="wrench.html#cb63-1"></a>norm_wrench &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_col){</span>
-<span id="cb63-2"><a href="wrench.html#cb63-2"></a>    <span class="kw">require</span>(Wrench, <span class="dt">quietly =</span> T)</span>
-<span id="cb63-3"><a href="wrench.html#cb63-3"></a>    <span class="cf">if</span>( <span class="kw">identical</span>(<span class="kw">all.equal</span>(<span class="kw">length</span>(group_col), <span class="dv">1</span>), <span class="ot">TRUE</span>) <span class="op">&amp;</span><span class="st"> </span><span class="kw">nsamples</span>(ps) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span> ){</span>
-<span id="cb63-4"><a href="wrench.html#cb63-4"></a>        <span class="co"># Assume that group was a sample variable name (must be categorical)</span></span>
-<span id="cb63-5"><a href="wrench.html#cb63-5"></a>        group =<span class="st"> </span><span class="kw">get_variable</span>(ps, group_col)</span>
-<span id="cb63-6"><a href="wrench.html#cb63-6"></a>    }</span>
-<span id="cb63-7"><a href="wrench.html#cb63-7"></a>    otu_tab &lt;-<span class="st"> </span><span class="kw">otu_table</span>(ps)</span>
-<span id="cb63-8"><a href="wrench.html#cb63-8"></a>    W &lt;-<span class="st"> </span><span class="kw">wrench</span>(otu_tab, group)</span>
-<span id="cb63-9"><a href="wrench.html#cb63-9"></a>    </span>
-<span id="cb63-10"><a href="wrench.html#cb63-10"></a>    compositionalFactors &lt;-<span class="st"> </span>W<span class="op">$</span>ccf</span>
-<span id="cb63-11"><a href="wrench.html#cb63-11"></a>    normalizationFactors &lt;-<span class="st"> </span>W<span class="op">$</span>nf</span>
-<span id="cb63-12"><a href="wrench.html#cb63-12"></a>    </span>
-<span id="cb63-13"><a href="wrench.html#cb63-13"></a>    normed_otu &lt;-<span class="st"> </span>otu_tab<span class="op">/</span>(normalizationFactors<span class="op">/</span><span class="fl">1e6</span>)</span>
-<span id="cb63-14"><a href="wrench.html#cb63-14"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(normed_otu, <span class="dt">taxa_are_rows =</span> T)</span>
-<span id="cb63-15"><a href="wrench.html#cb63-15"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
-<span id="cb63-16"><a href="wrench.html#cb63-16"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>normalizationFactors</span>
-<span id="cb63-17"><a href="wrench.html#cb63-17"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
-<span id="cb63-18"><a href="wrench.html#cb63-18"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
-<span id="cb63-19"><a href="wrench.html#cb63-19"></a>    ps_wrench &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
-<span id="cb63-20"><a href="wrench.html#cb63-20"></a>    </span>
-<span id="cb63-21"><a href="wrench.html#cb63-21"></a>    <span class="kw">return</span>(ps_wrench)</span>
-<span id="cb63-22"><a href="wrench.html#cb63-22"></a>}</span></code></pre></div>
-</div>
-<div id="wrench-on-global-patterns" class="section level2" number="9.2">
-<h2><span class="header-section-number">9.2</span> Wrench on Global Patterns</h2>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="wrench.html#cb64-1"></a>gp_wrench &lt;-<span class="st"> </span><span class="kw">norm_wrench</span>(gp_raw, <span class="dt">group_col =</span> <span class="st">&quot;SampleType&quot;</span>)</span></code></pre></div>
+<!-- ## Wrench Implementation -->
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="wrench.html#cb66-1"></a>norm_wrench &lt;-<span class="st"> </span><span class="cf">function</span>(ps, group_col){</span>
+<span id="cb66-2"><a href="wrench.html#cb66-2"></a>    <span class="kw">require</span>(Wrench, <span class="dt">quietly =</span> T)</span>
+<span id="cb66-3"><a href="wrench.html#cb66-3"></a>    <span class="cf">if</span>( <span class="kw">identical</span>(<span class="kw">all.equal</span>(<span class="kw">length</span>(group_col), <span class="dv">1</span>), <span class="ot">TRUE</span>) <span class="op">&amp;</span><span class="st"> </span><span class="kw">nsamples</span>(ps) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span> ){</span>
+<span id="cb66-4"><a href="wrench.html#cb66-4"></a>        <span class="co"># Assume that group was a sample variable name (must be categorical)</span></span>
+<span id="cb66-5"><a href="wrench.html#cb66-5"></a>        group =<span class="st"> </span><span class="kw">get_variable</span>(ps, group_col)</span>
+<span id="cb66-6"><a href="wrench.html#cb66-6"></a>    }</span>
+<span id="cb66-7"><a href="wrench.html#cb66-7"></a>    otu_tab &lt;-<span class="st"> </span><span class="kw">otu_table</span>(ps)</span>
+<span id="cb66-8"><a href="wrench.html#cb66-8"></a>    W &lt;-<span class="st"> </span><span class="kw">wrench</span>(otu_tab, group)</span>
+<span id="cb66-9"><a href="wrench.html#cb66-9"></a>    </span>
+<span id="cb66-10"><a href="wrench.html#cb66-10"></a>    compositionalFactors &lt;-<span class="st"> </span>W<span class="op">$</span>ccf</span>
+<span id="cb66-11"><a href="wrench.html#cb66-11"></a>    normalizationFactors &lt;-<span class="st"> </span>W<span class="op">$</span>nf</span>
+<span id="cb66-12"><a href="wrench.html#cb66-12"></a>    </span>
+<span id="cb66-13"><a href="wrench.html#cb66-13"></a>    normed_otu &lt;-<span class="st"> </span>otu_tab<span class="op">/</span>(normalizationFactors<span class="op">/</span><span class="fl">1e6</span>)</span>
+<span id="cb66-14"><a href="wrench.html#cb66-14"></a>    otu &lt;-<span class="st"> </span><span class="kw">otu_table</span>(normed_otu, <span class="dt">taxa_are_rows =</span> T)</span>
+<span id="cb66-15"><a href="wrench.html#cb66-15"></a>    sam &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;sam_data&quot;</span>)</span>
+<span id="cb66-16"><a href="wrench.html#cb66-16"></a>    sam<span class="op">$</span>scaling_factor &lt;-<span class="st"> </span>normalizationFactors</span>
+<span id="cb66-17"><a href="wrench.html#cb66-17"></a>    tax &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;tax_table&quot;</span>)</span>
+<span id="cb66-18"><a href="wrench.html#cb66-18"></a>    phy &lt;-<span class="st"> </span><span class="kw">access</span>(ps, <span class="st">&quot;phy_tree&quot;</span>)</span>
+<span id="cb66-19"><a href="wrench.html#cb66-19"></a>    ps_wrench &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(otu,sam,tax,phy)</span>
+<span id="cb66-20"><a href="wrench.html#cb66-20"></a>    </span>
+<span id="cb66-21"><a href="wrench.html#cb66-21"></a>    <span class="kw">return</span>(ps_wrench)</span>
+<span id="cb66-22"><a href="wrench.html#cb66-22"></a>}</span></code></pre></div>
+<!-- ## Wrench on Global Patterns -->
+<!-- ```{r, eval = F} -->
+<!-- gp_wrench <- norm_wrench(gp_raw, group_col = "SampleType") -->
+<!-- ``` -->
+<!-- ```{r, message = F, results = "hide", eval = F, echo = F} -->
+<!-- gp_wrench <- norm_wrench(gp_raw, group_col = "SampleType") -->
+<!-- # warnings, authors suggest robust averaging  -->
+<!-- # Is this because we have such distinct groups?  -->
+<!-- ``` -->
 <!-- # ```{r} -->
 <!-- # norm_ms_wrench <- function(ps, group_col){ -->
 <!-- #   require(metagenomeSeq, quietly = T) -->
@@ -280,7 +285,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- # ``` -->
 
 </div>
-</div>
 <h3>References</h3>
 <div id="refs" class="references hanging-indent">
 <div id="ref-kumar2018">
@@ -292,8 +296,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="gmpr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="log-ratio-methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="library-size-and-composition-scaling-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="log-ratio-transformation-methods-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

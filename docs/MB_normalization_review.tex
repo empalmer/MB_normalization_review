@@ -107,6 +107,20 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
 \usepackage{booktabs}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage[]{natbib}
 \bibliographystyle{apalike}
 
@@ -131,45 +145,43 @@ Microbiome data must be normalized before any statistical analysis can be perfor
 
 Analysis of composition, differences, connections, etc. should be done based only on true biological aspects. However, technical variation in counts across samples is a given hurdle that must be accounted for. Biases can arise in the sequencing process, sample preparation, contamination, preferential amplification, and can manifest in differences in sparsity and unequal sequencing depths \citep{salter2014}. An effective normalization strategy should put all samples on equal footing so interpretations are on biological signals, not technical signals such as sequencing depth. Currently, there is no known `best' normalization method that removes all technical artifacts leaving only biological signals.
 
-Due to the sequencing technology, samples will have different sequencing depths, or the sum of all the counts in a sample. Directly comparing raw counts between samples is not possible. To illustrate this, consider the counts of one taxon, labeled \texttt{taxon1}, across two samples shown below. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples? As we see below, the way we normalize the data can change how we would answer this question.
+Due to the sequencing technology, samples will have different sequencing depths, or the sum of all the counts in a sample. Directly comparing raw counts between samples is not possible. To illustrate this, consider the counts of Taxon 1, across two samples shown below. In Sample A, this taxon has a count of 230, and in Sample B, this taxon has a count of 23. Is this taxon differentially abundant between samples? As we see below, the way we normalize the data can change how we would answer this question.
 
-\textbackslash begin\{table\}
+\begin{longtable}[]{@{}lrr@{}}
+\caption{\label{tab:unnamed-chunk-1}The raw counts of taxon 1 are different, and the raw counts of taxon 2 are equal. Sampling depth is not accounted for.}\tabularnewline
+\toprule
+Taxa & Sample A & Sample B\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Taxa & Sample A & Sample B\tabularnewline
+\midrule
+\endhead
+Taxon 1 & 230 & 23\tabularnewline
+Taxon 2 & 5 & 5\tabularnewline
+\bottomrule
+\end{longtable}
 
-\textbackslash caption\{(\#tab:demo\_data\_table\_raw\_counts)The raw counts of taxon 1 are different, and the raw counts of taxon 2 are equal. Sampling depth is not accounted for\}
-\centering
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-2-1.pdf}
 
-\begin{tabular}[t]{l|r|r}
-\hline
-Sample A & Sample B & Taxa\\
-\hline
-taxon1 & 230 & 23\\
-\hline
-taxon2 & 5 & 5\\
-\hline
-\end{tabular}
-
-\textbackslash end\{table\}
-
-\includegraphics{MB_normalization_review_files/figure-latex/demo_normalization_importance-1.pdf}
-
-Normalization for microbiome data often refers to standardizing sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as Figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in \texttt{ASV1} between samples appears much smaller. However, now there appears to be a difference in \texttt{ASV2}, even though the counts were originally the same. This is because in sample B \texttt{ASV1} consists of a higher proportion of the total count than in sample A.
+Normalization for microbiome data often refers to standardizing sequencing depth across samples. One common approach to this is a scaling-based approach, where a scaling factor is calculated for every sample and the counts for each taxon are divided by the scaling factor for that sample. Figure B shows the same data as Figure A, but where each sample has been transformed into proportions by dividing by the total counts for each sample. The difference in Taxon 1 between samples appears much smaller. However, now there appears to be a difference in Taxon 2, even though the counts were originally the same. This is because in sample B, Taxon 1 consists of a higher proportion of the total count than in sample A.
 
 This demonstrates the importance of normalization, but also the artifacts that can occur depending on the method.
 
 \hypertarget{the-compositional-nature-of-microbiome-data}{%
 \section{The compositional nature of microbiome data}\label{the-compositional-nature-of-microbiome-data}}
 
-Microbiome data are inherently compositional. The counts of the collection of taxa that make up each sample are constrained by the total sum, or sequencing depth for that sample. This means that the count of each sampled taxon is a portion of a larger whole. Each observed taxon is not independent. As we saw in the above example, before normalization, \texttt{ASV2} was equal between samples. After converting to proportions, \texttt{ASV2} no longer appears equal. If there is a difference between two samples it is unclear if that difference is because of a true difference in that taxon or if that taxon is changing because of differences in another taxon. Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.
+Microbiome data are inherently compositional. The counts of the collection of taxa that make up each sample are constrained by the total sum, or sequencing depth for that sample. This means that the count of each sampled taxon is a portion of a larger whole. Each observed taxon is not independent. As we saw in the above example, before normalization, Taxon 2 was equal between samples. After converting to proportions, Taxon 2 no longer appears equal. If there is a difference between two samples it is unclear if that difference is because of a true difference in that taxon or if that taxon is changing because of differences in another taxon. Numerous traditional statistical methods rely on an independence assumption, which is not met with microbiome data. This can lead to spurious correlations that exist only because of the compositional nature and not any true signal.
 
 With library size as the sum constraint for each sample, if we know in a biological system that after an event occurs (treatment), the red taxon decreases, this will change the composition of the sampled blue taxon regardless of its change or lack thereof in the underlying population.
 
-\includegraphics{MB_normalization_review_files/figure-latex/compositional-plot-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-3-1.pdf}
 
 Consider again two samples consisting of red and blue points. We can think of the samples as before and after treatment. In the second plot, the number of red dots in the population and in the observed sample has decreased, but the blue remains the same.
 
 \begin{table}
 
-\caption{\label{tab:compositional-tibble}Counts of sampled red and blue taxa before and after}
+\caption{\label{tab:unnamed-chunk-4}Counts of sampled red and blue taxa before and after}
 \centering
 \begin{tabular}[t]{l|r|r}
 \hline
@@ -184,7 +196,7 @@ After & 10 & 4\\
 
 \begin{table}
 
-\caption{\label{tab:compositional-tibble}Proportions of sampled red and blue taxa before and after}
+\caption{\label{tab:unnamed-chunk-4}Proportions of sampled red and blue taxa before and after}
 \centering
 \begin{tabular}[t]{l|r|r}
 \hline
@@ -377,15 +389,18 @@ Repeat this same process for the \texttt{kostic} data. Use a prevalence filter t
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-3-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-7-1.pdf}
 
 When considering a normalization method, it is important to know if between sample (DA methods) or within sample (community) analysis is of interest.
 
+\hypertarget{count-scaling-normalization-methods}{%
+\chapter{Count Scaling Normalization methods}\label{count-scaling-normalization-methods}}
+
 \hypertarget{total-sum-scaling-tss}{%
-\chapter{Total Sum scaling (TSS)}\label{total-sum-scaling-tss}}
+\section{Total Sum scaling (TSS)}\label{total-sum-scaling-tss}}
 
 \hypertarget{about-tss}{%
-\section{About TSS}\label{about-tss}}
+\subsection{About TSS}\label{about-tss}}
 
 The first method described is Total Sum Scaling (TSS). This method is also referred to as Total Count (TC), converting into proportions, or relative abundance. This is a scaling method to normalize the different library sizes across samples. For every entry in the count matrix, we scale by the total read depth of that sample. This converts the counts into the proportion of abundance present in each given sample.
 
@@ -403,8 +418,11 @@ Sample B & 824 & 23 & 13 & 20 & 880 & 56\\
 
 Because this method does not account for the preferential sequencing over-abundance of \texttt{ASV1} it is possible to see an increase in false positives. However, this is a widely used method, and one of the few normalization methods that completely accounts for differing library sizes, which can be an important consideration depending on the analysis goal. Community level-analysis, for example, can be library-size dependent (ordination, some dissimiliarity measures).
 
-\hypertarget{tss-implementation}{%
-\section{TSS Implementation}\label{tss-implementation}}
+\hypertarget{tss-r-code}{%
+\subsection{TSS R code}\label{tss-r-code}}
+
+\hypertarget{function}{%
+\subsubsection{Function}\label{function}}
 
 Here, we provide a wrapper function that will normalize a \texttt{phyloseq} object by Total Sum Scaling. We have the option of keeping the result as proportions (having values 0-1), or transforming to an equal sequencing depth so the results are counts per million.
 
@@ -420,10 +438,8 @@ Here, we provide a wrapper function that will normalize a \texttt{phyloseq} obje
 \end{Highlighting}
 \end{Shaded}
 
-s
-
-\hypertarget{tss-on-global-patterns}{%
-\section{TSS on Global Patterns}\label{tss-on-global-patterns}}
+\hypertarget{tss-implementation-on-global-patterns}{%
+\subsubsection{TSS implementation on Global Patterns}\label{tss-implementation-on-global-patterns}}
 
 Using the above function, we apply this normalization to the Global Patterns data.
 
@@ -489,12 +505,12 @@ We can also compare the values of the distance matrices before and after normali
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are `more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, un-normalized data, and became marked as more similar after TSS normalization.
 
 \hypertarget{tss-on-kostic-data}{%
-\section{TSS on Kostic data}\label{tss-on-kostic-data}}
+\subsubsection{TSS on Kostic data}\label{tss-on-kostic-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -511,7 +527,7 @@ Points below the line are pairs of samples that are marked as more similar after
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-5-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-10-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -524,7 +540,7 @@ Points below the line are pairs of samples that are marked as more similar after
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-5-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-10-2.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -534,24 +550,143 @@ Points below the line are pairs of samples that are marked as more similar after
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-5-3.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-10-3.pdf}
+
+\hypertarget{cumulative-sum-scaling-css}{%
+\section{Cumulative sum scaling (CSS)}\label{cumulative-sum-scaling-css}}
+
+\hypertarget{about-css}{%
+\subsection{About CSS}\label{about-css}}
+
+Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner \citep{paulson2013}. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. This method is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods \citep{costea2014}.
+
+\hypertarget{css-r-code}{%
+\subsection{CSS R code}\label{css-r-code}}
+
+\hypertarget{function-1}{%
+\subsubsection{Function}\label{function-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{norm\_CSS \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps)\{}
+  \KeywordTok{require}\NormalTok{(metagenomeSeq)}
+  \CommentTok{\# Convert to metagenomeSeq data type}
+\NormalTok{  ps.metaG\textless{}{-}}\KeywordTok{phyloseq\_to\_metagenomeSeq}\NormalTok{(ps)}
+\NormalTok{  p\_stat =}\StringTok{ }\KeywordTok{cumNormStatFast}\NormalTok{(ps.metaG)}
+\NormalTok{  ps.metaG =}\StringTok{ }\KeywordTok{cumNorm}\NormalTok{(ps.metaG, }\DataTypeTok{p =}\NormalTok{ p\_stat)}
+\NormalTok{  ps.metaG.norm \textless{}{-}}\StringTok{ }\KeywordTok{MRcounts}\NormalTok{(ps.metaG, }\DataTypeTok{norm =}\NormalTok{ T)}
+  \CommentTok{\# Convert back to phyloseq with normalized counts}
+\NormalTok{  otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(ps.metaG.norm, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
+\NormalTok{  sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
+\NormalTok{  sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\KeywordTok{normFactors}\NormalTok{(ps.metaG)}\OperatorTok{/}\FloatTok{1e6}
+\NormalTok{  tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
+\NormalTok{  phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
+\NormalTok{  ps\_CSS \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
+  \KeywordTok{return}\NormalTok{(ps\_CSS)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{css-on-global-patterns}{%
+\subsubsection{CSS on Global Patterns}\label{css-on-global-patterns}}
+
+Perform CSS normalization:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gp\_css \textless{}{-}}\StringTok{ }\KeywordTok{norm\_CSS}\NormalTok{(gp\_raw)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Default value being used.
+\end{verbatim}
+
+View how TMM normalization changes distance metrics differently than raw counts.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_css, gp\_raw, }
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"CSS"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between CSS normalization and Raw counts"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_css, gp\_tss, }
+                  \DataTypeTok{x\_lab =} \StringTok{"TSS"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"CSS"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between CSS normalization and TSS normalization"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-13-2.pdf}
+
+CSS normalization appears to consider pairs as more different than TSS normalization, and pairs with high sequencing depth differences even more so.
+
+\hypertarget{css-on-kostic-data}{%
+\subsubsection{CSS on Kostic data}\label{css-on-kostic-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k\_css \textless{}{-}}\StringTok{ }\KeywordTok{norm\_CSS}\NormalTok{(k\_raw)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Default value being used.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_ordination}\NormalTok{(}
+\NormalTok{    k\_css,}
+\NormalTok{    phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_css, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
+    \DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{,}
+    \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
+\NormalTok{) }\OperatorTok{/}
+\StringTok{    }\KeywordTok{plot\_ordination}\NormalTok{(}
+\NormalTok{        k\_css,}
+\NormalTok{        phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_css, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
+        \DataTypeTok{color =} \StringTok{"depth"}\NormalTok{,}
+        \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_css, k\_raw, }
+                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"CSS"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between CSS normalization and Raw counts"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-14-2.pdf}
+
+\hypertarget{subsampling-methods}{%
+\chapter{Subsampling Methods}\label{subsampling-methods}}
 
 \hypertarget{rarefying}{%
-\chapter{Rarefying}\label{rarefying}}
+\section{Rarefying}\label{rarefying}}
 
 \hypertarget{about-rarefying}{%
-\section{About Rarefying}\label{about-rarefying}}
+\subsection{About Rarefying}\label{about-rarefying}}
 
 Rarefying is another common normalization technique that standardizes the library size across samples that was originally used in ecology. This method standardizes the read depth across all samples. To perform this method we first choose a minimum library size. Looking at rarefaction/collectors curves, or using a certain percentile can guide choosing this cutoff. Then all samples that have a read depth below this cutoff are discarded. Thus this method has a built-in filtering step. Next, we sample without replacement of the size of the chosen cutoff. It can be a standalone method or combined with other methods and transformations.
 
 This is a very commonly used method, but it has also been criticized \citep{mcmurdie2014}. First of all, it throws away valid data, and this results in a loss of power and an increase in false positives. Rare taxa can be removed in this approach too. It is however encouraged when we have widely different library sizes as it can lower the false discovery rate \citep{weiss2017}, and has also been shown to perform well in community-level analysis \citep{mcknight2019}, as it completely standardizes the read count depth, and some methods are sensitive to differences in read count. Rarefying has been shown to separate by biological signal in ordination methods based on presence/absence.
 
-\hypertarget{rarefying-implementation}{%
-\section{Rarefying implementation}\label{rarefying-implementation}}
+\hypertarget{rarefying-walkthrough}{%
+\subsection{Rarefying walkthrough}\label{rarefying-walkthrough}}
 
 Consider the following example dataset.
 
-\label{tab:unnamed-chunk-6}Example dataset - Raw Counts
+\label{tab:unnamed-chunk-15}Example dataset - Raw Counts
 
 Taxa
 
@@ -615,7 +750,7 @@ We then randomly sample taxa from each sample/column in the proportions correspo
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-8}Rarefied counts}
+\caption{\label{tab:unnamed-chunk-17}Rarefied counts}
 \centering
 \begin{tabular}[t]{l|r|r}
 \hline
@@ -634,6 +769,9 @@ Taxon 5 & 61 & 60\\
 \end{tabular}
 \end{table}
 
+\hypertarget{rarefying-r-code}{%
+\subsection{Rarefying R code}\label{rarefying-r-code}}
+
 We now show the process of rarefying a real dataset. The following function returns a rarefied \texttt{phyloseq} object. We can either pass in the minimum sampling depth as a second argument, or use the default minimum depth of the samples.
 
 \begin{Shaded}
@@ -645,7 +783,7 @@ We now show the process of rarefying a real dataset. The following function retu
 \end{Shaded}
 
 \hypertarget{rarefying-on-global-patterns}{%
-\section{Rarefying on Global Patterns}\label{rarefying-on-global-patterns}}
+\subsubsection{Rarefying on Global Patterns}\label{rarefying-on-global-patterns}}
 
 We use the above function to rarefy the Global Patterns data. The first difficulty is choosing a minimum sampling depth. The Global Patterns dataset already has a very high sampling depth for all samples, so we will chose the lowest as the minimum depth to rarefy to.Since we chose the minimum sampling depth, no samples have been dropped. In data sets where we have low sampling depth there is a balance between how many samples to drop and how low to set the minimum depth to.
 
@@ -740,7 +878,7 @@ Now examine how the distance matrices change before/after normalization. We see 
 \includegraphics{MB_normalization_review_files/figure-latex/rare_plot_ordination-2.pdf}
 
 \hypertarget{rarefying-on-kostic-data}{%
-\section{Rarefying on Kostic Data}\label{rarefying-on-kostic-data}}
+\subsection{Rarefying on Kostic Data}\label{rarefying-on-kostic-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -775,7 +913,7 @@ Now examine how the distance matrices change before/after normalization. We see 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-10-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-19-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -785,15 +923,18 @@ Now examine how the distance matrices change before/after normalization. We see 
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-10-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-19-2.pdf}
+
+\hypertarget{library-size-and-composition-scaling-methods}{%
+\chapter{Library Size and Composition Scaling Methods}\label{library-size-and-composition-scaling-methods}}
 
 \hypertarget{deseq}{%
-\chapter{DESeq}\label{deseq}}
+\section{DESeq}\label{deseq}}
 
 \hypertarget{about-deseq}{%
-\section{About DESeq}\label{about-deseq}}
+\subsection{About DESeq}\label{about-deseq}}
 
-DESeq2 includes a normalization method for adjusting for differing library sizes across samples \citep{anders2010}. This method also can account for differences in library composition. This method has also been called MED, RLE, or DESeq in the literature.
+The DESeq2 package includes a normalization method for adjusting for differing library sizes across samples \citep{anders2010}. This method also can account for differences in library composition. A scaling factor to normalize each sample takes into account both library size and library composition. This method has also been called MED, RLE, or DESeq in the literature.
 
 DESeq2 first takes the natural logarithm of every entry in the count matrix. Due to this, all entries with zero will be set to negative infinity. Next, the row average is calculated (geometric average), so we have a vector of average counts for each taxon. Taking the log first should avoid undue influence by extreme outliers. All taxa with an average of infinity are removed. This step will remove all taxa with zero read count in one or more samples. This can be a problem in microbiome data. Next, we subtract the average log value from the log(counts), this gives a log ratio. This is equivalent to the ratio of the reads in each sample to the average across all samples. Next, we calculate the median of the log-ratios for each sample. These medians are converted to scaling factors for each sample by exponentiation. An extension of this method, denoted `poscounts', has been suggested, which instead of taking the geometric mean of the logged counts for each taxon, we take the n-th root of the product of the non-zero counts.
 
@@ -803,10 +944,247 @@ An additional option can be used to perform a variance stabilizing transformatio
 
 If differential abundance is of interest to calculate, DESeq uses a negative binomial distribution to model differential abundances. It is possible to provide the size factors calculated by another method to DESeq to perform differential analysis.
 
-\hypertarget{deseq-implementation}{%
-\section{DESeq Implementation}\label{deseq-implementation}}
+\hypertarget{deseq-walkthrough}{%
+\subsubsection{DESeq walkthrough}\label{deseq-walkthrough}}
 
-Here we provide two normalization functions using DESeq methods. The first calculates the RLE normalization using the \texttt{poscounts} option for microbiome data. The second calculates the variance stabalizing transformation.
+Consider again this example dataset.
+
+\label{tab:unnamed-chunk-20}Example dataset - Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+132
+
+103
+
+11
+
+Taxon 2
+
+7
+
+48
+
+3
+
+Taxon 3
+
+0
+
+2
+
+1
+
+Taxon 4
+
+23
+
+15
+
+2
+
+Taxon 5
+
+71
+
+80
+
+5
+
+The first step in DESeq normalization is to take the natural log of each entry in the count matrix.
+
+\label{tab:unnamed-chunk-21}Step 1: Logged Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+4.882802
+
+4.6347290
+
+2.3978953
+
+Taxon 2
+
+1.945910
+
+3.8712010
+
+1.0986123
+
+Taxon 3
+
+-Inf
+
+0.6931472
+
+0.0000000
+
+Taxon 4
+
+3.135494
+
+2.7080502
+
+0.6931472
+
+Taxon 5
+
+4.262680
+
+4.3820266
+
+1.6094379
+
+Notice the one entry with zero counts is marked as negative infinity.
+
+Next, the average of the logged values is taken across the samples. This results in an average log value for each taxa. This averaged log value is helpful for normalizing because it is not overwhelmed by outliers.
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-22}Step 2: Average Logged Counts}
+\centering
+\begin{tabular}[t]{l|r}
+\hline
+Taxa & Average Log Counts\\
+\hline
+Taxon 1 & 3.971809\\
+\hline
+Taxon 2 & 2.305241\\
+\hline
+Taxon 3 & -Inf\\
+\hline
+Taxon 4 & 2.178897\\
+\hline
+Taxon 5 & 3.418048\\
+\hline
+\end{tabular}
+\end{table}
+
+The row for the taxa that contained a zero on one of the samples is negative infinity. This taxon is now excluded from the following steps. This step results in removing any taxa that have zero counts from being considered to contribute to calculating the scaling factors.
+
+The next step is to subtract the average log values (step 2) from the log of the raw counts (step 1), only including rows that were not filtered. This step shows which samples have counts in a sample higher or lower than the average.
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-23}Step 3: Log Ratio of reads in each sample to average across all samples}
+\centering
+\begin{tabular}[t]{l|l|l|l}
+\hline
+Taxa & Sample 1 & Sample 2 & Sample 3\\
+\hline
+Taxon 1 & 4.88 - 3.97 = 0.91 & 4.63 - 3.97 = 0.66 & 2.40 - 3.97 = -1.57\\
+\hline
+Taxon 2 & 1.95 - 2.31 = -0.36 & 3.97 - 2.31 = 1.66 & 1.10 - 2.31 = -1.31\\
+\hline
+Taxon 4 & 3.14 - 2.18 = 0.96 & 2.71 - 2.18 = 0.53 & 0.69 - 2.18 = -1.49\\
+\hline
+Taxon 5 & 4.26 - 3.42 = 0.84 & 4.38 - 3.42 = 0.96 & 1.61- 3.42 = -1.81\\
+\hline
+\end{tabular}
+\end{table}
+
+Next, to calculate the scaling factors for each sample, we take the median of the log ratios calculated in the above step. Like using logs, calculating medians avoids the influence of outlier taxa that put undue influence on the scaling factor.
+
+\begin{table}
+
+\caption{\label{tab:unnamed-chunk-24}Step 4: Calculating medians per sample}
+\centering
+\begin{tabular}[t]{l|r|r|r}
+\hline
+Taxa & Sample 1 & Sample 2 & Sample 3\\
+\hline
+Taxon 1 & 0.910000 & 0.660000 & -1.5700000\\
+\hline
+Taxon 2 & -0.360000 & 1.660000 & -1.3100000\\
+\hline
+Taxon 4 & 0.960000 & 0.530000 & -1.4900000\\
+\hline
+Taxon 5 & 0.840000 & 0.960000 & -1.8100000\\
+\hline
+Median & 0.875000 & 0.810000 & -1.5300000\\
+\hline
+Exponentiated Median & 2.398875 & 2.247908 & 0.2165357\\
+\hline
+\end{tabular}
+\end{table}
+
+Finally, we normalize the data, by exponentiating the median log ratios for each sample, which are the final scaling factors. We then divide all the raw counts in a sample by the sample's scaling factor.
+
+\label{tab:unnamed-chunk-25}Step 5: DESeq Normalized Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+55.025787
+
+45.8203808
+
+50.799945
+
+Taxon 2
+
+2.918034
+
+21.3531872
+
+13.854530
+
+Taxon 3
+
+0.000000
+
+0.8897161
+
+4.618177
+
+Taxon 4
+
+9.587827
+
+6.6728710
+
+9.236354
+
+Taxon 5
+
+29.597203
+
+35.5886453
+
+23.090884
+
+Since Taxon 3 had a zero count in sample 1, it was excluded from the calculation of scale factors. The above example dataset may not be characteristic of microbiome datasets. Microbiome datasets are zero-inflated, meaning that there are numerous zero counts in the raw count matrix. Even up to 80-90\% of the counts in a microbiome datset can be zero. Because of this, if the zero-inflation in the datseta is not accounted for, very few, or even perhaps none of the taxa will contribute to calculating the scaling factor. One option so that all of the taxa are included in the calculation is to add a pseudocount so none of the counts are zero. Another option is the \texttt{poscounts} option, which is encouraged for microbiome data. Instead of taking the average of the logged counts, it takes the \(n\)th root of the non-zero counts. This replaces step 2 in this example.
+
+\hypertarget{deseq-r-code}{%
+\subsection{DESeq R Code}\label{deseq-r-code}}
+
+\hypertarget{function-2}{%
+\subsubsection{Function}\label{function-2}}
+
+Here we provide two normalization functions implemented in R using DESeq methods. The first calculates the RLE normalization using the \texttt{poscounts} option for microbiome data. The second calculates the variance stabilizing transformation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -852,8 +1230,8 @@ Here we provide two normalization functions using DESeq methods. The first calcu
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{deseq-on-global-patterns}{%
-\section{DESeq on Global Patterns}\label{deseq-on-global-patterns}}
+\hypertarget{deseq-implemented-on-global-patterns}{%
+\subsubsection{DESeq implemented on Global Patterns}\label{deseq-implemented-on-global-patterns}}
 
 Perform DESeq RLE normalization as well as DESeq variance stabilized transformation on Global Patterns:
 
@@ -896,10 +1274,10 @@ See how dissimilarity matrices differ from raw counts and each DESeq transformat
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-12-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-27-1.pdf}
 
-\hypertarget{deseq-on-kostic-data}{%
-\section{DESeq on Kostic data}\label{deseq-on-kostic-data}}
+\hypertarget{deseq-implemented-on-kostic-dataset}{%
+\subsubsection{DESeq implemented on Kostic dataset}\label{deseq-implemented-on-kostic-dataset}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -918,7 +1296,7 @@ See how dissimilarity matrices differ from raw counts and each DESeq transformat
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-13-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-28-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -932,15 +1310,240 @@ See how dissimilarity matrices differ from raw counts and each DESeq transformat
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-13-2.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-28-2.pdf}
+
+\hypertarget{gmpr}{%
+\section{GMPR}\label{gmpr}}
+
+\hypertarget{about-gmpr}{%
+\subsection{About GMPR}\label{about-gmpr}}
+
+A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach \citep{chen2018}. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are many shared taxa between pairs. It then uses the pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxa. The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.
+
+\hypertarget{gmpr-walkthough}{%
+\subsection{GMPR Walkthough}\label{gmpr-walkthough}}
+
+Consider the following zero-inflated dataset. Notice that there are no taxa that are present in every sample.
+
+\label{tab:unnamed-chunk-29}Example dataset - Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Taxon 1
+
+132
+
+103
+
+0
+
+Taxon 2
+
+0
+
+48
+
+74
+
+Taxon 3
+
+0
+
+2
+
+0
+
+Taxon 4
+
+23
+
+0
+
+35
+
+Taxon 5
+
+71
+
+80
+
+0
+
+Taxon 6
+
+0
+
+96
+
+82
+
+The first step in GMPR normalization is to calculate the pairwise median count ratio between samples. We first calculate the scaling factor for sample 1. The pairwise comparisons we need to make are between sample 1 and sample 2 as well as sample 1 and sample 3. For both pairs, we calculate the ratio of the counts of taxa that the pair shares. Between sample 1 and sample 2, the shared taxa are 1 and 5. Between sample 1 and sample 3, taxon 4 is the only one shared.
+
+\label{tab:unnamed-chunk-30}Example dataset - Raw Counts
+
+Taxa
+
+Sample 1
+
+Sample2
+
+Sample 3
+
+Count ratio between 1 and 2
+
+Count ratio between 1 and 3
+
+Taxon 1
+
+132
+
+103
+
+0
+
+132/103
+
+Taxon 2
+
+0
+
+48
+
+74
+
+Taxon 3
+
+0
+
+2
+
+0
+
+Taxon 4
+
+23
+
+0
+
+35
+
+23/35
+
+Taxon 5
+
+71
+
+80
+
+0
+
+71/80
+
+Taxon 6
+
+0
+
+96
+
+82
+
+Then we calculate the median of the ratios between each pair. Between sample 1 and 2, the two ratios between shared taxa are (132/103, 71/80). Then the median of those is 1.085. Between sample 1 and 3, there is only one shared taxa, so the median is 0.657.
+
+Finally to find the scaling factor for sample 1, we calculate the geometric mean of the two medians of the pairwise shared taxa ratios. In this case it is the geometric mean of 1.085 and 0.657, which equals 0.844. This is the scaling factor for sample 1.
+We now repeat this process to find the scaling factor for sample 1 and sample 3.
+
+\hypertarget{gmpr-r-code}{%
+\subsection{GMPR R Code}\label{gmpr-r-code}}
+
+\hypertarget{function-3}{%
+\subsubsection{Function}\label{function-3}}
+
+The following provides the R code to implement GMPR normalization in R. We can additionally specify the number of taxa that should be shared between paired samples as well as the minimum count labeled as nonzero. The default values are 4 and 2 respectively.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{norm\_GMPR \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{intersect\_no =} \DecValTok{4}\NormalTok{, }\DataTypeTok{min\_ct =} \DecValTok{2}\NormalTok{)\{}
+  \KeywordTok{require}\NormalTok{(GMPR, }\DataTypeTok{quietly =}\NormalTok{ T)}
+    \CommentTok{\# Convert data to correct format for GMPR function }
+\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{as}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(ps), }\StringTok{"matrix"}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{taxa\_are\_rows}\NormalTok{(ps))\{otu \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(otu)\}}
+\NormalTok{    otu\_df =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(otu)}
+\NormalTok{    otu.tab \textless{}{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(otu, }\DataTypeTok{ncol =} \KeywordTok{ncol}\NormalTok{(otu))}
+    \CommentTok{\# calculate scaling factor}
+    \CommentTok{\# OTU matrix must be a data frame where OTUs are arranged in columns and samples as rows}
+\NormalTok{    gmpr.size.factor \textless{}{-}}\StringTok{ }\NormalTok{GMPR}\OperatorTok{::}\KeywordTok{GMPR}\NormalTok{(}\DataTypeTok{OTUmatrix =}\NormalTok{ otu\_df,}
+                                   \DataTypeTok{intersect\_no =}\NormalTok{ intersect\_no,}
+                                   \DataTypeTok{min\_ct =}\NormalTok{ min\_ct)}
+    \CommentTok{\# normalize}
+\NormalTok{    otu.tab.norm \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(otu }\OperatorTok{/}\StringTok{ }\NormalTok{(gmpr.size.factor))}
+    \CommentTok{\# convert back to PS}
+\NormalTok{    otu\_ps \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(otu.tab.norm, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
+\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
+\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\NormalTok{gmpr.size.factor}
+\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
+\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
+\NormalTok{    ps\_GMPR \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu\_ps,sam,tax,phy)}
+    \KeywordTok{return}\NormalTok{(ps\_GMPR)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{gmpr-implementation-on-global-patterns}{%
+\subsubsection{GMPR implementation on Global Patterns}\label{gmpr-implementation-on-global-patterns}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Normalize}
+\NormalTok{gp\_gmpr \textless{}{-}}\StringTok{ }\KeywordTok{norm\_GMPR}\NormalTok{(gp\_raw)}
+
+\CommentTok{\# Compare to other methods like before}
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_raw,}
+                  \DataTypeTok{x\_lab =} \StringTok{"GMPR"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"Raw Counts"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"GMPR normalization vs Raw Counts"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_tss,}
+                  \DataTypeTok{x\_lab =} \StringTok{"TSS"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"GMPR"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"TSS vs GMPR"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_gmpr, gp\_deseq\_rle,}
+                  \DataTypeTok{x\_lab =} \StringTok{"DESeq"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"GMPR"}\NormalTok{,}
+                  \DataTypeTok{title =} \StringTok{"DESeq vs GMPR"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-31-3.pdf}
 
 \hypertarget{tmm-edger}{%
-\chapter{TMM (edgeR)}\label{tmm-edger}}
+\section{TMM (edgeR)}\label{tmm-edger}}
+
+\hypertarget{about-tmm}{%
+\subsection{About TMM}\label{about-tmm}}
 
 TMM (Trimmed median of m-values) is another method borrowed from RNA-Seq analysis, and implemented in \texttt{edgeR} \citep{robinson2010}. This method uses, or calculates a reference sample, and compares all other samples to the reference sample. The size factor is the mean of the log-ratios after excluding the highest count taxa and taxa with the largest fold change. As taxa with zero counts are excluded, a pseudo count is needed. Additionally, there is the \texttt{TMMwsp} option which is encouraged as it is more robust to zero counts. Positive counts are reused to increase the number of features when we compared. The singleton positive counts are paired up in decreasing order of size and then a modified TMM method is applied to the re-ordered libraries.
 
-\hypertarget{edger-tmm-implementation}{%
-\section{EdgeR TMM implementation}\label{edger-tmm-implementation}}
+\hypertarget{edger-tmm-t-code}{%
+\subsection{EdgeR TMM T code}\label{edger-tmm-t-code}}
+
+\hypertarget{function-4}{%
+\subsubsection{Function}\label{function-4}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -987,8 +1590,8 @@ TMM (Trimmed median of m-values) is another method borrowed from RNA-Seq analysi
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{tmm-on-global-patterns}{%
-\section{TMM on Global Patterns}\label{tmm-on-global-patterns}}
+\hypertarget{tmm-implementation-on-global-patterns}{%
+\subsubsection{TMM implementation on Global Patterns}\label{tmm-implementation-on-global-patterns}}
 
 Perform normalization:
 
@@ -1006,7 +1609,7 @@ View PCoA plots
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-16-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-34-1.pdf}
 
 View how TMM normalization changes distance metrics differently than raw counts.
 
@@ -1018,10 +1621,10 @@ View how TMM normalization changes distance metrics differently than raw counts.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-17-1.pdf}
+\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-35-1.pdf}
 
-\hypertarget{tmm-on-kostic-data}{%
-\section{TMM on Kostic data}\label{tmm-on-kostic-data}}
+\hypertarget{tmm-implementation-on-kostic-data}{%
+\subsubsection{TMM implementation on Kostic data}\label{tmm-implementation-on-kostic-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1053,157 +1656,10 @@ View how TMM normalization changes distance metrics differently than raw counts.
 
 \includegraphics{MB_normalization_review_files/figure-latex/edgeR-kostic-2.pdf}
 
-\hypertarget{cumulative-sum-scaling-css}{%
-\chapter{Cumulative sum scaling (CSS)}\label{cumulative-sum-scaling-css}}
-
-Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner \citep{paulson2013}. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. This method is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods \citep{costea2014}.
-
-\hypertarget{css-implementation}{%
-\section{CSS implementation}\label{css-implementation}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{norm\_CSS \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps)\{}
-  \KeywordTok{require}\NormalTok{(metagenomeSeq)}
-  \CommentTok{\# Convert to metagenomeSeq data type}
-\NormalTok{  ps.metaG\textless{}{-}}\KeywordTok{phyloseq\_to\_metagenomeSeq}\NormalTok{(ps)}
-\NormalTok{  p\_stat =}\StringTok{ }\KeywordTok{cumNormStatFast}\NormalTok{(ps.metaG)}
-\NormalTok{  ps.metaG =}\StringTok{ }\KeywordTok{cumNorm}\NormalTok{(ps.metaG, }\DataTypeTok{p =}\NormalTok{ p\_stat)}
-\NormalTok{  ps.metaG.norm \textless{}{-}}\StringTok{ }\KeywordTok{MRcounts}\NormalTok{(ps.metaG, }\DataTypeTok{norm =}\NormalTok{ T)}
-  \CommentTok{\# Convert back to phyloseq with normalized counts}
-\NormalTok{  otu \textless{}{-}}\StringTok{ }\KeywordTok{otu\_table}\NormalTok{(ps.metaG.norm, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ T)}
-\NormalTok{  sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
-\NormalTok{  sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\KeywordTok{normFactors}\NormalTok{(ps.metaG)}\OperatorTok{/}\FloatTok{1e6}
-\NormalTok{  tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
-\NormalTok{  phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
-\NormalTok{  ps\_CSS \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(otu,sam,tax,phy)}
-  \KeywordTok{return}\NormalTok{(ps\_CSS)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{css-on-global-patterns}{%
-\section{CSS on Global Patterns}\label{css-on-global-patterns}}
-
-Perform CSS normalization:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{gp\_css \textless{}{-}}\StringTok{ }\KeywordTok{norm\_CSS}\NormalTok{(gp\_raw)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Default value being used.
-\end{verbatim}
-
-View how TMM normalization changes distance metrics differently than raw counts.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_css, gp\_raw, }
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"CSS"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between CSS normalization and Raw counts"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-20-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(gp\_css, gp\_tss, }
-                  \DataTypeTok{x\_lab =} \StringTok{"TSS"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"CSS"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between CSS normalization and TSS normalization"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-20-2.pdf}
-
-CSS normalization appears to consider pairs as more different than TSS normalization, and pairs with high sequencing depth differences even more so.
-
-\hypertarget{css-on-kostic-data}{%
-\section{CSS on Kostic data}\label{css-on-kostic-data}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{k\_css \textless{}{-}}\StringTok{ }\KeywordTok{norm\_CSS}\NormalTok{(k\_raw)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Default value being used.
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_ordination}\NormalTok{(}
-\NormalTok{    k\_css,}
-\NormalTok{    phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_css, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
-    \DataTypeTok{color =} \StringTok{"DIAGNOSIS"}\NormalTok{,}
-    \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
-\NormalTok{) }\OperatorTok{/}
-\StringTok{    }\KeywordTok{plot\_ordination}\NormalTok{(}
-\NormalTok{        k\_css,}
-\NormalTok{        phyloseq}\OperatorTok{::}\KeywordTok{ordinate}\NormalTok{(k\_css, }\StringTok{"PCoA"}\NormalTok{, }\StringTok{"bray"}\NormalTok{) ,}
-        \DataTypeTok{color =} \StringTok{"depth"}\NormalTok{,}
-        \DataTypeTok{title =} \StringTok{"PCoA on Raw data"}
-\NormalTok{    )}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-21-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot\_norm\_changes}\NormalTok{(k\_css, k\_raw, }
-                  \DataTypeTok{x\_lab =} \StringTok{"Raw"}\NormalTok{, }\DataTypeTok{y\_lab =} \StringTok{"CSS"}\NormalTok{,}
-                  \DataTypeTok{title =} \StringTok{"Distance metric comparision between CSS normalization and Raw counts"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{MB_normalization_review_files/figure-latex/unnamed-chunk-21-2.pdf}
-
-\hypertarget{gmpr}{%
-\chapter{GMPR}\label{gmpr}}
-
-A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach \citep{chen2018}. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are many shared taxa between pairs. It then uses the pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxa. It addresses sparsity, but not composition. The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.
-
-\hypertarget{gmpr-implementation}{%
-\section{GMPR Implementation}\label{gmpr-implementation}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{norm\_GMPR \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(ps, }\DataTypeTok{scale =} \FloatTok{1e6}\NormalTok{)\{}
-  \KeywordTok{require}\NormalTok{(GMPR, }\DataTypeTok{quietly =}\NormalTok{ T)}
-    \CommentTok{\# Calculate GMPR size factor}
-    \CommentTok{\# Row {-} features, column {-} samples}
-\NormalTok{    otu \textless{}{-}}\StringTok{ }\KeywordTok{as}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(ps), }\StringTok{"matrix"}\NormalTok{)}
-    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{taxa\_are\_rows}\NormalTok{(ps))\{otu \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(otu)\}}
-\NormalTok{    otu\_df =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(otu)}
-\NormalTok{    otu.tab \textless{}{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(otu, }\DataTypeTok{ncol =} \KeywordTok{ncol}\NormalTok{(otu))}
-\NormalTok{    gmpr.size.factor \textless{}{-}}\StringTok{ }\NormalTok{GMPR}\OperatorTok{::}\KeywordTok{GMPR}\NormalTok{(otu\_df, }\DataTypeTok{intersect\_no =} \DecValTok{4}\NormalTok{, }\DataTypeTok{min\_ct =} \DecValTok{2}\NormalTok{)}
-    
-    \CommentTok{\# normalize}
-\NormalTok{    otu.tab.norm \textless{}{-}}\StringTok{ }\KeywordTok{t}\NormalTok{(}\KeywordTok{t}\NormalTok{(otu) }\OperatorTok{/}\StringTok{ }\NormalTok{(gmpr.size.factor}\OperatorTok{/}\NormalTok{scale))}
-    
-    \CommentTok{\# convert back to PS}
-\NormalTok{    sam \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"sam\_data"}\NormalTok{)}
-\NormalTok{    sam}\OperatorTok{$}\NormalTok{scaling\_factor \textless{}{-}}\StringTok{ }\NormalTok{gmpr.size.factor}
-\NormalTok{    tax \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"tax\_table"}\NormalTok{)}
-\NormalTok{    phy \textless{}{-}}\StringTok{ }\KeywordTok{access}\NormalTok{(ps, }\StringTok{"phy\_tree"}\NormalTok{)}
-\NormalTok{    ps\_GMPR \textless{}{-}}\StringTok{ }\KeywordTok{phyloseq}\NormalTok{(}\KeywordTok{otu\_table}\NormalTok{(otu.tab.norm, }\DataTypeTok{taxa\_are\_rows =}\NormalTok{ F),sam,tax,phy)}
-    \KeywordTok{return}\NormalTok{(ps\_GMPR)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
 \hypertarget{wrench}{%
 \chapter{Wrench}\label{wrench}}
 
-Wrench is a recent normalization method developed for microbiome data \citep{kumar2018}. This method includes compositional bias correction for sparse datasets. This method uses a hurdle log-normal distribution to estimate the normalization factors (the location estimate for the group). For this method, we assume abundances are drawn from a hurdle Log-Gaussian distribution, and the scaling factor used is essentially the location estimate for the group.
-
-\hypertarget{wrench-implementation}{%
-\section{Wrench Implementation}\label{wrench-implementation}}
+Wrench is a recent normalization method developed for microbiome data \citep{kumar2018} that uses an empirical Bayes Normalization approach. This method includes compositional bias correction for sparse datasets. This method uses a hurdle log-normal distribution to estimate the normalization factors (the location estimate for the group). For this method, we assume abundances are drawn from a hurdle Log-Gaussian distribution, and the scaling factor used is essentially the location estimate for the group.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1232,17 +1688,8 @@ Wrench is a recent normalization method developed for microbiome data \citep{kum
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{wrench-on-global-patterns}{%
-\section{Wrench on Global Patterns}\label{wrench-on-global-patterns}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{gp\_wrench \textless{}{-}}\StringTok{ }\KeywordTok{norm\_wrench}\NormalTok{(gp\_raw, }\DataTypeTok{group\_col =} \StringTok{"SampleType"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{log-ratio-methods}{%
-\chapter{Log Ratio Methods}\label{log-ratio-methods}}
+\hypertarget{log-ratio-transformation-methods-1}{%
+\chapter{Log Ratio Transformation Methods}\label{log-ratio-transformation-methods-1}}
 
 \hypertarget{ancom-ii}{%
 \section{ANCOM II}\label{ancom-ii}}

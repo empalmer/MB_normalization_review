@@ -8,7 +8,7 @@ The first method described is Total Sum Scaling (TSS). This method is also refer
 
 Though a more straightforward method, TSS normalization is not without its drawbacks. In microbiome data, it is common to have numerous low or zero-count observations, and that only a few most common OTUs contribute to the majority of the total sum of the sampling depth. These high-count, frequent, taxa could be an artifact of the sequencing step, where high abundance  observations are preferentially sampled. Using these large counts can dominate the scaling factor for each sample. As seen below, we see that the scaling factor for each sample is completely dominated by `ASV1`, if that one taxon were not included in the sample, the scaling factor would be widely different.
 
-```{r, tss_ex, echo = F}
+```{r, echo = F}
 sample <- c("Sample A", "Sample B")
 ASV1 <- c(10314, 824)
 ASV2 <- c(34, 23)
@@ -25,7 +25,9 @@ tibble(sample, ASV1, ASV2, ASV3, ASV4, scaling_factor, sf_wo_asv1) %>%
 Because this method does not account for the preferential sequencing over-abundance of `ASV1` it is possible to see an increase in false positives. However, this is a widely used method, and one of the few normalization methods that completely accounts for differing library sizes, which can be an important consideration depending on the analysis goal. Community level-analysis, for example, can be library-size dependent (ordination, some dissimiliarity measures).   
 
 
-### TSS Implementation 
+### TSS R code 
+
+#### Function 
 Here, we provide a wrapper function that will normalize a `phyloseq` object by Total Sum Scaling. We have the option of keeping the result as proportions (having values 0-1), or transforming to an equal sequencing depth so the results are counts per million.
 
 ```{r, norm_tss_func}
@@ -40,14 +42,14 @@ norm_TSS <- function(ps, keep_prop = F){
 
 
 <!-- To perform the normalization, this method calculates scaling factors.   -->
-s
+
 <!-- ```{r, tss_table} -->
 
 <!-- ``` -->
 
 
 
-### TSS on Global Patterns
+#### TSS implementation on Global Patterns
 
 Using the above function, we apply this normalization to the Global Patterns data. 
 
@@ -107,7 +109,7 @@ plot_norm_changes(gp_tss, gp_raw,
 
 Points below the line are pairs of samples that are marked as more similar after normalization. Points above the line are marked as more different after normalization. Values closer to 1 are 'more different'. Unsurprisingly, pairs that had larger original differences in sampling depth were marked as more different on the raw, un-normalized data, and became marked as more similar after TSS normalization. 
 
-### TSS on Kostic data
+#### TSS on Kostic data
 
 
 ```{r}
@@ -169,10 +171,14 @@ plot_norm_changes(k_tss, k_raw,
 
 ## Cumulative sum scaling (CSS)
 
+### About CSS
+
 Cumulative sum scaling is a scaling normalization method, developed for marker gene sequencing, It is intended to account for undersampling and correct biases from preferentially amplified features in a sample-specific manner [@paulson2013]. This method assumes that count distributions should be roughly equivalent and independent to each other up to the given quantile which is chosen as the smallest value at which instability is found. This method is an extension to UQ scaling where a quantile is specified. If there is high count variability the assumption may not be met. This is not a method that accounts for compositionality. CSS normalization initially showed improvements in separating samples biologically in ordination, it was shown to be an artifact of unequal application of log transformation across methods [@costea2014].
 
 
-### CSS implementation 
+### CSS R code
+
+#### Function 
 
 ```{r}
 norm_CSS <- function(ps){
@@ -193,7 +199,7 @@ norm_CSS <- function(ps){
 }
 ```
 
-### CSS on Global Patterns 
+#### CSS on Global Patterns 
 
 Perform CSS normalization: 
 ```{r}
@@ -214,7 +220,7 @@ plot_norm_changes(gp_css, gp_tss,
 
 CSS normalization appears to consider pairs as more different than TSS normalization, and pairs with high sequencing depth differences even more so. 
 
-### CSS on Kostic data
+#### CSS on Kostic data
 
 ```{r}
 k_css <- norm_CSS(k_raw)

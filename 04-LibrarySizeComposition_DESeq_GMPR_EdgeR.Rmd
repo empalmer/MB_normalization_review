@@ -1,4 +1,4 @@
-# Log-Ratio Based Scaling Methods
+# Library Size and Composition Scaling Methods
 
 ## DESeq
 
@@ -14,13 +14,12 @@ An additional option can be used to perform a variance stabilizing transformatio
 
 If differential abundance is of interest to calculate, DESeq uses a negative binomial distribution to model differential abundances. It is possible to provide the size factors calculated by another method to DESeq to perform differential analysis.
 
-### DESeq Implementation
-
+#### DESeq walkthrough
 
 Consider again this example dataset. 
 
 
-```{r}
+```{r, echo = F}
 sample1 <- c(132, 7, 0, 23, 71)
 sample2 <- c(103, 48, 2, 15, 80)
 sample3 <- c(11, 3, 1, 2, 5)
@@ -29,7 +28,7 @@ taxa <- paste("Taxon", 1:5)
 sampling_depth <- c(sum(sample1), sum(sample2), sum(sample3))
 
 tibble(taxa, sample1, sample2, sample3) %>%
-    knitr::kable(
+    kable(
         col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
         caption =  "Example dataset - Raw Counts", 
         format = "html"
@@ -38,7 +37,7 @@ tibble(taxa, sample1, sample2, sample3) %>%
 
 The first step in DESeq normalization is to take the natural log of each entry in the count matrix. 
 
-```{r, deseq_step_1}
+```{r, echo = F}
 
 ds1_df <- tibble(taxa, log(sample1), log(sample2), log(sample3))
 ds1_df  %>%
@@ -53,7 +52,7 @@ Notice the one entry with zero counts is marked as negative infinity.
 
 Next, the average of the logged values is taken across the samples. This results in an average log value for each taxa. This averaged log value is helpful for normalizing because it is not overwhelmed by outliers. 
 
-```{r deseq_step2}
+```{r  echo = F}
 
 ds2_df <- tibble(taxa, rowMeans(data.frame(log(sample1), log(sample2), log(sample3))))
 
@@ -73,7 +72,7 @@ The row for the taxa that contained a zero on one of the samples is negative inf
 The next step is to subtract the average log values (step 2) from the log of the raw counts (step 1), only including rows that were not filtered. This step shows which samples have counts in a sample higher or lower than the average. 
 
 
-```{r, deseq_step3}
+```{r,echo = F}
 s1v <- c(0.91, -.36, .96, .84)
 s2v <- c(.66, 1.66, .53, .96)
 s3v <- c(-1.57, -1.31, -1.49, -1.81)
@@ -101,7 +100,7 @@ tibble(taxa_filtered, s1_diff, s2_diff, s3_diff) %>%
 
 Next, to calculate the scaling factors for each sample, we take the median of the log ratios calculated in the above step. Like using logs, calculating medians avoids the influence of outlier taxa that put undue influence on the scaling factor.
 
-```{r, deseq_step4}
+```{r, echo = F}
 tibble(c(taxa_filtered, "Median", "Exponentiated Median"),
        c(s1v, median(s1v), exp(median(s1v))),
        c(s2v, median(s2v), exp(median(s2v))),
@@ -115,7 +114,7 @@ tibble(c(taxa_filtered, "Median", "Exponentiated Median"),
 
 Finally, we normalize the data, by exponentiating the median log ratios for each sample, which are the final scaling factors. We then divide all the raw counts in a sample by the sample's scaling factor.
 
-```{r, deseq }
+```{r, echo = F}
 tibble(taxa, sample1/exp(median(s1v)), sample2/exp(median(s2v)), sample3/exp(median(s3v)))  %>%
     knitr::kable(
         col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
@@ -128,7 +127,9 @@ tibble(taxa, sample1/exp(median(s1v)), sample2/exp(median(s2v)), sample3/exp(med
 Since Taxon 3 had a zero count in sample 1, it was excluded from the calculation of scale factors. The above example dataset may not be characteristic of microbiome datasets. Microbiome datasets are zero-inflated, meaning that there are numerous zero counts in the raw count matrix. Even up to 80-90% of the counts in a microbiome datset can be zero. Because of this, if the zero-inflation in the datseta is not accounted for, very few, or even perhaps none of the taxa will contribute to calculating the scaling factor. One option so that all of the taxa are included in the calculation is to add a pseudocount so none of the counts are zero. Another option is the `poscounts` option, which is encouraged for microbiome data. Instead of taking the average of the logged counts, it takes the $n$th root of the non-zero counts. This replaces step 2 in this example.  
 
 
+### DESeq R Code 
 
+#### Function 
 
 Here we provide two normalization functions implemented in R using DESeq methods. The first calculates the RLE normalization using the `poscounts` option for microbiome data. The second calculates the variance stabilizing transformation. 
 
@@ -175,7 +176,7 @@ norm_DESeq_vs <- function(ps, group = 1){
 
 ```
 
-### DESeq on Global Patterns
+#### DESeq implemented on Global Patterns
 
 Perform DESeq RLE normalization as well as DESeq variance stabilized transformation on Global Patterns:
 
@@ -211,7 +212,7 @@ plot_norm_changes(gp_deseq_vs, gp_raw,
 ```
 
 
-### DESeq on Kostic data 
+#### DESeq implemented on Kostic dataset
 
 ```{r, warning=FALSE,message=FALSE}
 k_deseq_rle <- norm_DESeq_RLE_poscounts(k_raw)
@@ -234,5 +235,209 @@ plot_norm_changes(k_deseq_vs, k_raw,
                   x_lab = "Raw", y_lab = "VST", 
                   title = "Distance metric comparision between VST normalization and Raw counts ") + 
   plot_layout(guides = 'collect')
+```
+
+
+
+
+
+
+## GMPR
+
+### About GMPR 
+
+A recent extension of the RLE DESeq method is the Geometric mean of Pairwise ratios (GMPR) approach [@chen2018]. This method reverses the steps of RLE, and instead calculates the median count ratio of the non-zero counts between pairs of samples as although only a small number of taxa are likely to be shared for every sample, it is more likely that there are many shared taxa between pairs. It then uses the pairwise results to calculate the size factor for each sample. This method has slow computation, but is robust to differential and outlier taxa. The size factors can be inputted to DESeq and a VST transformation applied additionally. It is a newer method, and has unfortunately not been included in many benchmarking studies, although initial results show it to be more powerful than DESeq, not surprisingly, as it uses more data, as zero counts do not need to be discarded. It assumes there is a large invariant portion of the count data, similar to other methods.
+
+### GMPR Walkthough
+
+Consider the following zero-inflated dataset. Notice that there are no taxa that are present in every sample. 
+
+```{r, echo = F}
+sample1 <- c(132, 0, 0, 23, 71, 0)
+sample2 <- c(103, 48, 2, 0, 80, 96)
+sample3 <- c(0, 74, 0, 35, 0, 82)
+taxa <- paste("Taxon", 1:6)
+
+sampling_depth <- c(sum(sample1), sum(sample2), sum(sample3))
+
+tibble(taxa, sample1, sample2, sample3) %>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3"),
+        caption =  "Example dataset - Raw Counts", 
+        format = "html"
+    ) 
+```
+
+The first step in GMPR normalization is to calculate the pairwise median count ratio between samples. We first calculate the scaling factor for sample 1. The pairwise comparisons we need to make are between sample 1 and sample 2 as well as sample 1 and sample 3. For both pairs, we calculate the ratio of the counts of taxa that the pair shares. Between sample 1 and sample 2, the shared taxa are 1 and 5. Between sample 1 and sample 3, taxon 4 is the only one shared. 
+
+```{r, echo = F}
+r12 <- c("132/103", NA, NA, NA, "71/80", NA)
+r13 <- c(NA, NA, NA, "23/35", NA, NA)
+options(knitr.kable.NA = '')
+tibble(taxa, sample1, sample2, sample3, r12, r13) %>%
+    knitr::kable(
+        col.names = c("Taxa", "Sample 1", "Sample2", "Sample 3", "Count ratio between 1 and 2", "Count ratio between 1 and 3"),
+        caption =  "Example dataset - Raw Counts", 
+        format = "html"
+    ) 
+```
+
+Then we calculate the median of the ratios between each pair. Between sample 1 and 2, the two ratios between shared taxa are (132/103, 71/80). Then the median of those is 1.085. Between sample 1 and 3, there is only one shared taxa, so the median is 0.657. 
+
+Finally to find the scaling factor for sample 1, we calculate the geometric mean of the two medians of the pairwise shared taxa ratios. In this case it is the geometric mean of 1.085 and 0.657, which equals 0.844. This is the scaling factor for sample 1. 
+We now repeat this process to find the scaling factor for sample 1 and sample 3. 
+
+### GMPR R Code
+
+#### Function 
+
+The following provides the R code to implement GMPR normalization in R. We can additionally specify the number of taxa that should be shared between paired samples as well as the minimum count labeled as nonzero. The default values are 4 and 2 respectively.
+
+```{r, gmpr-implementation}
+norm_GMPR <- function(ps, intersect_no = 4, min_ct = 2){
+  require(GMPR, quietly = T)
+    # Convert data to correct format for GMPR function 
+    otu <- as(otu_table(ps), "matrix")
+    if(taxa_are_rows(ps)){otu <- t(otu)}
+    otu_df = as.data.frame(otu)
+    otu.tab <- matrix(otu, ncol = ncol(otu))
+    # calculate scaling factor
+    # OTU matrix must be a data frame where OTUs are arranged in columns and samples as rows
+    gmpr.size.factor <- GMPR::GMPR(OTUmatrix = otu_df,
+                                   intersect_no = intersect_no,
+                                   min_ct = min_ct)
+    # normalize
+    otu.tab.norm <- t(otu / (gmpr.size.factor))
+    # convert back to PS
+    otu_ps <- otu_table(otu.tab.norm, taxa_are_rows = T)
+    sam <- access(ps, "sam_data")
+    sam$scaling_factor <- gmpr.size.factor
+    tax <- access(ps, "tax_table")
+    phy <- access(ps, "phy_tree")
+    ps_GMPR <- phyloseq(otu_ps,sam,tax,phy)
+    return(ps_GMPR)
+}
+
+```
+
+#### GMPR implementation on Global Patterns
+
+```{r}
+# Normalize
+gp_gmpr <- norm_GMPR(gp_raw)
+
+# Compare to other methods like before
+plot_norm_changes(gp_gmpr, gp_raw,
+                  x_lab = "GMPR", y_lab = "Raw Counts",
+                  title = "GMPR normalization vs Raw Counts")
+plot_norm_changes(gp_gmpr, gp_tss,
+                  x_lab = "TSS", y_lab = "GMPR",
+                  title = "TSS vs GMPR")
+plot_norm_changes(gp_gmpr, gp_deseq_rle,
+                  x_lab = "DESeq", y_lab = "GMPR",
+                  title = "DESeq vs GMPR" )
+```
+
+
+
+
+
+
+
+## TMM (edgeR)
+
+### About TMM
+
+TMM (Trimmed median of m-values) is another method borrowed from RNA-Seq analysis, and implemented in `edgeR` [@robinson2010]. This method uses, or calculates a reference sample, and compares all other samples to the reference sample. The size factor is the mean of the log-ratios after excluding the highest count taxa and taxa with the largest fold change. As taxa with zero counts are excluded, a pseudo count is needed. Additionally, there is the `TMMwsp` option which is encouraged as it is more robust to zero counts. Positive counts are reused to increase the number of features when we compared. The singleton positive counts are paired up in decreasing order of size and then a modified TMM method is applied to the re-ordered libraries.
+
+### EdgeR TMM T code 
+
+#### Function 
+
+```{r}
+norm_TMM <- function(physeq, group = 1, method="TMM", pseudocount = 1, ...){
+    require("edgeR", quietly = T)
+    require("phyloseq", quietly = T)
+    # Enforce orientation.
+    if( !taxa_are_rows(physeq) ){ physeq <- t(physeq) }
+    x = as(otu_table(physeq), "matrix")
+    # Add one to protect against overflow, log(0) issues.
+    x = x + pseudocount
+    # Check `group` argument
+    if( identical(all.equal(length(group), 1), TRUE) & nsamples(physeq) > 1 ){
+        # Assume that group was a sample variable name (must be categorical)
+        group = get_variable(physeq, group)
+    }
+    # Define gene annotations (`genes`) as tax_table
+    taxonomy = tax_table(physeq, errorIfNULL=FALSE)
+    if( !is.null(taxonomy) ){
+        taxonomy = data.frame(as(taxonomy, "matrix"))
+    } 
+    # Now turn into a DGEList
+    y = DGEList(counts=x, group=group, genes=taxonomy, remove.zeros = TRUE)
+    # Calculate the normalization factors
+    d = edgeR::calcNormFactors(y, method=method)
+    # Check for division by zero inside `calcNormFactors`
+    if( !all(is.finite(d$samples$norm.factors)) ){
+        stop("Something wrong with edgeR::calcNormFactors on this data,
+         non-finite $norm.factors, consider changing `method` argument")
+    }
+    scalingFactor <- d$samples$norm.factors * d$samples$lib.size / 1e6
+    dataNormalized <- t(t(otu_table(physeq)) / scalingFactor)
+    #dataNormalized <- cpm(d)
+    otu <- otu_table(dataNormalized, taxa_are_rows = T)
+    sam <- access(physeq, "sam_data")
+    sam$scaling_factor <- scalingFactor
+    tax <- access(physeq, "tax_table")
+    phy <- access(physeq, "phy_tree")
+    ps_edgeR <- phyloseq(otu,sam,tax,phy)
+    
+    return(ps_edgeR)
+    
+}
+```
+
+#### TMM implementation on Global Patterns
+
+Perform normalization:
+
+```{r}
+gp_tmm <- norm_TMM(gp_raw)
+```
+
+View PCoA plots
+
+```{r}
+plot_ordination(gp_tmm, phyloseq::ordinate(gp_tmm, "PCoA", "bray") , color = "SampleType", title = "PCoA on Raw data")
+```
+
+View how TMM normalization changes distance metrics differently than raw counts.
+
+```{r}
+plot_norm_changes(gp_tmm, gp_raw,
+                  x_lab = "Raw", y_lab = "TMM",
+                  title = "Distance metric comparision between TMM normalization and Raw counts ")
+
+```
+
+#### TMM implementation on Kostic data
+
+```{r, edgeR-kostic}
+k_tmm <- norm_TMM(k_raw)
+plot_ordination(
+    k_tmm,
+    phyloseq::ordinate(k_tmm, "PCoA", "bray") ,
+    color = "DIAGNOSIS",
+    title = "PCoA on Raw data"
+) /
+    plot_ordination(
+        k_tmm,
+        phyloseq::ordinate(k_tmm, "PCoA", "bray") ,
+        color = "depth",
+        title = "PCoA on Raw data"
+    )
+plot_norm_changes(k_tmm, k_raw,
+                  x_lab = "Raw", y_lab = "TMM",
+                  title = "Distance metric comparision between TMM normalization and Raw counts ")
 ```
 
