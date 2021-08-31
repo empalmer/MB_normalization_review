@@ -202,9 +202,9 @@ After & 10 & 4\\
 \hline
 Sample & blue & red\\
 \hline
-Before & 0.2857143 & 0.6666667\\
+Before & 0.29 & 0.67\\
 \hline
-After & 0.7142857 & 0.3333333\\
+After & 0.71 & 0.33\\
 \hline
 \end{tabular}
 \end{table}
@@ -1002,43 +1002,43 @@ Sample 3
 
 Taxon 1
 
-4.882802
+4.88
 
-4.6347290
+4.63
 
-2.3978953
+2.40
 
 Taxon 2
 
-1.945910
+1.95
 
-3.8712010
+3.87
 
-1.0986123
+1.10
 
 Taxon 3
 
 -Inf
 
-0.6931472
+0.69
 
-0.0000000
+0.00
 
 Taxon 4
 
-3.135494
+3.14
 
-2.7080502
+2.71
 
-0.6931472
+0.69
 
 Taxon 5
 
-4.262680
+4.26
 
-4.3820266
+4.38
 
-1.6094379
+1.61
 
 Notice the one entry with zero counts is marked as negative infinity.
 
@@ -1098,17 +1098,17 @@ Next, to calculate the scaling factors for each sample, we take the median of th
 \hline
 Taxa & Sample 1 & Sample 2 & Sample 3\\
 \hline
-Taxon 1 & 0.910 & 0.660 & -1.570\\
+Taxon 1 & 0.91 & 0.66 & -1.57\\
 \hline
-Taxon 2 & -0.360 & 1.660 & -1.310\\
+Taxon 2 & -0.36 & 1.66 & -1.31\\
 \hline
-Taxon 4 & 0.960 & 0.530 & -1.490\\
+Taxon 4 & 0.96 & 0.53 & -1.49\\
 \hline
-Taxon 5 & 0.840 & 0.960 & -1.810\\
+Taxon 5 & 0.84 & 0.96 & -1.81\\
 \hline
-Median & 0.875 & 0.810 & -1.530\\
+Median & 0.88 & 0.81 & -1.53\\
 \hline
-Exponentiated Median & 2.399 & 2.248 & 0.217\\
+Exponentiated Median & 2.40 & 2.25 & 0.22\\
 \hline
 \end{tabular}
 \end{table}
@@ -1127,43 +1127,43 @@ Sample 3
 
 Taxon 1
 
-55.026
+55.03
 
-45.820
+45.82
 
-50.800
+50.80
 
 Taxon 2
 
-2.918
+2.92
 
-21.353
+21.35
 
-13.855
+13.85
 
 Taxon 3
 
-0.000
+0.00
 
-0.890
+0.89
 
-4.618
+4.62
 
 Taxon 4
 
-9.588
+9.59
 
-6.673
+6.67
 
-9.236
+9.24
 
 Taxon 5
 
-29.597
+29.60
 
-35.589
+35.59
 
-23.091
+23.09
 
 Since Taxon 3 had a zero count in sample 1, it was excluded from the calculation of scale factors. The above example dataset may not be characteristic of microbiome datasets. Microbiome datasets are zero-inflated, meaning that there are numerous zero counts in the raw count matrix. Even up to 80-90\% of the counts in a microbiome datset can be zero. Because of this, if the zero-inflation in the datseta is not accounted for, very few, or even perhaps none of the taxa will contribute to calculating the scaling factor. One option so that all of the taxa are included in the calculation is to add a pseudocount so none of the counts are zero. Another option is the \texttt{poscounts} option, which is encouraged for microbiome data. Instead of taking the average of the logged counts, it takes the \(n\)th root of the non-zero counts. This replaces step 2 in this example.
 

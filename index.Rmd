@@ -164,7 +164,8 @@ red_a <- c(20/30, 10/30)
 blue_a <- c(4/14, 10/14)
 tibble(sample, blue_a, red_a) %>% 
     knitr::kable(col.names = c("Sample", "blue", "red"), 
-                 caption = "Proportions of sampled red and blue taxa before and after")
+                 caption = "Proportions of sampled red and blue taxa before and after", 
+                 digits = 2)
 ```
 
 <!-- In the after sample, the blue counts have decreased, as we would expect from our knowledge of the population. However, the red counts have increased, even though there is no change in the red population.  -->
